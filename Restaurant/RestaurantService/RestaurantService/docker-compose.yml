@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  restaurant-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    image: manujaya/restaurant-service:latest
+    container_name: restaurant-service
