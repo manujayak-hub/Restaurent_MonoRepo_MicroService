@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restaurant-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restaurant
+  template:
+    metadata:
+      labels:
+        app: restaurant
+    spec:
+      containers:
+        - name: restaurant
+          image: your-dockerhub-username/restaurant-service:latest
+          ports:
+            - containerPort: 6000
