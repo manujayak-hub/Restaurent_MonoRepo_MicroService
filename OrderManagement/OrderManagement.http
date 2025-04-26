@@ -1,0 +1,6 @@
+@OrderManagement_HostAddress = http://localhost:5112
+
+GET {{OrderManagement_HostAddress}}/
+Accept: application/json
+
+###
