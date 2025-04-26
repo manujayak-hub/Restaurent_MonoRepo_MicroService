@@ -56,3 +56,4 @@ Desktop.ini
 docker-compose.override.yml
 *.pid
 *.pid.lock
+Restaurant/RestaurantService/RestaurantService/Controllers/RestaurentController.cs

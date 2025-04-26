@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/SE1020-IT2070-OOP-DSA-25/project-IT22885128#readme",
   "dependencies": {
+    "amqplib": "^0.10.7",
     "axios": "^1.8.2",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
@@ -35,6 +36,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+    "kafka-node": "^5.0.0",
     "node-cron": "^3.0.3",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0"

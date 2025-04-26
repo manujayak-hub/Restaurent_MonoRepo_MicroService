@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import User from "../Model/Auth_Model.js";
+//import { publishUserLogin } from "../Queue/producer.js";
 
 const generateAccessToken = (user) => {
     return jwt.sign(
@@ -19,7 +20,7 @@ let refreshTokens = [];
 
 // Register (Only Admins Can Register New Users)
 const register = async (req, res) => {
-    const { lastName,firstName,email, password, role } = req.body; 
+    const { lastName,firstName,email, password, role,vehiclemodel,vehicleno,driverbasedlocation } = req.body; 
 
     try {
         const existingUser = await User.findOne({ email });
@@ -29,7 +30,7 @@ const register = async (req, res) => {
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({lastName,firstName, email, password: hashedPassword, role });
+        const newUser = new User({lastName,firstName, email, password: hashedPassword, role ,vehiclemodel, vehicleno, driverbasedlocation });
 
         await newUser.save();
         res.status(201).json({ message: "User registered successfully" });
@@ -56,11 +57,19 @@ const login = async (req, res) => {
 
         const accessToken = generateAccessToken({ _id: user._id, email: user.email, firstName: user.firstName , role: user.role });
         const refreshToken = generateRefreshToken({ _id: user._id, email: user.email,firstName: user.firstName, role: user.role });
+        const uid = user._id
+        const uemail = user.email
+        const uname = user.firstName
+        const urole = user.role
 
+        // await publishUserLogin(accessToken, {
+        //     id:user._id,
+        //     email: user.email,
+        //     role: user.role,
+        //     firstName: user.firstName,
+        // });
 
-        refreshTokens.push(refreshToken); // Store refresh token
-
-        res.json({ accessToken, refreshToken });
+        res.json({ accessToken, refreshToken ,uid,uemail,uname,urole});
     } catch (error) {
         res.status(500).json({ error: "Database error" });
     }
