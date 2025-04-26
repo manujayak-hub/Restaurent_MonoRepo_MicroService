@@ -12,6 +12,8 @@ builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
 
 // Register OrderService
 builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<CartService>();
+
 
 // Add services to the container.
 builder.Services.AddControllers();
