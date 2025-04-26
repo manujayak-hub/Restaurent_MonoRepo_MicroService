@@ -9,14 +9,17 @@ public static class RestaurentController
 {
     public static void MapRestaurentEndpoints(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("/api/Restaurent").WithTags(nameof(Restaurent));
+        var group = routes.MapGroup("/Restaurent").WithTags(nameof(Restaurent));
 
         var mongoClient = routes.ServiceProvider.GetRequiredService<IMongoClient>();
-        var database = mongoClient.GetDatabase("RestaurantDB"); // Change DB name if needed
+        var database = mongoClient.GetDatabase("RestaurantDB"); 
         var collection = database.GetCollection<Restaurent>("Restaurants");
 
         group.MapGet("/", async () =>
         {
+        //    var user = KafkaUserHelper.GetUserById(userId);
+        //    if (user is null) return Results.NotFound();
+
             var restaurants = await collection.Find(_ => true).ToListAsync();
             return Results.Ok(restaurants);
         })
@@ -34,7 +37,7 @@ public static class RestaurentController
         group.MapPost("/", async (Restaurent model) =>
         {
             await collection.InsertOneAsync(model);
-            return Results.Created($"/api/Restaurent/{model.Id}", model);
+            return Results.Created($"/Restaurent/{model.Id}", model);
         })
         .WithName("CreateRestaurent")
         .WithOpenApi();

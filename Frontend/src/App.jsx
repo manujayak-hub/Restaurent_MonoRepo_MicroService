@@ -1,15 +1,30 @@
 
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import RegisterDriver from "./Pages/Users/RegisterDriver";
+import RegisterUser from "./Pages/Users/RegisterUser";
+import RegisterRestaurantOwner from "./Pages/Users/RegisterRestaurantOwner";
+import LoginUser from "./Pages/Users/LoginUser";
+import ResUserDash from "./Pages/Restaurent/ResUserDash";
+import OrderPage from "./Pages/Restaurent/OrderPage";
+
+
+
 
 function App() {
-
   return (
     <>
-      
-      <p >
-        Click on the Vite and React logos to learn more
-      </p>
+      <BrowserRouter>
+        <Routes>
+        <Route path="/" element={<LoginUser/>} /> 
+        <Route path="/register/driver" element={<RegisterDriver/>} />
+        <Route path="/register/user" element={<RegisterUser/>} />
+        <Route path="/register/owner" element={<RegisterRestaurantOwner/>} />
+        <Route path="/resuserdash" element={<ResUserDash/>} />
+        <Route path="/restaurant/:id" element={<OrderPage />} />
+        </Routes>
+      </BrowserRouter>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

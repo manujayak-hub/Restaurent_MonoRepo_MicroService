@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: auth
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend
+      app: auth
   template:
     metadata:
       labels:
-        app: frontend
+        app: auth
     spec:
       containers:
-        - name: frontend
-          image: manujayak/frontend:latest
+        - name: auth
+          image: manujayak/authservice:v1.0.0
           ports:
-            - containerPort: 80
+            - containerPort: 5000

@@ -1,9 +1,24 @@
-﻿using RestaurantService.Controllers;
+﻿
 using Microsoft.Extensions.Options;
 using RestaurantService.Data;
 using MongoDB.Driver;
+using RestaurantService.Controllers;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+var allowedOrigin = "http://localhost:5173";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        builder =>
+        {
+            builder.WithOrigins(allowedOrigin)
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
 
 // Configure MongoDB settings
 builder.Services.Configure<MongoDBSettings>(
@@ -28,6 +43,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//builder.Services.AddHostedService<KafkaUserEventConsumer>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
@@ -38,12 +56,18 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowReactApp");
 app.UseAuthorization();
 app.MapControllers();
 
-// Keep your MapRestaurentEndpoints() as it was
-app.MapRestaurentEndpoints();
 
+
+
+
+// Keep your MapRestaurentEndpoints() as it was
+
+app.MapRestaurentEndpoints();
+app.MapMenuEndpoints();
 
 app.Run();
 

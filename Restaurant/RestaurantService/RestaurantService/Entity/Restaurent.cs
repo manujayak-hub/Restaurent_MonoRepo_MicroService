@@ -8,6 +8,12 @@
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; } = null!;
 
+        [BsonElement("ownername")]
+        public string OwnerName { get; set; } = null!;
+
+        [BsonElement("ownerid")]
+        public string OwnerID { get; set; } = null!;
+
         [BsonElement("name")]
         public string Name { get; set; } = null!;
 
