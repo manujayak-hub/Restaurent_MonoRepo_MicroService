@@ -1,4 +1,4 @@
-﻿using DeliveryService.Repositories;
+﻿
 using DeliveryService.Services;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -20,11 +20,7 @@ try
     var mongoClient = new MongoClient(mongoConnectionString);
     var database = mongoClient.GetDatabase(mongoDatabaseName);
 
-    // Ensure the database is created by inserting a dummy document into a collection
-    var deliveriesCollection = database.GetCollection<BsonDocument>("Deliveries");
-
-    var testDocument = new BsonDocument { { "Test", "Data" } };
-    await deliveriesCollection.InsertOneAsync(testDocument);
+    
 
     Console.WriteLine("✅ MongoDB connection successful and test document inserted.");
 }
@@ -37,7 +33,7 @@ catch (Exception ex)
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddHttpClient();
 // Enable CORS
 builder.Services.AddCors(options =>
 {
@@ -49,10 +45,9 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
-builder.Services.AddScoped<DeliveryRepository>();
-builder.Services.AddScoped<DeliveryService.Services.DeliveryService>();
-
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<IDeliveryRepository, DeliveryRepository>();
+builder.Services.AddScoped<IDeliveryService, DeliveryService.Services.DeliveryService>();
 
 var app = builder.Build();
 

@@ -1,199 +1,98 @@
-﻿using DeliveryService.DTOs;
-using Newtonsoft.Json.Linq;
-using DeliveryService.Repositories;
-using MongoDB.Bson.IO;
+using DeliveryService.Models;
 using Newtonsoft.Json;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Text.Json;
 
-
-namespace DeliveryService.Services
+namespace DeliveryService.Services // ✅ Add this
 {
-    public class DeliveryService
+public class DeliveryService : IDeliveryService
+{
+    private readonly IDeliveryRepository _repository;
+    private readonly HttpClient _httpClient;
+
+    public DeliveryService(IDeliveryRepository repository, IHttpClientFactory factory)
     {
-        private readonly DeliveryRepository _repository;
-        private readonly string googleMapsApiKey = "YOUR_GOOGLE_MAPS_API_KEY";
+        _repository = repository;
+        _httpClient = factory.CreateClient();
+    }
 
+    public async Task<Delivery> CreateDeliveryAsync(CreateDeliveryRequest request)
+    {
+        // Fetch restaurant location
+        // var response = await _httpClient.GetAsync($"http://localhost:5177/api/Restaurent/{request.RestaurantId}");
+        // response.EnsureSuccessStatusCode();
+        // var json = await response.Content.ReadAsStringAsync();
+        // dynamic restaurant = JsonConvert.DeserializeObject(json);
+        var restaurantLocation = "Kottawa";
 
-        public DeliveryService(DeliveryRepository repository)
+        var delivery = new Delivery
         {
-            _repository = repository;
-        }
+            CustomerId = request.CustomerId,
+            OrderId = request.OrderId,
+            RestaurantId = request.RestaurantId,
+            PickupLocation = restaurantLocation,//restaurant.location,
+            DeliveryLocation = request.DeliveryLocation,
+            PaymentType = request.PaymentType
+        };
 
-        public async Task<string> ReceiveDeliveryAsync(Delivery delivery)
+        await _repository.CreateDeliveryAsync(delivery);
+        return delivery;
+    }
+
+    public async Task<List<Delivery>> GetAllDeliveriesAsync()
+    {
+        return await _repository.GetAllDeliveriesAsync();
+    }
+
+    public async Task<bool> AcceptDeliveryAsync(string deliveryId, string driverId)
+{
+    var delivery = await _repository.GetDeliveryByIdAsync(deliveryId);
+    
+    if (delivery == null || delivery.Status != "Pending") 
+    {
+        // You can throw an exception or return false if the delivery is not available to accept.
+        return false;
+    }
+
+    // Update delivery status to 'Accepted' and assign driver
+    delivery.Status = "Accepted";
+    delivery.DriverId = driverId;
+    await _repository.UpdateDeliveryAsync(delivery);
+    return true;
+}
+
+public async Task<bool> CompleteDeliveryAsync(string deliveryId)
+{
+    var delivery = await _repository.GetDeliveryByIdAsync(deliveryId);
+
+    if (delivery == null || delivery.Status != "Accepted")
+    {
+        // Return false if the delivery is not in 'Accepted' state or doesn't exist
+        return false;
+    }
+
+    // Update the status to 'Completed' and optionally store the completion time
+    delivery.Status = "Completed";
+    await _repository.UpdateDeliveryAsync(delivery);
+    return true;
+}
+
+public async Task<List<Delivery>> GetCompletedDeliveriesAsync()
+{
+    var allDeliveries = await _repository.GetAllDeliveriesAsync();
+    return allDeliveries
+        .Where(d => d.Status == "Completed")
+        .ToList();
+}
+
+public async Task<Delivery> GetDeliveryByIdAsync(string deliveryId)
         {
-            await _repository.CreateAsync(delivery);
-            return delivery.Id;
-        }
-
-
-        public async Task BroadcastToDriversAsync(Delivery delivery)
-        {
-            List<DriverDto> drivers;
-
-            try
-            {
-                var httpClient = new HttpClient();
-                var response = await httpClient.GetAsync("http://usermanagement/api/drivers/available");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var driverListJson = await response.Content.ReadAsStringAsync();
-                    drivers = Newtonsoft.Json.JsonConvert.DeserializeObject<List<DriverDto>>(driverListJson);
-                }
-                else
-                {
-                    Console.WriteLine("[WARN] User Management API call failed. Using mock drivers.");
-                    drivers = GetMockDrivers();
-                }
-
-                // ✅ Use Google Maps to filter nearby drivers
-                var nearbyDrivers = await FilterNearbyDriversAsync(drivers, delivery.PickupAddress);
-
-                foreach (var driver in nearbyDrivers)
-                {
-                    var notification = new
-                    {
-                        DriverId = driver.Id,
-                        DeliveryId = delivery.Id,
-                        PickupAddress = delivery.PickupAddress,
-                        Message = "New delivery nearby!"
-                    };
-
-                    // Call the new API to notify the driver
-                    var notifyResponse = await httpClient.PostAsJsonAsync("http://localhost:5272/api/delivery/notify-driver", notification);
-                    if (notifyResponse.IsSuccessStatusCode)
-                    {
-                        Console.WriteLine($"[INFO] Notification sent to Driver {driver.Id} – Status: {notifyResponse.StatusCode}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"[ERROR] Failed to notify Driver {driver.Id}. Status: {notifyResponse.StatusCode}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ERROR] Could not broadcast delivery: {ex.Message}");
-            }
-        }
-
-        private List<DriverDto> GetMockDrivers()
-        {
-            return new List<DriverDto>
-            {
-                new DriverDto { Id = "driver001", CurrentLocation = "Colombo" },
-                new DriverDto { Id = "driver002", CurrentLocation = "Nugegoda" },
-                new DriverDto { Id = "driver003", CurrentLocation = "Kandy" }
-            };
-        }
-
-        // ✅ Real version using Google Distance Matrix API
-        private async Task<List<DriverDto>> FilterNearbyDriversAsync(List<DriverDto> drivers, string pickupAddress)
-        {
-            var httpClient = new HttpClient();
-            var destinations = string.Join("|", drivers.Select(d => Uri.EscapeDataString(d.CurrentLocation)));
-
-            string requestUrl = $"https://maps.googleapis.com/maps/api/distancematrix/json?" +
-                                $"origins={Uri.EscapeDataString(pickupAddress)}" +
-                                $"&destinations={destinations}" +
-                                $"&key={googleMapsApiKey}";
-
-            var response = await httpClient.GetStringAsync(requestUrl);
-            var json = JObject.Parse(response);
-
-            var elements = json["rows"][0]["elements"];
-            var nearbyDrivers = new List<DriverDto>();
-
-            for (int i = 0; i < elements.Count(); i++)
-            {
-                var element = elements[i];
-                if (element["status"]?.ToString() == "OK")
-                {
-                    int distanceInMeters = (int)element["distance"]["value"];
-                    if (distanceInMeters <= 5000) // 5 km
-                    {
-                        nearbyDrivers.Add(drivers[i]);
-                    }
-                }
-            }
-
-            return nearbyDrivers;
-        }
-
-
-        //public async Task<List<DriverDto>> FilterNearbyDriversAsync(List<DriverDto> drivers, string pickupAddress)
-        //{
-        //    string apiKey = "YOUR_GOOGLE_MAPS_API_KEY";
-
-        //    // Combine driver locations into pipe-separated list
-        //    var destinations = string.Join("|", drivers.Select(d => Uri.EscapeDataString(d.CurrentLocation)));
-
-        //    string requestUrl = $"https://maps.googleapis.com/maps/api/distancematrix/json?" +
-        //                        $"origins={Uri.EscapeDataString(pickupAddress)}" +
-        //                        $"&destinations={destinations}" +
-        //                        $"&key={apiKey}";
-
-        //    var httpClient = new HttpClient();
-        //    var response = await httpClient.GetStringAsync(requestUrl);
-        //    var json = JObject.Parse(response);
-
-        //    var elements = json["rows"][0]["elements"];
-        //    var nearbyDrivers = new List<DriverDto>();
-
-        //    for (int i = 0; i < elements.Count(); i++)
-        //    {
-        //        var element = elements[i];
-        //        if (element["status"].ToString() == "OK")
-        //        {
-        //            int distanceInMeters = (int)element["distance"]["value"];
-        //            if (distanceInMeters <= 5000) // within 5km
-        //            {
-        //                nearbyDrivers.Add(drivers[i]);
-        //            }
-        //        }
-        //    }
-
-        //    return nearbyDrivers;
-        //}
-
-
-        public async Task<Delivery> AcceptDeliveryAsync(string deliveryId, string driverId)
-        {
-            var active = await _repository.GetActiveDeliveryByDriverIdAsync(driverId);
-            if (active != null) return null;
-
             var delivery = await _repository.GetDeliveryByIdAsync(deliveryId);
-            if (delivery == null || delivery.Status != "Pending") return null;
-
-            delivery.DriverId = driverId;
-            delivery.Status = "Accepted";
-            await _repository.UpdateAsync(delivery);
-
             return delivery;
         }
+  
 
-        public async Task<bool> CompleteDeliveryAsync(string deliveryId, string paymentType)
-        {
-            var delivery = await _repository.GetDeliveryByIdAsync(deliveryId);
-            if (delivery == null || delivery.Status == "Delivered") return false;
 
-            delivery.Status = "Delivered";
-            delivery.PaymentType = paymentType;
-            await _repository.UpdateAsync(delivery);
-
-            // Notify admin logic here
-            Console.WriteLine($"Admin notified: Delivery {deliveryId} completed with {paymentType} payment.");
-            return true;
-        }
-
-        public async Task<bool> UpdateStatusAsync(string deliveryId, string status)
-        {
-            var delivery = await _repository.GetDeliveryByIdAsync(deliveryId);
-            if (delivery == null || delivery.Status == "Delivered") return false;
-
-            delivery.Status = status;
-            await _repository.UpdateAsync(delivery);
-            return true;
-        }
-
-    }
+}
 }
