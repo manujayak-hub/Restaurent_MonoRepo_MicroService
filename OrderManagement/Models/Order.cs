@@ -13,7 +13,7 @@ namespace OrderManagement.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        public string CustomerId { get; set; }
+        public string CustomerId { get; set; } // User ID of the customer who placed the order
         public string RestaurantId { get; set; }
         public List<OrderItemDTO> Items { get; set; }
         public string DeliveryAddress { get; set; }

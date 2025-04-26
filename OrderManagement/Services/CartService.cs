@@ -10,8 +10,9 @@ namespace OrderManagement.Services
     {
         private readonly IMongoCollection<Cart> _carts;
 
-        public CartService(IMongoDatabase database)
+        public CartService(IMongoClient mongoClient)
         {
+            var database = mongoClient.GetDatabase("OrderManagementDb");
             _carts = database.GetCollection<Cart>("Carts");
         }
 
@@ -25,13 +26,19 @@ namespace OrderManagement.Services
             return await _carts.Find(c => c.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task CreateCartAsync(CreateCartDTO cartDto)
+        public async Task<Cart> GetOrCreateCartAsync(string userId)
         {
-            var cart = new Cart
+            var cart = await _carts.Find(c => c.UserId == userId).FirstOrDefaultAsync();
+            if (cart == null)
             {
-                CustomerId = cartDto.CustomerId
-            };
-            await _carts.InsertOneAsync(cart);
+                cart = new Cart
+                {
+                    UserId = userId,
+                    Items = new List<OrderItemDTO>()
+                };
+                await _carts.InsertOneAsync(cart);
+            }
+            return cart;
         }
 
         public async Task<bool> AddItemToCartAsync(string cartId, OrderItemDTO itemDto)
@@ -41,16 +48,40 @@ namespace OrderManagement.Services
             return result.ModifiedCount > 0;
         }
 
-        public async Task<bool> RemoveItemFromCartAsync(string cartId, string productName)
-        {
-            var update = Builders<Cart>.Update.PullFilter(c => c.Items, i => i.ProductName == productName);
-            var result = await _carts.UpdateOneAsync(c => c.Id == cartId, update);
-            return result.ModifiedCount > 0;
-        }
+       public async Task<bool> RemoveItemFromCartAsync(string cartId, string itemId)
+    {
+        var update = Builders<Cart>.Update.PullFilter(c => c.Items, i => i.ItemId == itemId);
+        var result = await _carts.UpdateOneAsync(c => c.Id == cartId, update);
+        return result.ModifiedCount > 0;
+    }
+
 
         public async Task DeleteCartAsync(string id)
         {
             await _carts.DeleteOneAsync(c => c.Id == id);
         }
+
+        public async Task ClearCartAsync(string userId)
+        {
+            var cart = await _carts.Find(c => c.UserId == userId).FirstOrDefaultAsync();
+            if (cart != null)
+            {
+                var update = Builders<Cart>.Update.Set(c => c.Items, new List<OrderItemDTO>());
+                await _carts.UpdateOneAsync(c => c.Id == cart.Id, update);
+            }
+        }
+
+        public async Task<Cart> CreateCartAsync(string userId)
+        {
+            var cart = new Cart
+            {
+                UserId = userId,
+                Items = new List<OrderItemDTO>()
+            };
+            await _carts.InsertOneAsync(cart);
+            return cart;
+        }
+
+
     }
 }

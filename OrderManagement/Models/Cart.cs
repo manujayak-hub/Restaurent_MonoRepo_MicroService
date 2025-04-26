@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System;
 using System.Collections.Generic;
+using OrderManagement.DTO;
 
 namespace OrderManagement.Models
 {
@@ -11,8 +11,7 @@ namespace OrderManagement.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        public string CustomerId { get; set; }
+        public string UserId { get; set; }  // User ID of the customer who owns the cart
         public List<OrderItemDTO> Items { get; set; } = new List<OrderItemDTO>();
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

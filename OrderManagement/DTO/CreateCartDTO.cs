@@ -2,6 +2,6 @@ namespace OrderManagement.DTO
 {
     public class CreateCartDTO
     {
-        public string CustomerId { get; set; }
+        public string UserId { get; set; }
     }
 }

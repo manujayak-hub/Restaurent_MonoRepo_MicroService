@@ -38,7 +38,7 @@ namespace OrderManagement.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateCart([FromBody] CreateCartDTO cartDto)
         {
-            await _cartService.CreateCartAsync(cartDto);
+            await _cartService.CreateCartAsync(cartDto.UserId); // << Pass only the UserId
             return Ok(new { message = "Cart created successfully" });
         }
 
@@ -67,6 +67,13 @@ namespace OrderManagement.Controllers
         {
             await _cartService.DeleteCartAsync(id);
             return Ok(new { message = "Cart deleted successfully" });
+        }
+
+        [HttpPost("clear/{userId}")]
+        public async Task<ActionResult> ClearCart(string userId)
+        {
+            await _cartService.ClearCartAsync(userId);
+            return Ok(new { message = "Cart cleared successfully" });
         }
     }
 }
