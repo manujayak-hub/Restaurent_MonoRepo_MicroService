@@ -34,6 +34,14 @@ public static class RestaurentController
         .WithName("GetRestaurentById")
         .WithOpenApi();
 
+        group.MapGet("resowner/{id}", async (string id) =>
+        {
+            var user = await collection.Find(x => x.OwnerID == id).ToListAsync();
+            return user != null ? Results.Ok(user) : Results.NotFound();
+        })
+      .WithName("GetRestaurentByowner")
+      .WithOpenApi();
+
         group.MapPost("/", async (Restaurent model) =>
         {
             await collection.InsertOneAsync(model);
@@ -44,11 +52,13 @@ public static class RestaurentController
 
         group.MapPut("/{id}", async (string id, Restaurent input) =>
         {
+            input.Id = id; // Set the ID manually before replacing
             var result = await collection.ReplaceOneAsync(r => r.Id == id, input);
             return result.MatchedCount > 0 ? Results.NoContent() : Results.NotFound();
         })
-        .WithName("UpdateRestaurent")
-        .WithOpenApi();
+         .WithName("UpdateRestaurent")
+         .WithOpenApi();
+
 
         group.MapDelete("/{id}", async (string id) =>
         {

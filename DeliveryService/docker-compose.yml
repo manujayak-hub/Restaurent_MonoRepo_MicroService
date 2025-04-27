@@ -5,6 +5,6 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8084:8084"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

@@ -1,9 +1,7 @@
-﻿
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using RestaurantService.Data;
 using MongoDB.Driver;
 using RestaurantService.Controllers;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +17,8 @@ builder.Services.AddCors(options =>
         });
 });
 
-
 // Configure MongoDB settings
-builder.Services.Configure<MongoDBSettings>(
-    builder.Configuration.GetSection("MongoDB"));
+builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 
 builder.Services.AddSingleton<IMongoClient>(sp =>
 {
@@ -37,13 +33,12 @@ builder.Services.AddSingleton<IMongoDatabase>(sp =>
     return client.GetDatabase(settings.DatabaseName);
 });
 
-
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//builder.Services.AddHostedService<KafkaUserEventConsumer>();
+
 
 
 var app = builder.Build();
@@ -60,14 +55,10 @@ app.UseCors("AllowReactApp");
 app.UseAuthorization();
 app.MapControllers();
 
-
-
-
-
-// Keep your MapRestaurentEndpoints() as it was
-
+// Keep your existing MapRestaurentEndpoints() as it was
 app.MapRestaurentEndpoints();
 app.MapMenuEndpoints();
 
-app.Run();
 
+Console.WriteLine("hi");
+app.Run();
