@@ -49,6 +49,22 @@ namespace OrderManagement.Controllers
             }
         }
 
+       [HttpPatch("{id}")]
+        public async Task<ActionResult> UpdateOrderStatus(string id, string recordstatus)
+        {
+            var existingOrder = await _orderService.GetOrderAsync(id);
+            if (existingOrder == null)
+                return NotFound(new { message = "Order not found" });
+
+            // Update only the status field
+            existingOrder.Status = recordstatus;
+
+            await _orderService.UpdateOrderAsync(id, existingOrder);
+
+            return Ok(new { message = "Order successfully updated", order = existingOrder });
+        }
+
+
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateOrder(string id, [FromBody] Order order)
         {
@@ -73,6 +89,7 @@ namespace OrderManagement.Controllers
             await _orderService.DeleteOrderAsync(id);
             return Ok(new { message = "Order successfully deleted" });
         }
+
         //Get orders by Customer ID
         [HttpGet("customer/{customerId}")]
         public async Task<ActionResult<List<Order>>> GetOrdersByCustomerId(string customerId)
@@ -93,8 +110,30 @@ namespace OrderManagement.Controllers
                 return NotFound(new { message = "No orders found for this restaurant" });
 
             return Ok(orders);
-        }
+        }
 
-    }    
+       
+        [HttpGet("status/{status}/{id}")]
+public async Task<ActionResult<List<Order>>> GetOrdersByStatusAndRestaurantId(string status, string id)
+{
+    var orders = await _orderService.GetOrdersByStatusAndRestaurantIdAsync(status, id);
+    if (orders == null || orders.Count == 0)
+        return NotFound();
+
+    return Ok(orders);
+}
+
+[HttpGet("status/{status}")]
+public async Task<ActionResult<List<Order>>> GetOrdersByStatus(string status)
+{
+    var orders = await _orderService.GetOrdersByStatusAsync(status);
+    if (orders == null || orders.Count == 0)
+        return NotFound();
+
+    return Ok(orders);
+}
+
+
+    }    
 
 }

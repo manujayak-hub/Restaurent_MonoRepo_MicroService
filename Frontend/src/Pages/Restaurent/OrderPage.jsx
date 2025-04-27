@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import RestaurantService from "../../Services/RestaurentService";
 import MenuService from "../../Services/MenuService";
 import { FaPhoneAlt, FaStar, FaUtensils, FaMapMarkerAlt, FaShoppingCart, FaLeaf, FaHamburger } from "react-icons/fa";
 
 const OrderPage = () => {
+  const navigate = useNavigate();  // For navigation in React Router v6
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
@@ -28,8 +29,24 @@ const OrderPage = () => {
     fetchData();
   }, [id]);
 
-  const handleAddToCart = (item) => {
-    alert(`🛒 Added "${item.DishName}" to cart!`);
+  // Function to navigate to AddToCart page and pass individual values
+  const handleGoToAddToCart = (item) => {
+    navigate("/cart", { 
+      state: { 
+    
+        id:item.id,
+      
+        dishName: item.dishName, 
+        price: item.price, 
+        imgUrl: item.imgUrl, 
+        ingredient: item.ingredient, 
+        rating: item.rating, 
+        vegNonveg: item.vegNonveg,
+        resid:restaurant.id, // Pass restaurant ID as well
+      } 
+    });  // Passing individual values as state
+
+    console.log(item); // Log the item to the console for debugging
   };
 
   if (loading) {
@@ -86,22 +103,21 @@ const OrderPage = () => {
                     </p>
                     <p className="text-lg font-semibold text-gray-800 mb-2">Rs. {item.price}</p>
 
-                    {/* Display Veg or Non-Veg */}
                     <p className="flex items-center text-sm text-gray-700">
                       {item.vegNonveg === 1 ? (
-                        <FaLeaf className="mr-1 text-green-500" /> // Veg
+                        <FaLeaf className="mr-1 text-green-500" />
                       ) : (
-                        <FaHamburger className="mr-1 text-red-500" /> // Non-Veg
+                        <FaHamburger className="mr-1 text-red-500" />
                       )}
                       {item.vegNonveg === 1 ? "Vegetarian" : "Non-Vegetarian"}
                     </p>
                   </div>
 
                   <button
-                    onClick={() => handleAddToCart(item)}
+                    onClick={() => handleGoToAddToCart(item)}  // Navigate to AddToCart page
                     className="mt-4 flex items-center justify-center gap-2 bg-gradient-to-r from-[#7fc7e0] to-[#57a9c6] hover:from-[#68b8d8] hover:to-[#499ab0] text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-xl transition-all duration-300"
                   >
-                    <FaShoppingCart /> Add to Cart
+                    <FaShoppingCart /> Place Order
                   </button>
                 </div>
               </div>
@@ -109,7 +125,7 @@ const OrderPage = () => {
           </div>
         ) : (
           <div className="text-center text-lg font-semibold text-gray-500">
-            No food items found.
+            No menu items available.
           </div>
         )}
       </div>

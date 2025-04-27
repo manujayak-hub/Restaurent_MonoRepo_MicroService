@@ -3,6 +3,9 @@ using OrderManagement.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Define allowed origin
+var allowedOrigin = "http://localhost:5173";
+
 // Register MongoClient as a singleton using the connection string
 var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDb");
 builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
@@ -10,7 +13,7 @@ builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
     return new MongoClient(mongoConnectionString);
 });
 
-// Register OrderService
+// Register OrderService and CartService
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<CartService>();
 
@@ -19,9 +22,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // Allow your React app's origin
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        policy.WithOrigins(allowedOrigin)  // Use the allowedOrigin variable
+              .AllowAnyMethod()            // Allow any HTTP method
+              .AllowAnyHeader();           // Allow any headers
     });
 });
 
@@ -46,7 +49,7 @@ if (!IsRunningInDocker())
 }
 
 // Use CORS middleware - Apply the correct CORS policy
-app.UseCors("AllowReactApp"); 
+app.UseCors("AllowReactApp");
 
 app.UseAuthorization();
 app.MapControllers();
