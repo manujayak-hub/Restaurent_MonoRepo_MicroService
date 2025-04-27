@@ -30,7 +30,7 @@ services:
     # Gives the container a specific name instead of a random one.
 
     ports:
-      - 27017:27017 
+      - 8081:8081
       # Maps port 27017 on your **host machine** to port 27017 inside the container.
       # MongoDB runs on port 27017 by default.
 

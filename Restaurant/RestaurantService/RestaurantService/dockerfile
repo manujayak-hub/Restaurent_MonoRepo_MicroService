@@ -14,6 +14,9 @@ RUN dotnet publish -c Release -o out
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
+# Set the environment variable to bind to port 8082
+ENV ASPNETCORE_URLS=http://+:8081
+
 # Copy the published output from build stage
 COPY --from=build /app/out ./
 
