@@ -61,8 +61,13 @@ const RestaurantOrderPage = () => {
       const response = await OrderService.create(requestBody);
       console.log('Order placed successfully:', response.data);
       
-      // Optionally, navigate to the order confirmation page
-      navigate('/order-confirmation', { state: { orderId: response.data.id } });
+      // Show success alert
+      alert('Order placed successfully!');
+
+      // Wait for a couple of seconds before navigating back
+      setTimeout(() => {
+        navigate(-1);  // Go back to the previous page
+      }, 1000);
   
     } catch (error) {
       console.error('Error placing order:', error);
