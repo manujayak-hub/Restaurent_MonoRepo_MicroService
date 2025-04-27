@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-
+using OrderManagement.DTO;
 public class Delivery
 {
       [BsonId] // Marks this as the _id field
@@ -15,19 +15,12 @@ public class Delivery
         public string Status { get; set; } = "Pending";
         public string PaymentType { get; set; }
          // List of items in the order for the delivery
-    public List<string> OrderItems { get; set; } = new List<string>();
+        public List<OrderItemDTO> Items { get; set; }
 
-    // Timestamp of when the delivery was created
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public decimal TotalAmount { get; set; }
 
-    // Estimated delivery time (optional)
-    public DateTime? EstimatedDeliveryTime { get; set; }
-
-    // Driver's name (optional, used for showing the assigned driver)
-    public string DriverName { get; set; }
-
-    // Driver's contact number (optional, for communication purposes)
-    public string DriverContact { get; set; }
+        public string DriverName { get; set; }
+        public string DriverContact { get; set; }
 
 
 }

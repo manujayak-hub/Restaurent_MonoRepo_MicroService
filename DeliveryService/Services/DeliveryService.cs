@@ -28,12 +28,14 @@ public class DeliveryService : IDeliveryService
 
         var delivery = new Delivery
         {
-            CustomerId = request.CustomerId,
             OrderId = request.OrderId,
+            CustomerId = request.CustomerId,
             RestaurantId = request.RestaurantId,
             PickupLocation = restaurantLocation,//restaurant.location,
             DeliveryLocation = request.DeliveryLocation,
-            PaymentType = request.PaymentType
+            PaymentType = request.PaymentType,
+            Items = request.Items,
+            TotalAmount = request.TotalAmount
         };
 
         await _repository.CreateDeliveryAsync(delivery);
@@ -45,7 +47,7 @@ public class DeliveryService : IDeliveryService
         return await _repository.GetAllDeliveriesAsync();
     }
 
-    public async Task<bool> AcceptDeliveryAsync(string deliveryId, string driverId)
+    public async Task<bool> AcceptDeliveryAsync(string deliveryId, string driverId,string DriverName,string DriverContact)
 {
     var delivery = await _repository.GetDeliveryByIdAsync(deliveryId);
     
@@ -58,6 +60,8 @@ public class DeliveryService : IDeliveryService
     // Update delivery status to 'Accepted' and assign driver
     delivery.Status = "Accepted";
     delivery.DriverId = driverId;
+    delivery.DriverName = DriverName;
+    delivery.DriverContact = DriverContact;
     await _repository.UpdateDeliveryAsync(delivery);
     return true;
 }
@@ -92,7 +96,11 @@ public async Task<Delivery> GetDeliveryByIdAsync(string deliveryId)
             return delivery;
         }
   
-
+public async Task<List<Delivery>> GetDeliveriesByDriverId(string driverId)
+        {
+            // Fetch deliveries assigned to the driver from the repository
+            return await _repository.GetDeliveriesByDriverId(driverId);
+        }
 
 }
 }
