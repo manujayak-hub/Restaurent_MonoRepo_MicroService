@@ -25,7 +25,6 @@ namespace OrderManagement.Services
         {
             return await _carts.Find(c => c.Id == id).FirstOrDefaultAsync();
         }
-
         public async Task<Cart> GetOrCreateCartAsync(string userId)
         {
             var cart = await _carts.Find(c => c.UserId == userId).FirstOrDefaultAsync();
@@ -38,7 +37,7 @@ namespace OrderManagement.Services
                 };
                 await _carts.InsertOneAsync(cart);
             }
-            return cart;
+            return cart;  // Ensure the cart returned is the one (either found or newly created)
         }
 
         public async Task<bool> AddItemToCartAsync(string cartId, OrderItemDTO itemDto)
