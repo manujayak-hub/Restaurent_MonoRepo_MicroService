@@ -14,8 +14,18 @@ builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<CartService>();
 
+// Add CORS services to the container
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") // Allow your React app's origin
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
-// Add services to the container.
+// Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -34,6 +44,9 @@ if (!IsRunningInDocker())
 {
     app.UseHttpsRedirection();
 }
+
+// Use CORS middleware - Apply the correct CORS policy
+app.UseCors("AllowReactApp"); 
 
 app.UseAuthorization();
 app.MapControllers();

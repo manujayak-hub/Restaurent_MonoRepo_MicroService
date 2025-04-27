@@ -35,21 +35,41 @@ namespace OrderManagement.Controllers
             return Ok(cart);
         }
 
+       // POST: /api/Cart
         [HttpPost]
         public async Task<ActionResult> CreateCart([FromBody] CreateCartDTO cartDto)
         {
-            await _cartService.CreateCartAsync(cartDto.UserId); // << Pass only the UserId
-            return Ok(new { message = "Cart created successfully" });
+            if (cartDto == null || string.IsNullOrEmpty(cartDto.UserId))
+            {
+                return BadRequest(new { message = "UserId is required" });
+            }
+
+            var cart = await _cartService.GetOrCreateCartAsync(cartDto.UserId);
+            
+            // Return a message if the cart already exists or is newly created
+            return Ok(new 
+            { 
+                message = cart.Items.Count == 0 ? "New cart created successfully" : "Cart already exists", 
+                cart = cart 
+            });
         }
 
+        // POST: /api/Cart/add-item
         [HttpPost("add-item")]
         public async Task<ActionResult> AddItemToCart([FromBody] AddCartItemDTO dto)
         {
+            if (dto == null || string.IsNullOrEmpty(dto.CartId) || dto.Item == null)
+            {
+                return BadRequest(new { message = "CartId and item are required" });
+            }
+
             var success = await _cartService.AddItemToCartAsync(dto.CartId, dto.Item);
             if (!success)
+            {
                 return NotFound(new { message = "Cart not found" });
+            }
 
-            return Ok(new { message = "Item added to cart" });
+            return Ok(new { message = "Item added to cart successfully" });
         }
 
         [HttpDelete("{cartId}/remove-item/{productName}")]
