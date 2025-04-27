@@ -70,39 +70,62 @@ const RestaurantOrderPage = () => {
   };
   
   return (
-    <div className="order-page">
-      <h2>Restaurant Order</h2>
-      
-      <div className="order-details">
-        <img src={orderdetails.imgUrl} alt={orderdetails.dishName} />
-        <h3>{orderdetails.dishName}</h3>
-        <p>{orderdetails.ingredient}</p>
-        <p><strong>Price:</strong> ${orderdetails.price}</p>
-        <p><strong>Rating:</strong> {orderdetails.rating} <FaStar /></p>
-        <p><strong>Type:</strong> {orderdetails.vegNonveg === 'veg' ? <FaLeaf /> : <FaHamburger />}</p>
+    <div className="order-page bg-gradient-to-r from-[#fbc2eb] via-[#a6c1ee] to-[#fbc2eb] min-h-screen py-12 px-6 sm:px-8">
+      <h2 className="text-4xl font-extrabold text-center text-[#e87c21] mb-8 drop-shadow">
+        Restaurant Order
+      </h2>
+
+      {/* Order Details Section */}
+      <div className="order-details bg-white rounded-xl shadow-lg p-8 mb-10 max-w-4xl mx-auto">
+        <div className="flex items-center">
+          <img
+            src={orderdetails.imgUrl}
+            alt={orderdetails.dishName}
+            className="w-48 h-48 object-cover rounded-lg mr-8"
+          />
+          <div className="flex-1">
+            <h3 className="text-2xl font-bold text-[#333] mb-4">{orderdetails.dishName}</h3>
+            <p className="text-sm text-gray-600 mb-2">{orderdetails.ingredient}</p>
+            <p className="text-lg text-gray-800 mb-2"><strong>Price:</strong> ${orderdetails.price}</p>
+            <p className="flex items-center text-yellow-500 mb-2">
+              <FaStar className="mr-1" /> {orderdetails.rating} ⭐
+            </p>
+            <p className="text-sm text-gray-700">
+              <strong>Type:</strong> 
+              {orderdetails.vegNonveg === 'veg' ? (
+                <><FaLeaf className="mr-1 text-green-500" /> Vegetarian</>
+              ) : (
+                <><FaHamburger className="mr-1 text-red-500" /> Non-Vegetarian</>
+              )}
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* Input fields for Customer ID, Payment Method, and Delivery Address */}
-      <div className="order-form">
-        
-        
-        <label>
-          Delivery Address:
+      {/* Order Form Section */}
+      <div className="order-form bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
+        <h3 className="text-xl font-semibold text-[#333] mb-6">Delivery & Payment Information</h3>
+
+        <label className="block mb-4">
+          <span className="text-lg font-semibold text-gray-700">Delivery Address:</span>
           <input
             type="text"
             name="deliveryAddress"
             value={orderData.deliveryAddress}
             onChange={handleChange}
+            className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7fc7e0] focus:border-[#57a9c6] transition-all"
+            placeholder="Enter your delivery address"
             required
           />
         </label>
 
-        <label>
-          Payment Method:
+        <label className="block mb-4">
+          <span className="text-lg font-semibold text-gray-700">Payment Method:</span>
           <select
             name="paymentMethod"
             value={orderData.paymentMethod}
             onChange={handleChange}
+            className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7fc7e0] focus:border-[#57a9c6] transition-all"
             required
           >
             <option value="">Select Payment Method</option>
@@ -112,24 +135,27 @@ const RestaurantOrderPage = () => {
           </select>
         </label>
 
-        {/* Optionally, add quantity input */}
-        <label>
-          Quantity:
+        <label className="block mb-4">
+          <span className="text-lg font-semibold text-gray-700">Quantity:</span>
           <input
             type="number"
             name="quantity"
             value={orderData.quantity}
             onChange={handleChange}
             min="1"
+            className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7fc7e0] focus:border-[#57a9c6] transition-all"
             required
           />
         </label>
-      </div>
 
-      {/* Place Order Button */}
-      <button onClick={handlePlaceOrder} className="place-order-btn">
-        <FaShoppingCart /> Place Order
-      </button>
+        {/* Place Order Button */}
+        <button
+          onClick={handlePlaceOrder}
+          className="w-full mt-6 bg-gradient-to-r from-[#7fc7e0] to-[#57a9c6] hover:from-[#68b8d8] hover:to-[#499ab0] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 flex items-center justify-center"
+        >
+          <FaShoppingCart className="mr-2" /> Place Order
+        </button>
+      </div>
     </div>
   );
 };

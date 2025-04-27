@@ -114,26 +114,24 @@ namespace OrderManagement.Controllers
 
        
         [HttpGet("status/{status}/{id}")]
-public async Task<ActionResult<List<Order>>> GetOrdersByStatusAndRestaurantId(string status, string id)
-{
-    var orders = await _orderService.GetOrdersByStatusAndRestaurantIdAsync(status, id);
-    if (orders == null || orders.Count == 0)
-        return NotFound();
+        public async Task<ActionResult<List<Order>>> GetOrdersByStatusAndRestaurantId(string status, string id)
+        {
+            var orders = await _orderService.GetOrdersByStatusAndRestaurantIdAsync(status, id);
+            if (orders == null || orders.Count == 0)
+                return NotFound();
 
-    return Ok(orders);
-}
+            return Ok(orders);
+        }
 
-[HttpGet("status/{status}")]
-public async Task<ActionResult<List<Order>>> GetOrdersByStatus(string status)
-{
-    var orders = await _orderService.GetOrdersByStatusAsync(status);
-    if (orders == null || orders.Count == 0)
-        return NotFound();
+        [HttpGet("status/{status}")]
+        public async Task<ActionResult<List<Order>>> GetOrdersByStatus(string status)
+        {
+            var orders = await _orderService.GetOrdersByStatusAsync(status);
+            if (orders == null || orders.Count == 0)
+                return NotFound();
 
-    return Ok(orders);
-}
-
-
+            return Ok(orders);
+        }
     }    
 
 }
