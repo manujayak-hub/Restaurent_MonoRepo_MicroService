@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RestaurantService from "../../Services/RestaurentService";
 import { FaPhoneAlt, FaStar, FaUtensils, FaMapMarkerAlt } from "react-icons/fa";
+import Header from "../../Components/Header";
+import Footer from "../../Components/Footer";
 
 const ResUserDash = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -24,6 +26,8 @@ const ResUserDash = () => {
   }, []);
 
   return (
+    <>
+    <Header/>
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-5xl font-extrabold text-center text-[#e87c21] mb-12 drop-shadow">
@@ -87,6 +91,8 @@ const ResUserDash = () => {
         )}
       </div>
     </div>
+  <Footer/>
+    </>
   );
 };
 

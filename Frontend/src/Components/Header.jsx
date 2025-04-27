@@ -8,14 +8,17 @@ const Header = () => {
           🍴 Foodies
         </Link>
         <nav className="space-x-6">
-          <Link to="/login" className="text-[#1f2e4a] font-semibold hover:text-[#e87c21] transition-all duration-300">
+          <Link to="/" className="text-[#1f2e4a] font-semibold hover:text-[#e87c21] transition-all duration-300">
             Login
           </Link>
-          <Link to="/register" className="text-[#1f2e4a] font-semibold hover:text-[#e87c21] transition-all duration-300">
-            Register
+          <Link to="/register/driver" className="text-[#1f2e4a] font-semibold hover:text-[#e87c21] transition-all duration-300">
+            Register as Delivery Rider
           </Link>
-          <Link to="/about" className="text-[#1f2e4a] font-semibold hover:text-[#e87c21] transition-all duration-300">
-            About
+          <Link to="/register/user" className="text-[#1f2e4a] font-semibold hover:text-[#e87c21] transition-all duration-300">
+            Register as Foodie
+          </Link>
+          <Link to="/register/owner" className="text-[#1f2e4a] font-semibold hover:text-[#e87c21] transition-all duration-300">
+            Register Your Restaurent
           </Link>
         </nav>
       </div>

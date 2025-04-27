@@ -1,6 +1,7 @@
 // src/pages/RegisterUser.jsx
 import { useState } from "react";
 import authService from "../../Services/AuthService";
+import Header from "../../Components/Header";
 
 const RegisterUser = () => {
   const [form, setForm] = useState({
@@ -32,6 +33,8 @@ const RegisterUser = () => {
   };
 
   return (
+    <>
+    <Header/>
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#7fc7e0] via-white to-[#e87c21]/30 transition-all duration-500">
       <div className="w-full max-w-md p-8 bg-white rounded-3xl shadow-2xl border border-gray-200 backdrop-blur-md">
         <h2 className="text-4xl font-extrabold text-center text-[#7fc7e0] drop-shadow mb-6">
@@ -113,6 +116,8 @@ const RegisterUser = () => {
         </form>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

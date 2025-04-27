@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import RestaurantService from "../../Services/RestaurentService" // Update the path if needed
 import OrderService from "../../Services/OrderService"; // Update the path if needed
+import Header from "../../Components/Header";
+import Footer from "../../Components/Footer";
+import axios from "axios";
 
 const ResOrder = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -19,7 +22,7 @@ const ResOrder = () => {
         // Fetch orders for each restaurant
         const restaurantOrders = {};
         for (const restaurant of restaurantList) {
-          const ordersResponse = await OrderService.getByRestaurantId(restaurant.id);
+          const ordersResponse = await OrderService.getbystatusandid("Paid",restaurant.id);
           restaurantOrders[restaurant.id] = ordersResponse.data;
         }
         setOrders(restaurantOrders);
@@ -31,20 +34,48 @@ const ResOrder = () => {
     fetchData();
   }, [userId]);
 
-  const handleCompleteOrder = (restaurantId, orderId) => {
-    setOrders((prevOrders) => {
-      const updatedOrders = { ...prevOrders };
-      updatedOrders[restaurantId] = updatedOrders[restaurantId].map((order) =>
-        order.id === orderId ? { ...order, status: "Completed" } : order
-      );
-      return updatedOrders;
-    });
+//   const handleCompleteOrder = (restaurantId, orderId) => {
+//     setOrders((prevOrders) => {
+//       const updatedOrders = { ...prevOrders };
+//       updatedOrders[restaurantId] = updatedOrders[restaurantId].map((order) =>
+//         order.id === orderId ? { ...order, status: "Completed" } : order
+//       );
+//       return updatedOrders;
+//     });
 
-    console.log(`✅ Order ${orderId} for Restaurant ${restaurantId} marked as completed.`);
-    // You can also call an API to update order status if needed
+//     console.log(`✅ Order ${orderId} for Restaurant ${restaurantId} marked as completed.`);
+//     // You can also call an API to update order status if needed
+//   };
+
+  const handleComplete = async (orderId, restaurantId) => {
+    try {
+      // Step 1: Update order status
+      await OrderService.updaterecord(orderId, "Accepted");;
+      console.log('Order status updated.');
+  
+      // Step 2: Get restaurant details
+      const restaurantResponse = await RestaurantService.getById(restaurantId);
+      const restaurantLocation = restaurantResponse.data?.address; // Adjust based on your API response
+      console.log('Restaurant location:', restaurantLocation);
+  
+      if (!restaurantLocation) {
+        console.error('No restaurant location found!');
+        return;
+      }
+  
+      // Step 3: Call your other API (passing orderId and restaurantLocation)
+      const response = await axios.post(`http://localhost:8084/api/Delivery?orderId=${orderId}&resloc=${restaurantLocation}`);
+  
+      console.log('Final API response:', response.data);
+  
+    } catch (error) {
+      console.error('Error during complete flow:', error);
+    }
   };
 
   return (
+    <>
+    <Header/>
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-extrabold text-center text-[#e87c21] mb-12 drop-shadow">
@@ -78,13 +109,13 @@ const ResOrder = () => {
                         <p className="font-semibold text-[#1f2e4a]">{order.customerName}</p>
                         <p className="text-sm text-gray-600">Status: {order.status}</p>
                       </div>
-                      {order.status === "Pending" && (
-                        <button
-                          onClick={() => handleCompleteOrder(restaurant.id, order.id)}
-                          className="bg-green-500 text-white px-4 py-1 rounded-xl hover:bg-green-600 transition-all duration-300"
-                        >
-                          Complete
-                        </button>
+                      {order.status === "Paid" && (
+                        
+                        <button onClick={() => handleComplete(order.id, order.restaurantId)} 
+                        className="bg-green-500 text-white px-4 py-1 rounded-xl hover:bg-green-600 transition-all duration-300">
+                        Complete
+                      </button>
+                      
                       )}
                     </div>
                   ))
@@ -95,6 +126,8 @@ const ResOrder = () => {
         )}
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 
