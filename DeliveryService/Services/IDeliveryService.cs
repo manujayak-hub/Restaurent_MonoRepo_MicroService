@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 public interface IDeliveryService
 {
-    Task<Delivery> CreateDeliveryAsync(CreateDeliveryRequest request);
+    //Task<Delivery> CreateDeliveryAsync(CreateDeliveryRequest request);
     Task<List<Delivery>> GetAllDeliveriesAsync();
      Task<bool> AcceptDeliveryAsync(string deliveryId, string DriverName,string DriverContact, string driverId);
     Task<bool> CompleteDeliveryAsync(string deliveryId);
@@ -13,5 +13,7 @@ public interface IDeliveryService
 
     Task<Delivery> GetDeliveryByIdAsync(string deliveryId);
     Task<List<Delivery>> GetDeliveriesByDriverId(string driverId);
+
+    Task<string> PostDeliveryCreatebyoidresloc(string orderId, string resloc);
 
 }
