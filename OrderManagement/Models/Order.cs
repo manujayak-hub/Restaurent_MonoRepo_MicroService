@@ -19,7 +19,7 @@ namespace OrderManagement.Models
         public string DeliveryAddress { get; set; }
         public decimal TotalAmount { get; set; }
         public string PaymentMethod { get; set; } // "Card", "COD"
-        public string Status { get; set; } = "Pending";
+        public string Status { get; set; } 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
