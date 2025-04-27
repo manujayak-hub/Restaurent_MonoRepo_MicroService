@@ -31,7 +31,7 @@ const OrderPage = () => {
 
   // Function to navigate to AddToCart page and pass individual values
   const handleGoToAddToCart = (item) => {
-    navigate("/add-to-cart", { 
+    navigate("/cart", { 
       state: { 
     
         id:item.id,
@@ -41,7 +41,8 @@ const OrderPage = () => {
         imgUrl: item.imgUrl, 
         ingredient: item.ingredient, 
         rating: item.rating, 
-        vegNonveg: item.vegNonveg 
+        vegNonveg: item.vegNonveg,
+        resid:restaurant.id, // Pass restaurant ID as well
       } 
     });  // Passing individual values as state
 
@@ -116,7 +117,7 @@ const OrderPage = () => {
                     onClick={() => handleGoToAddToCart(item)}  // Navigate to AddToCart page
                     className="mt-4 flex items-center justify-center gap-2 bg-gradient-to-r from-[#7fc7e0] to-[#57a9c6] hover:from-[#68b8d8] hover:to-[#499ab0] text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-xl transition-all duration-300"
                   >
-                    <FaShoppingCart /> Add to Cart
+                    <FaShoppingCart /> Place Order
                   </button>
                 </div>
               </div>

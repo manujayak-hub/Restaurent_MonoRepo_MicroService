@@ -9,6 +9,7 @@ import OrderPage from "./Pages/Restaurent/OrderPage";
 import ResOwner from "./Pages/Restaurent/ResOwner";
 import TestCartForm from "./Pages/Restaurent/TestCartForm";
 import AddToCart from "./Pages/Restaurent/AddToCart";
+import RestaurantOrderPage from "./Pages/Restaurent/RestaurantOrderPage"; 
 
 
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/resowner" element={<ResOwner />} />
         <Route path="/testcartform" element={<TestCartForm />} />
         <Route path="/add-to-cart" element={<AddToCart/>} /> 
+        <Route path="/cart" element={<RestaurantOrderPage/>} />
         </Routes>
       </BrowserRouter>
     </>

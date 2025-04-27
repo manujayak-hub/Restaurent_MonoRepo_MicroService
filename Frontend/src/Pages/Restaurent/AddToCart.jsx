@@ -7,19 +7,10 @@ const AddToCart = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { item } = location.state || {};  // fallback in case of direct access
+  // Destructure values directly from location.state
+  const { id, dishName, price, imgUrl, ingredient, rating, vegNonveg } = location.state || {};
 
-  console.log(item); 
-
- 
-console.log("stateeeeeeeeeeeeeeeeeeeee", location.state); // Log the item ID to the console
-
-
-
-  
-//
-
- 
+  console.log("Received state:", location.state); // For debugging
 
   const [quantity, setQuantity] = useState(1);
   const [cartId, setCartId] = useState(localStorage.getItem('cartId') || '');
