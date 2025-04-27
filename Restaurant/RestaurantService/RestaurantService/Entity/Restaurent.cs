@@ -26,6 +26,9 @@
         [BsonElement("rating")]
         public double Rating { get; set; }
 
+        [BsonElement("imgUrl")]
+        public string ImgUrl { get; set; }
+
         [BsonElement("cuisine")]
         public string Cuisine { get; set; } = null!;
 

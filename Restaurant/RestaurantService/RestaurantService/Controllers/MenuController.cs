@@ -48,6 +48,7 @@ public static class MenuController
 
         group.MapPut("/{id}", async (string id, Menu input) =>
         {
+            //input.Id = id;
             var result = await collection.ReplaceOneAsync(r => r.Id == id, input);
             return result.MatchedCount > 0 ? Results.NoContent() : Results.NotFound();
         })

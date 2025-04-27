@@ -73,6 +73,27 @@ namespace OrderManagement.Controllers
             await _orderService.DeleteOrderAsync(id);
             return Ok(new { message = "Order successfully deleted" });
         }
+        //Get orders by Customer ID
+        [HttpGet("customer/{customerId}")]
+        public async Task<ActionResult<List<Order>>> GetOrdersByCustomerId(string customerId)
+        {
+            var orders = await _orderService.GetOrdersByCustomerIdAsync(customerId);
+            if (orders == null || orders.Count == 0)
+                return NotFound(new { message = "No orders found for this customer" });
+
+            return Ok(orders);
+        }
+
+        //Get orders by Restaurant ID
+        [HttpGet("restaurant/{restaurantId}")]
+        public async Task<ActionResult<List<Order>>> GetOrdersByRestaurantId(string restaurantId)
+        {
+            var orders = await _orderService.GetOrdersByRestaurantIdAsync(restaurantId);
+            if (orders == null || orders.Count == 0)
+                return NotFound(new { message = "No orders found for this restaurant" });
+
+            return Ok(orders);
+        }
 
     }    
 
