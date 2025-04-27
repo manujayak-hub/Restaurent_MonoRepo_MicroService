@@ -14,10 +14,10 @@ public class DeliveryController : ControllerBase
         _service = service;
     }
 
-    [HttpPost(Name = "CreateDelivery")]
-    public async Task<IActionResult> CreateDelivery(CreateDeliveryRequest request)
+    [HttpPost(Name = "PostDeliveryCreatebyoidresloc")]
+    public async Task<IActionResult> PostDeliveryCreatebyoidresloc(string orderId, string resloc)
     {
-        var delivery = await _service.CreateDeliveryAsync(request);
+        var delivery = await _service.PostDeliveryCreatebyoidresloc(orderId, resloc);
         return Ok(delivery);
     }
 
