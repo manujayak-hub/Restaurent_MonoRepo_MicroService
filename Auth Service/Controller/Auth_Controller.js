@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import User from "../Model/Auth_Model.js";
-//import { publishUserLogin } from "../Queue/producer.js";
 
 const generateAccessToken = (user) => {
     return jwt.sign(
@@ -62,12 +61,7 @@ const login = async (req, res) => {
         const uname = user.firstName
         const urole = user.role
 
-        // await publishUserLogin(accessToken, {
-        //     id:user._id,
-        //     email: user.email,
-        //     role: user.role,
-        //     firstName: user.firstName,
-        // });
+        
 
         res.json({ accessToken, refreshToken ,uid,uemail,uname,urole});
     } catch (error) {

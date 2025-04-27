@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://localhost:8081",
+  baseURL: "http://localhost:8081",
 });
 
 const RestaurantService = {
@@ -11,6 +11,10 @@ const RestaurantService = {
 
   getById: async (id) => {
     return await api.get(`/Restaurent/${id}`);
+  },
+
+  getbyowner : async (id) => {
+    return await api.get(`/Restaurent/resowner/${id}`);
   },
 
   create: async (restaurantData) => {

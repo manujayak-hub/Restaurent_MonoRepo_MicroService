@@ -22,6 +22,7 @@ console.log(req.path,req.method)
 next()
 })  
  
+
 //routes
 app.use("/auth",Authrouter);
 
