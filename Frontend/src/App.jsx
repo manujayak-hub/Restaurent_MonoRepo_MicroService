@@ -6,10 +6,28 @@ import RegisterRestaurantOwner from "./Pages/Users/RegisterRestaurantOwner";
 import LoginUser from "./Pages/Users/LoginUser";
 import ResUserDash from "./Pages/Restaurent/ResUserDash";
 import OrderPage from "./Pages/Restaurent/OrderPage";
+
+import AllDeliveries from './Pages/Delivery/AllDeliveries';
+import CompletedDeliveries from './Pages/Delivery/CompletedDeliveries';
+import CreateDelivery from './Pages/Delivery/CreateDelivery';
+import Dashboard from './Pages/Delivery/Dashboard';
+import DeliveryDetails from './Pages/Delivery/DeliveryDetails';
+import UserDashboard from './Pages/Delivery/UserDashboard';
+import TrackDelivery from './Pages/Delivery/TrackDelivery';
+import AdminDeliveries from './Pages/Delivery/AdminDeliveries';
+import DriverDeliveries from './Pages/Delivery/DriverDeliveries';
+import CreateOrderAndDelivery from './Pages/Delivery/CreateOrderAndDelivery';
+
 import ResOwner from "./Pages/Restaurent/ResOwner";
+
 import TestCartForm from "./Pages/Restaurent/TestCartForm";
 import AddToCart from "./Pages/Restaurent/AddToCart";
 import RestaurantOrderPage from "./Pages/Restaurent/RestaurantOrderPage"; 
+
+import ResOrder from "./Pages/Restaurent/ResOrder";
+
+
+
 
 
 
@@ -24,10 +42,28 @@ function App() {
         <Route path="/register/owner" element={<RegisterRestaurantOwner/>} />
         <Route path="/resuserdash" element={<ResUserDash/>} />
         <Route path="/restaurant/:id" element={<OrderPage />} />
+
+        
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/all" element={<AllDeliveries />} />
+        <Route path="/completed" element={<CompletedDeliveries />} />
+        <Route path="/create" element={<CreateDelivery />} />
+        <Route path="/delivery-details/:deliveryId" element={<DeliveryDetails />} />
+        <Route path="/userdashboard" element={<UserDashboard />} />
+        <Route path="/track-delivery/:deliveryId" element={<TrackDelivery />} />
+        <Route path="/admin-deliveries" element={<AdminDeliveries />} />
+        <Route path="/DriverDeliveries" element={<DriverDeliveries />} />
+        <Route path="/CreateOrderAndDelivery" element={<CreateOrderAndDelivery />} />
+
         <Route path="/resowner" element={<ResOwner />} />
+
         <Route path="/testcartform" element={<TestCartForm />} />
         <Route path="/add-to-cart" element={<AddToCart/>} /> 
         <Route path="/cart" element={<RestaurantOrderPage/>} />
+
+        <Route path="/resorder" element={<ResOrder />} />
+
+
         </Routes>
       </BrowserRouter>
     </>

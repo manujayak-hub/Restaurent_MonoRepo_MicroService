@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import RestaurantService from "../../Services/RestaurentService";
 import MenuService from "../../Services/MenuService";
+import { useNavigate } from "react-router-dom";
 
 const ResOwner = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -8,6 +9,7 @@ const ResOwner = () => {
   const [loading, setLoading] = useState(true);
   const [uid, setUid] = useState("");
 const [uname, setUname] = useState("");
+const navigate = useNavigate()
 
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -18,6 +20,7 @@ const [uname, setUname] = useState("");
     cuisine: "",
     contactNumber: "",
     rating: "",
+    ImgUrl: "",
     address: "",
   });
 
@@ -41,6 +44,7 @@ const [uname, setUname] = useState("");
     cuisine: "",
     contactNumber: "",
     rating: "",
+    imgUrl: "",
     address: "",
   });
 
@@ -101,6 +105,7 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
       cuisine: restaurant.cuisine,
       contactNumber: restaurant.contactNumber,
       rating: restaurant.rating,
+      ImgUrl:restaurent.imgUrl,
       address: restaurant.address,
     });
     setIsEditModalOpen(true);
@@ -172,7 +177,7 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
         Price: newMenuItem.Price.toString(), // 👈 make it string
         Ingredient: newMenuItem.Ingredient,
         VegNonveg: Number(newMenuItem.VegNonveg), // keep it number/double
-        ImgUrl: newMenuItem.ImgUrl || "",
+        ImgUrl: newMenuItem.ImgUrl ,
         Rating: newMenuItem.Rating.toString(), // 👈 make it string
         RestaurentId: currentRestaurant.id, // make sure this is not null
         CreatedAt: new Date().toISOString(), // ✅ correct DateTime
@@ -270,6 +275,7 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
         cuisine: "",
         contactNumber: "",
         rating: "",
+        imgUrl: "",
         address: "",
       });
     } catch (error) {
@@ -282,7 +288,7 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
     <div className="min-h-screen bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30 py-10 px-6">
       <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg p-8">
         <h2 className="text-3xl font-bold text-[#e87c21] mb-6">🍴 Your Restaurants</h2>
-
+        
         {loading ? (
           <div className="text-center text-lg text-gray-500">Loading...</div>
         ) : restaurants.length === 0 ? (
@@ -302,6 +308,18 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
             <div key={rest.id} className="mb-10 p-6 rounded-xl shadow-lg bg-white border-t-4 border-[#e87c21]">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-2xl font-bold text-[#1f2e4a]">{rest.name}</h3>
+                <button
+                onClick={() => setIsAddRestaurantModalOpen(true)}
+                className="bg-[#e87c21] text-white px-4 py-2 mb-2 rounded hover:bg-[#cf6b1b]"
+              >
+                Create Another Restaurant
+              </button>
+              <button
+                onClick={() =>  navigate("/user-dashboard")}
+                className="bg-[#e87c21] text-white px-4 py-2 mb-2 ml-2 rounded hover:bg-[#cf6b1b]"
+              >
+                See Orders
+              </button>
                 <div className="flex gap-2">
                   <button
                     onClick={() => {
@@ -327,6 +345,13 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
                   </button>
                 </div>
               </div>
+              {rest.imgUrl && (
+                <img
+                  src={rest.imgUrl}
+                  alt={rest.name}
+                  className="w-full h-48 object-contain rounded-lg mb-4"
+                />
+              )}
               <p className="text-sm text-gray-700">Cuisine: {rest.cuisine}</p>
               <p className="text-sm text-gray-700">Contact: {rest.contactNumber}</p>
               <p className="text-sm text-gray-700">Rating: {rest.rating}</p>
@@ -597,6 +622,15 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
                 className="w-full p-2 border rounded-md"
                 placeholder="Address"
               />
+               <input
+                type="text"
+                value={updatedRestaurant.ImgUrl}
+                onChange={(e) =>
+                  setUpdatedRestaurant((prev) => ({ ...prev, imgUrl: e.target.value }))
+                }
+                className="w-full p-2 border rounded-md"
+                placeholder="Image URL"
+              />
             </div>
             <div className="flex justify-end gap-4 mt-4">
               <button
@@ -666,6 +700,15 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
                 }
                 className="w-full p-2 border rounded-md"
                 placeholder="Address"
+              />
+                <input
+                type="text"
+                value={newRestaurant.imgUrl}
+                onChange={(e) =>
+                  setNewRestaurant((prev) => ({ ...prev, imgUrl: e.target.value }))
+                }
+                className="w-full p-2 border rounded-md"
+                placeholder="Image URL"
               />
             </div>
             <div className="flex justify-end gap-4 mt-4">

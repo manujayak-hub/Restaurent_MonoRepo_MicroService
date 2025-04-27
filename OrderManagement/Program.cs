@@ -63,3 +63,5 @@ bool IsRunningInDocker()
 {
     return Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
 }
+
+app.UseCors("AllowAll");

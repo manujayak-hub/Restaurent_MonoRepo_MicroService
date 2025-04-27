@@ -31,7 +31,7 @@ public class DeliveryController : ControllerBase
 [HttpPut("{deliveryId}/accept")]
 public async Task<IActionResult> AcceptDelivery(string deliveryId, [FromBody] Driver request)
 {
-    var success = await _service.AcceptDeliveryAsync(deliveryId, request.Id);
+    var success = await _service.AcceptDeliveryAsync(deliveryId, request.DriverId,request.DriverName,request.DriverContact);
 
     if (!success)
     {
@@ -75,4 +75,17 @@ public async Task<ActionResult<List<Delivery>>> GetCompletedDeliveries()
         return Ok(delivery);
     }
 
+// GET: api/delivery/driver/{driverId}
+        [HttpGet("driver/{driverId}")]
+        public async Task<ActionResult<IEnumerable<Delivery>>> GetDeliveriesByDriverId(string driverId)
+        {
+            var deliveries = await _service.GetDeliveriesByDriverId(driverId);
+            
+            if (deliveries == null || deliveries.Count == 0)
+            {
+                return NotFound("No deliveries found for this driver.");
+            }
+
+            return Ok(deliveries);
+        }
 }
