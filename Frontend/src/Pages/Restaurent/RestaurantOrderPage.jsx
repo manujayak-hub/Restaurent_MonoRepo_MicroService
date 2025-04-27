@@ -1,16 +1,20 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";  // Import useNavigate for React Router v6
+import { useNavigate ,useLocation } from "react-router-dom";  // Import useNavigate for React Router v6
 import { FaMapMarkerAlt, FaPhoneAlt, FaUtensils, FaStar, FaLeaf, FaHamburger, FaShoppingCart } from "react-icons/fa";
-import OrderService from '../../Services/OrderService'; // Adjust path as needed
+import OrderService from '../../Services/OrderService'; 
 
 const RestaurantOrderPage = () => {
   const navigate = useNavigate(); // Initialize useNavigate hook  
-  const orderdetails = location.state?.item || {}; // Get order details from location state
+   const location = useLocation();
+  const orderdetails = location.state || {}; // Get order details from location state
+  const cusid = localStorage.getItem("userId"); 
+
+  console.log(orderdetails);
 
   // State to hold order data
   const [orderData, setOrderData] = useState({
-    itemId: orderdetails.id || '', // Ensure this is the correct ItemId
-    dishName: orderdetails.dishName || '',
+    itemId: orderdetails.id , // Ensure this is the correct ItemId
+    dishName: orderdetails.dishName,
     price: orderdetails.price || 0,
     ingredient: orderdetails.ingredient || '',
     rating: orderdetails.rating || 0,
@@ -44,7 +48,7 @@ const RestaurantOrderPage = () => {
     ];
   
     const requestBody = {
-      customerId: orderData.customerId,
+      customerId: cusid,
       restaurantId: orderData.restaurantId,
       items: items, // Pass the items array here
       deliveryAddress: orderData.deliveryAddress,
@@ -80,16 +84,7 @@ const RestaurantOrderPage = () => {
 
       {/* Input fields for Customer ID, Payment Method, and Delivery Address */}
       <div className="order-form">
-        <label>
-          Customer ID:
-          <input
-            type="text"
-            name="customerId"
-            value={orderData.customerId}
-            onChange={handleChange}
-            required
-          />
-        </label>
+        
         
         <label>
           Delivery Address:

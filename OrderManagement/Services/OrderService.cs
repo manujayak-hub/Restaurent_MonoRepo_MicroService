@@ -67,5 +67,32 @@ namespace OrderManagement.Services
             return await _orders.Find(filter).ToListAsync();
         }
 
+        // Get Order by Status and RestaurantId
+        public async Task<Order?> GetOrderByStatusAndRestaurantIdAsync(string status, string restaurantId)
+        {
+            var filter = Builders<Order>.Filter.Eq(order => order.Status, status) &
+                        Builders<Order>.Filter.Eq(order => order.RestaurantId, restaurantId);
+
+            return await _orders.Find(filter).FirstOrDefaultAsync();
+        }
+
+        // Get Order by Status only
+        public async Task<Order?> GetOrderByStatusAsync(string status)
+        {
+            var filter = Builders<Order>.Filter.Eq(order => order.Status, status);
+
+            return await _orders.Find(filter).FirstOrDefaultAsync();
+        }
+
+        // Update ONLY the Status field
+        public async Task UpdateOrderStatusAsync(string id, string recordStatus)
+        {
+            var filter = Builders<Order>.Filter.Eq(order => order.Id, id);
+            var update = Builders<Order>.Update.Set(order => order.Status, recordStatus);
+
+            await _orders.UpdateOneAsync(filter, update);
+        }
+
+
     }
 }

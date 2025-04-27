@@ -35,6 +35,26 @@ namespace OrderManagement.Controllers
             return Ok(order);
         }
 
+        [HttpGet("status/{status}/{id}")]
+        public async Task<ActionResult<Order>> GetOrderByStatusAndRestaurantId(string status, string id)
+        {
+            var order = await _orderService.GetOrderByStatusAndRestaurantIdAsync(status, id);
+            if (order == null)
+                return NotFound();
+
+            return Ok(order);
+        }
+
+        [HttpGet("status/{status}")]
+        public async Task<ActionResult<Order>> GetOrderByStatus(string status)
+        {
+            var order = await _orderService.GetOrderByStatusAsync(status);
+            if (order == null)
+                return NotFound();
+
+            return Ok(order);
+        }
+
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] CreateOrderDTO orderDto)
         {
@@ -47,6 +67,18 @@ namespace OrderManagement.Controllers
             {
                 return BadRequest(new { error = ex.Message });
             }
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<ActionResult> UpdateOrderStatus(string id, [FromQuery] string recordstatus)
+        {
+            var existingOrder = await _orderService.GetOrderAsync(id);
+            if (existingOrder == null)
+                return NotFound(new { message = "Order not found" });
+
+            await _orderService.UpdateOrderStatusAsync(id, recordstatus);
+
+            return Ok(new { message = "Order successfully updated" });
         }
 
         [HttpPut("{id}")]
