@@ -26,8 +26,11 @@ namespace OrderManagement.Services
             return await _orders.Find(order => order.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task CreateOrderAsync(CreateOrderDTO orderDto)
+        public async Task CreateOrderAsync(CreateOrderDTO orderDto) 
         {
+            // Set the status based on payment method
+            string status = orderDto.PaymentMethod == "cashOnDelivery" ? "Paid" : "Pending";
+
             var order = new Order
             {
                 CustomerId = orderDto.CustomerId,
@@ -36,12 +39,13 @@ namespace OrderManagement.Services
                 DeliveryAddress = orderDto.DeliveryAddress,
                 TotalAmount = orderDto.TotalAmount,
                 PaymentMethod = orderDto.PaymentMethod,
-                Status = "Pending", // You can make this dynamic if needed
+                Status = status, // Set the status here
                 CreatedAt = DateTime.UtcNow
             };
 
             await _orders.InsertOneAsync(order);
         }
+
 
         public async Task UpdateOrderAsync(string id, Order order)
         {
