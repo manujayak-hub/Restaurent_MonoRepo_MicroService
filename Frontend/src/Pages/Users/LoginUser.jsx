@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import authService from "../../Services/AuthService"
+import Header from "../../Components/Header";
+import Footer from "../../Components/Footer";
 
 
 
@@ -57,6 +59,8 @@ const LoginUser = () => {
   }, [loginResponse]);
 
   return (
+    <>
+    <Header/>
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#7fc7e0] via-white to-[#e87c21]/30 transition-all duration-500">
       <div className="w-full max-w-md p-8 bg-white rounded-3xl shadow-2xl border border-gray-200 backdrop-blur-md">
         <h2 className="text-4xl font-extrabold text-center text-[#e87c21] drop-shadow mb-6">
@@ -106,6 +110,8 @@ const LoginUser = () => {
         </form>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 
