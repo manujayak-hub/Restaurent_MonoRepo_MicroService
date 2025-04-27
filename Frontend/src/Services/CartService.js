@@ -2,12 +2,12 @@
 
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8082/api/Cart';  // Adjust if needed
+const BASE_URL = 'http://localhost:8082/api/cart';  // Adjust if needed
 
 const CartService = {
   create: async ({ userId }) => {
     try {
-      const response = await axios.post(`${BASE_URL}/create`, {
+      const response = await axios.post(`${BASE_URL}/`, {
         userId: userId,
       });
       console.log('✅ Cart created:', response.data);

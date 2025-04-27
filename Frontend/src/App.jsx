@@ -7,7 +7,8 @@ import LoginUser from "./Pages/Users/LoginUser";
 import ResUserDash from "./Pages/Restaurent/ResUserDash";
 import OrderPage from "./Pages/Restaurent/OrderPage";
 import ResOwner from "./Pages/Restaurent/ResOwner";
-
+import TestCartForm from "./Pages/Restaurent/TestCartForm";
+import AddToCart from "./Pages/Restaurent/AddToCart";
 
 
 
@@ -23,6 +24,8 @@ function App() {
         <Route path="/resuserdash" element={<ResUserDash/>} />
         <Route path="/restaurant/:id" element={<OrderPage />} />
         <Route path="/resowner" element={<ResOwner />} />
+        <Route path="/testcartform" element={<TestCartForm />} />
+        <Route path="/add-to-cart" element={<AddToCart/>} /> 
         </Routes>
       </BrowserRouter>
     </>

@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import RestaurantService from "../../Services/RestaurentService";
 import MenuService from "../../Services/MenuService";
-import CartService from "../../Services/CartService"; 
 import { FaPhoneAlt, FaStar, FaUtensils, FaMapMarkerAlt, FaShoppingCart, FaLeaf, FaHamburger } from "react-icons/fa";
 
 const OrderPage = () => {
+  const navigate = useNavigate();  // For navigation in React Router v6
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  
-  // STATE to track cartId properly
-  const [cartId, setCartId] = useState(localStorage.getItem('cartId') || null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,50 +29,23 @@ const OrderPage = () => {
     fetchData();
   }, [id]);
 
-  const ensureCartExists = async () => {
-    const userId = localStorage.getItem('userId'); 
-    if (!userId) {
-      alert('❌ User not logged in.');
-      return null;
-    }
-  
-    let existingCartId = localStorage.getItem('cartId');
-    if (!existingCartId) {
-      const newCart = await CartService.create({ userId }); 
-      if (newCart && newCart.id) { 
-        localStorage.setItem('cartId', newCart.id);
-        setCartId(newCart.id);  // update the state
-        existingCartId = newCart.id;
-      } else {
-        console.error('❌ Failed to create new cart.');
-        return null;
-      }
-    }
-    return existingCartId;
-  };
-  
-  const handleAddToCart = async (item) => {
-    try {
-      let currentCartId = cartId;
+  // Function to navigate to AddToCart page and pass individual values
+  const handleGoToAddToCart = (item) => {
+    navigate("/add-to-cart", { 
+      state: { 
+    
+        id:item.id,
+      
+        dishName: item.dishName, 
+        price: item.price, 
+        imgUrl: item.imgUrl, 
+        ingredient: item.ingredient, 
+        rating: item.rating, 
+        vegNonveg: item.vegNonveg 
+      } 
+    });  // Passing individual values as state
 
-      if (!currentCartId) {
-        // ensureCartExists will create one if not exists
-        currentCartId = await ensureCartExists();
-        if (!currentCartId) {
-          console.error('❌ Cannot proceed without cart.');
-          return;
-        }
-      }
-
-      console.log('📦 Adding item to cart:', currentCartId, item);
-      const response = await CartService.addItem(currentCartId, item);
-      console.log('✅ Item added successfully:', response);
-      alert('✅ Item added to cart!');
-
-    } catch (error) {
-      console.error('❌ Failed to add item to cart:', error);
-      alert('❌ Failed to add item to cart!');
-    }
+    console.log(item); // Log the item to the console for debugging
   };
 
   if (loading) {
@@ -143,7 +113,7 @@ const OrderPage = () => {
                   </div>
 
                   <button
-                    onClick={() => handleAddToCart(item)}
+                    onClick={() => handleGoToAddToCart(item)}  // Navigate to AddToCart page
                     className="mt-4 flex items-center justify-center gap-2 bg-gradient-to-r from-[#7fc7e0] to-[#57a9c6] hover:from-[#68b8d8] hover:to-[#499ab0] text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-xl transition-all duration-300"
                   >
                     <FaShoppingCart /> Add to Cart
@@ -154,7 +124,7 @@ const OrderPage = () => {
           </div>
         ) : (
           <div className="text-center text-lg font-semibold text-gray-500">
-            No food items found.
+            No menu items available.
           </div>
         )}
       </div>
