@@ -24,6 +24,14 @@ const OrderService = {
   delete: async (id) => {
     return await api.delete(`/${id}`);
   },
+
+   getByCustomerId: async (customerId) => {
+    return await api.get(`/customer/${customerId}`);
+  },
+
+  getByRestaurantId: async (restaurantId) => {
+    return await api.get(`/restaurant/${restaurantId}`);
+  },
 };
 
 export default OrderService;

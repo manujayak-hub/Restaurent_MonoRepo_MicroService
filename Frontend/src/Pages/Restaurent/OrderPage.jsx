@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import RestaurantService from "../../Services/RestaurentService";
 import MenuService from "../../Services/MenuService";
+import CartService from "../../Services/CartService"; 
 import { FaPhoneAlt, FaStar, FaUtensils, FaMapMarkerAlt, FaShoppingCart, FaLeaf, FaHamburger } from "react-icons/fa";
 
 const OrderPage = () => {
@@ -9,6 +10,9 @@ const OrderPage = () => {
   const [restaurant, setRestaurant] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // STATE to track cartId properly
+  const [cartId, setCartId] = useState(localStorage.getItem('cartId') || null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,8 +32,50 @@ const OrderPage = () => {
     fetchData();
   }, [id]);
 
-  const handleAddToCart = (item) => {
-    alert(`🛒 Added "${item.DishName}" to cart!`);
+  const ensureCartExists = async () => {
+    const userId = localStorage.getItem('userId'); 
+    if (!userId) {
+      alert('❌ User not logged in.');
+      return null;
+    }
+  
+    let existingCartId = localStorage.getItem('cartId');
+    if (!existingCartId) {
+      const newCart = await CartService.create({ userId }); 
+      if (newCart && newCart.id) { 
+        localStorage.setItem('cartId', newCart.id);
+        setCartId(newCart.id);  // update the state
+        existingCartId = newCart.id;
+      } else {
+        console.error('❌ Failed to create new cart.');
+        return null;
+      }
+    }
+    return existingCartId;
+  };
+  
+  const handleAddToCart = async (item) => {
+    try {
+      let currentCartId = cartId;
+
+      if (!currentCartId) {
+        // ensureCartExists will create one if not exists
+        currentCartId = await ensureCartExists();
+        if (!currentCartId) {
+          console.error('❌ Cannot proceed without cart.');
+          return;
+        }
+      }
+
+      console.log('📦 Adding item to cart:', currentCartId, item);
+      const response = await CartService.addItem(currentCartId, item);
+      console.log('✅ Item added successfully:', response);
+      alert('✅ Item added to cart!');
+
+    } catch (error) {
+      console.error('❌ Failed to add item to cart:', error);
+      alert('❌ Failed to add item to cart!');
+    }
   };
 
   if (loading) {
@@ -86,12 +132,11 @@ const OrderPage = () => {
                     </p>
                     <p className="text-lg font-semibold text-gray-800 mb-2">Rs. {item.price}</p>
 
-                    {/* Display Veg or Non-Veg */}
                     <p className="flex items-center text-sm text-gray-700">
                       {item.vegNonveg === 1 ? (
-                        <FaLeaf className="mr-1 text-green-500" /> // Veg
+                        <FaLeaf className="mr-1 text-green-500" />
                       ) : (
-                        <FaHamburger className="mr-1 text-red-500" /> // Non-Veg
+                        <FaHamburger className="mr-1 text-red-500" />
                       )}
                       {item.vegNonveg === 1 ? "Vegetarian" : "Non-Vegetarian"}
                     </p>
