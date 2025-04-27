@@ -54,5 +54,18 @@ namespace OrderManagement.Services
             var filter = Builders<Order>.Filter.Eq(order => order.Id, id);
             await _orders.DeleteOneAsync(filter);
         }
+
+        public async Task<List<Order>> GetOrdersByCustomerIdAsync(string customerId)
+        {
+            var filter = Builders<Order>.Filter.Eq(order => order.CustomerId, customerId);
+            return await _orders.Find(filter).ToListAsync();
+        }
+
+        public async Task<List<Order>> GetOrdersByRestaurantIdAsync(string restaurantId)
+        {
+            var filter = Builders<Order>.Filter.Eq(order => order.RestaurantId, restaurantId);
+            return await _orders.Find(filter).ToListAsync();
+        }
+
     }
 }

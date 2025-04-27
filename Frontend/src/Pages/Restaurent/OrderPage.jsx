@@ -75,25 +75,25 @@ const OrderPage = () => {
                 <div className="flex flex-col h-full justify-between">
                   <div>
                     <img
-                      src={item.ImgUrl}
-                      alt={item.DishName}
-                      className="w-full h-40 object-cover rounded-xl mb-4"
+                      src={item.imgUrl}
+                      alt={item.dishName}
+                      className="w-full h-40 object-contain rounded-xl mb-4"
                     />
-                    <h3 className="text-xl font-bold text-[#1f2e4a] mb-2">{item.DishName}</h3>
-                    <p className="text-sm text-gray-600 mb-2">Ingredients: {item.Ingredient}</p>
+                    <h3 className="text-xl font-bold text-[#1f2e4a] mb-2">{item.dishName}</h3>
+                    <p className="text-sm text-gray-600 mb-2">Ingredients: {item.ingredient}</p>
                     <p className="text-sm text-gray-600 mb-2">
-                      <FaStar className="mr-1 text-yellow-400" /> {item.Rating} ⭐
+                      <FaStar className="mr-1 text-yellow-400" /> {item.rating} ⭐
                     </p>
-                    <p className="text-lg font-semibold text-gray-800 mb-2">Rs. {item.Price}</p>
+                    <p className="text-lg font-semibold text-gray-800 mb-2">Rs. {item.price}</p>
 
                     {/* Display Veg or Non-Veg */}
                     <p className="flex items-center text-sm text-gray-700">
-                      {item.VegNonveg === 1 ? (
+                      {item.vegNonveg === 1 ? (
                         <FaLeaf className="mr-1 text-green-500" /> // Veg
                       ) : (
                         <FaHamburger className="mr-1 text-red-500" /> // Non-Veg
                       )}
-                      {item.VegNonveg === 1 ? "Vegetarian" : "Non-Vegetarian"}
+                      {item.vegNonveg === 1 ? "Vegetarian" : "Non-Vegetarian"}
                     </p>
                   </div>
 

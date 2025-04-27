@@ -13,6 +13,10 @@ const RestaurantService = {
     return await api.get(`/Restaurent/${id}`);
   },
 
+  getbyowner : async (id) => {
+    return await api.get(`/Restaurent/resowner/${id}`);
+  },
+
   create: async (restaurantData) => {
     return await api.post('/Restaurent', restaurantData);
   },

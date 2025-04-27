@@ -6,6 +6,7 @@ import RegisterRestaurantOwner from "./Pages/Users/RegisterRestaurantOwner";
 import LoginUser from "./Pages/Users/LoginUser";
 import ResUserDash from "./Pages/Restaurent/ResUserDash";
 import OrderPage from "./Pages/Restaurent/OrderPage";
+
 import AllDeliveries from './Pages/Delivery/AllDeliveries';
 import CompletedDeliveries from './Pages/Delivery/CompletedDeliveries';
 import CreateDelivery from './Pages/Delivery/CreateDelivery';
@@ -16,6 +17,10 @@ import TrackDelivery from './Pages/Delivery/TrackDelivery';
 import AdminDeliveries from './Pages/Delivery/AdminDeliveries';
 import DriverDeliveries from './Pages/Delivery/DriverDeliveries';
 import CreateOrderAndDelivery from './Pages/Delivery/CreateOrderAndDelivery';
+
+import ResOwner from "./Pages/Restaurent/ResOwner";
+import ResOrder from "./Pages/Restaurent/ResOrder";
+
 
 
 
@@ -31,6 +36,7 @@ function App() {
         <Route path="/register/owner" element={<RegisterRestaurantOwner/>} />
         <Route path="/resuserdash" element={<ResUserDash/>} />
         <Route path="/restaurant/:id" element={<OrderPage />} />
+
         
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/all" element={<AllDeliveries />} />
@@ -42,6 +48,11 @@ function App() {
         <Route path="/admin-deliveries" element={<AdminDeliveries />} />
         <Route path="/DriverDeliveries" element={<DriverDeliveries />} />
         <Route path="/CreateOrderAndDelivery" element={<CreateOrderAndDelivery />} />
+
+        <Route path="/resowner" element={<ResOwner />} />
+        <Route path="/resorder" element={<ResOrder />} />
+
+
         </Routes>
       </BrowserRouter>
     </>
