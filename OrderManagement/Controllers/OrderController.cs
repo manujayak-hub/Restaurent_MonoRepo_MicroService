@@ -35,26 +35,6 @@ namespace OrderManagement.Controllers
             return Ok(order);
         }
 
-        [HttpGet("status/{status}/{id}")]
-        public async Task<ActionResult<Order>> GetOrderByStatusAndRestaurantId(string status, string id)
-        {
-            var order = await _orderService.GetOrderByStatusAndRestaurantIdAsync(status, id);
-            if (order == null)
-                return NotFound();
-
-            return Ok(order);
-        }
-
-        [HttpGet("status/{status}")]
-        public async Task<ActionResult<Order>> GetOrderByStatus(string status)
-        {
-            var order = await _orderService.GetOrderByStatusAsync(status);
-            if (order == null)
-                return NotFound();
-
-            return Ok(order);
-        }
-
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] CreateOrderDTO orderDto)
         {
@@ -69,17 +49,21 @@ namespace OrderManagement.Controllers
             }
         }
 
-        [HttpPatch("{id}")]
-        public async Task<ActionResult> UpdateOrderStatus(string id, [FromQuery] string recordstatus)
+       [HttpPatch("{id}")]
+        public async Task<ActionResult> UpdateOrderStatus(string id, string recordstatus)
         {
             var existingOrder = await _orderService.GetOrderAsync(id);
             if (existingOrder == null)
                 return NotFound(new { message = "Order not found" });
 
-            await _orderService.UpdateOrderStatusAsync(id, recordstatus);
+            // Update only the status field
+            existingOrder.Status = recordstatus;
 
-            return Ok(new { message = "Order successfully updated" });
+            await _orderService.UpdateOrderAsync(id, existingOrder);
+
+            return Ok(new { message = "Order successfully updated", order = existingOrder });
         }
+
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateOrder(string id, [FromBody] Order order)
@@ -105,27 +89,6 @@ namespace OrderManagement.Controllers
             await _orderService.DeleteOrderAsync(id);
             return Ok(new { message = "Order successfully deleted" });
         }
-        //Get orders by Customer ID
-        [HttpGet("customer/{customerId}")]
-        public async Task<ActionResult<List<Order>>> GetOrdersByCustomerId(string customerId)
-        {
-            var orders = await _orderService.GetOrdersByCustomerIdAsync(customerId);
-            if (orders == null || orders.Count == 0)
-                return NotFound(new { message = "No orders found for this customer" });
-
-            return Ok(orders);
-        }
-
-        //Get orders by Restaurant ID
-        [HttpGet("restaurant/{restaurantId}")]
-        public async Task<ActionResult<List<Order>>> GetOrdersByRestaurantId(string restaurantId)
-        {
-            var orders = await _orderService.GetOrdersByRestaurantIdAsync(restaurantId);
-            if (orders == null || orders.Count == 0)
-                return NotFound(new { message = "No orders found for this restaurant" });
-
-            return Ok(orders);
-        }
 
         //Get orders by Customer ID
         [HttpGet("customer/{customerId}")]
@@ -147,8 +110,30 @@ namespace OrderManagement.Controllers
                 return NotFound(new { message = "No orders found for this restaurant" });
 
             return Ok(orders);
-        }
+        }
 
-    }    
+       
+        [HttpGet("status/{status}/{id}")]
+public async Task<ActionResult<List<Order>>> GetOrdersByStatusAndRestaurantId(string status, string id)
+{
+    var orders = await _orderService.GetOrdersByStatusAndRestaurantIdAsync(status, id);
+    if (orders == null || orders.Count == 0)
+        return NotFound();
+
+    return Ok(orders);
+}
+
+[HttpGet("status/{status}")]
+public async Task<ActionResult<List<Order>>> GetOrdersByStatus(string status)
+{
+    var orders = await _orderService.GetOrdersByStatusAsync(status);
+    if (orders == null || orders.Count == 0)
+        return NotFound();
+
+    return Ok(orders);
+}
+
+
+    }    
 
 }
