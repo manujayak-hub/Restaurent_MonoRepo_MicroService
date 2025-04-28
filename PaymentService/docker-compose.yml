@@ -1,0 +1,8 @@
+services:
+  payment-service:
+    build:
+      context: .
+    ports:
+      - "8083:8083"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
