@@ -32,6 +32,20 @@ const OrderService = {
   getByRestaurantId: async (restaurantId) => {
     return await api.get(`/restaurant/${restaurantId}`);
   },
+
+  getbystatusandid: async (status,id) => {
+    return await api.get(`/status/${status}/${id}`)
+  },
+
+  getbystatus: async (status) => {
+    return await api.get(`/status/${status}`)
+  },
+
+  updaterecord: async (orderId, status) => {
+    return await api.patch(`/${orderId}?recordstatus=${status}`);
+  }
+  
+  
 };
 
 export default OrderService;

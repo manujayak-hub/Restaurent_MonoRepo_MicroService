@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import RestaurantService from "../../Services/RestaurentService";
 import MenuService from "../../Services/MenuService";
 import { FaPhoneAlt, FaStar, FaUtensils, FaMapMarkerAlt, FaShoppingCart, FaLeaf, FaHamburger } from "react-icons/fa";
+import Header from "../../Components/Header";
+import Footer from "../../Components/Footer";
 
 const OrderPage = () => {
   const navigate = useNavigate();  // For navigation in React Router v6
@@ -58,6 +60,8 @@ const OrderPage = () => {
   }
 
   return (
+    <>
+    <Header/>
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30">
       <div className="max-w-7xl mx-auto">
         {/* Restaurant Info */}
@@ -130,6 +134,8 @@ const OrderPage = () => {
         )}
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

@@ -86,7 +86,7 @@ public async Task<string> PostDeliveryCreatebyoidresloc(string orderId, string r
     var client = _httpClientFactory.CreateClient();
 
     // Example API URL (replace with the actual URL and parameters)
-    var apiUrl = $"http://localhost:5112/api/Order/{orderId}";
+    var apiUrl = $"http://localhost:8082/api/Order/{orderId}";
 
     var response = await client.GetAsync(apiUrl);
 

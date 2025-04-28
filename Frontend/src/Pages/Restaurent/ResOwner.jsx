@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import RestaurantService from "../../Services/RestaurentService";
 import MenuService from "../../Services/MenuService";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../Components/Footer";
 
 const ResOwner = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -285,6 +286,9 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
   
 
   return (
+
+    <>
+    <header/>
     <div className="min-h-screen bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30 py-10 px-6">
       <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg p-8">
         <h2 className="text-3xl font-bold text-[#e87c21] mb-6">🍴 Your Restaurants</h2>
@@ -729,6 +733,8 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
         </div>
       )}
     </div>
+    <Footer/>
+    </>
   );
 };
 
