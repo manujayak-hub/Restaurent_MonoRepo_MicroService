@@ -23,23 +23,33 @@ import ResOwner from "./Pages/Restaurent/ResOwner";
 
 import TestCartForm from "./Pages/Restaurent/TestCartForm";
 import AddToCart from "./Pages/Restaurent/AddToCart";
-import RestaurantOrderPage from "./Pages/Restaurent/RestaurantOrderPage"; 
+import RestaurantOrderPage from "./Pages/Restaurent/RestaurantOrderPage";
 
 import ResOrder from "./Pages/Restaurent/ResOrder";
+
 import MyCart from "./Pages/Order/MyCart";
 import OrderDetails from "./Pages/Order/OrderDetails";
 
 
+import PaymentPage from "./Pages/PaymentPage";
 
 
 
 
 
-function App() {
+
+
+
+
+
+function App()
+{
+
   return (
     <>
       <BrowserRouter>
         <Routes>
+
         <Route path="/" element={<LoginUser/>} /> 
         <Route path="/register/driver" element={<RegisterDriver/>} />
         <Route path="/register/user" element={<RegisterUser/>} />
@@ -72,6 +82,41 @@ function App() {
         <Route path="/order/:id" element={<OrderDetails />} />
 
         <Route path="/resorder" element={<ResOrder />} />
+
+          <Route path="/" element={<LoginUser />} />
+          <Route path="/register/driver" element={<RegisterDriver />} />
+          <Route path="/register/user" element={<RegisterUser />} />
+          <Route path="/register/owner" element={<RegisterRestaurantOwner />} />
+          <Route path="/resuserdash" element={<ResUserDash />} />
+          <Route path="/restaurant/:id" element={<OrderPage />} />
+
+
+
+
+
+          <Route path="/testcartform" element={<TestCartForm />} />
+          <Route path="/add-to-cart" element={<AddToCart />} />
+          <Route path="/cart" element={<RestaurantOrderPage />} />
+
+
+
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/all" element={<AllDeliveries />} />
+          <Route path="/completed" element={<CompletedDeliveries />} />
+          <Route path="/create" element={<CreateDelivery />} />
+          <Route path="/delivery-details/:deliveryId" element={<DeliveryDetails />} />
+          <Route path="/userdashboard" element={<UserDashboard />} />
+          <Route path="/track-delivery/:deliveryId" element={<TrackDelivery />} />
+          <Route path="/admin-deliveries" element={<AdminDeliveries />} />
+          <Route path="/DriverDeliveries" element={<DriverDeliveries />} />
+          <Route path="/CreateOrderAndDelivery" element={<CreateOrderAndDelivery />} />
+
+          <Route path="/resowner" element={<ResOwner />} />
+          <Route path="/resorder" element={<ResOrder />} />
+
+          <Route path="/payment" element={<PaymentPage />} />
+
+
 
 
 
