@@ -7,6 +7,8 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import 'leaflet-routing-machine';
 import tickImage from '../../assets/tick.png';
+import Header from "../../Components/Header";
+import Footer from "../../Components/Footer";
 
 const containerStyle = {
   width: '100%',
@@ -59,6 +61,8 @@ function TrackDelivery() {
   const isCompleted = status === "Completed";
 
   return (
+    <>
+    <Header/>
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30">
       <h2 className="text-5xl font-extrabold text-center text-[#e87c21] mb-12 drop-shadow">Delivery Tracking</h2>
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -134,6 +138,8 @@ function TrackDelivery() {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }
 

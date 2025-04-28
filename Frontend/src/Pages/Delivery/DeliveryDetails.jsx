@@ -6,6 +6,8 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine';
 import OrderService from '../../Services/OrderService'; // Make sure the path to your OrderService is correct
+import Header from "../../Components/Header";
+import Footer from "../../Components/Footer";
 
 const containerStyle = {
   width: '100%',
@@ -53,24 +55,35 @@ function DeliveryDetails() {
       .catch(err => console.error('Error fetching coordinates:', err));
   };
 
-  const handleCompleteDelivery = () => {
-    // Update the order status to "Completed" using OrderService
-    OrderService.updaterecord(orderId, 'Completed')
-      .then(() => {
-        alert("Delivery marked as complete and order status updated!");
-        navigate("/");  // Navigate to another page (e.g., home or order list)
-      })
-      .catch(error => {
-        console.error('Error completing delivery:', error);
-        alert(error?.response?.data || "Failed to complete delivery.");
-      });
+  const handleCompleteDelivery = async () => {
+    try {
+      // First, update the Order status
+      await OrderService.updaterecord(orderId, 'Completed');
+      console.log('Order status updated.');
+  
+      // Then, update the Delivery status using the PUT method
+      const response = await axios.put(
+        `http://localhost:8084/api/delivery/${deliveryId}/complete`
+      );
+      console.log('Delivery status updated:', response.data);
+  
+      alert("Delivery and Order marked as complete!");
+      navigate("/all"); // Navigate after both updates
+    } catch (error) {
+      console.error('Error completing delivery:', error.response?.data || error.message);
+      alert(error.response?.data || "Failed to complete delivery.");
+    }
   };
+  
+  
 
   if (!delivery || !pickupCoords || !deliveryCoords) {
     return <div>Loading...</div>;
   }
 
   return (
+    <>
+    <Header/>
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30">
       <h2 className="text-5xl font-extrabold text-center text-[#e87c21] mb-12 drop-shadow">Delivery Details</h2>
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -123,6 +136,8 @@ function DeliveryDetails() {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }
 

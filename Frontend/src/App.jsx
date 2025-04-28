@@ -60,10 +60,6 @@ function App() {
 
         //Admin side delivery
         <Route path="/admin-deliveries" element={<AdminDeliveries />} />
-        
-     
-        
-
         <Route path="/DriverProfile" element={<DriverProfile />} />
         <Route path="/DriverDeliveries" element={<DriverDeliveries />} />
 

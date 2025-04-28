@@ -1,6 +1,8 @@
 // src/pages/AdminDeliveries.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Header from "../../Components/Header";
+import Footer from "../../Components/Footer";
 
 function AdminDeliveries() {
   const [deliveries, setDeliveries] = useState([]);
@@ -12,6 +14,8 @@ function AdminDeliveries() {
   }, []);
 
   return (
+    <>
+      <Header />
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30">
       <div className="max-w-7xl mx-auto">
     <div className="p-6">
@@ -68,6 +72,8 @@ function AdminDeliveries() {
     </div>
     </div>
     </div>
+    <Footer/>
+    </>
   );
 }
 

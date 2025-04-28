@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Header from "../../Components/Header";
+import Footer from "../../Components/Footer";
 
 function DriverProfile() {
   const [driver, setDriver] = useState(null);
@@ -56,6 +58,8 @@ function DriverProfile() {
   }
 
   return (
+    <>
+    <Header/>
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-blue-100 via-white to-orange-100">
       <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Driver Profile</h2>
@@ -69,24 +73,25 @@ function DriverProfile() {
           <div><strong>Based Location:</strong> {driver.driverbasedlocation || "N/A"}</div>
         </div>
 
-        <div className="mt-6 text-center">
-          <button
-            onClick={handleNavigateToDashboard}
-            className="px-6 py-3 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 transition duration-300"
-          >
-            Go to Deliveries
-          </button>
-        </div>
-        <div className="mt-6 text-center">
-          <button
-            onClick={handleNavigateToCompletedDelivery}
-            className="px-6 py-3 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 transition duration-300"
-          >
-            Go to Completed Deliveries
-          </button>
-        </div>
+        <div className="mt-6 flex justify-center gap-4">
+  <button
+    onClick={handleNavigateToDashboard}
+    className="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 mt-7"
+  >
+    Go to Deliveries
+  </button>
+  <button
+    onClick={handleNavigateToCompletedDelivery}
+    className="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 mt-7"
+  >
+    Go to Completed Deliveries
+  </button>
+</div>
+
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }
 

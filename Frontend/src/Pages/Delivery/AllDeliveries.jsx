@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Header from "../../Components/Header";
+import Footer from "../../Components/Footer";
 
 function AllDeliveries() {
   const [driver, setDriver] = useState(null);
@@ -93,6 +95,8 @@ function AllDeliveries() {
   }
 
   return (
+    <>
+    <Header/>
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30">
       <div className="max-w-7xl mx-auto">
         <div className="space-y-6">
@@ -131,7 +135,7 @@ function AllDeliveries() {
                       e.stopPropagation(); // Prevent triggering the onClickDelivery
                       handleAcceptDelivery(delivery.id);
                     }}
-                    className="mt-3 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
+                    className="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 mt-7"
                   >
                     Accept Delivery
                   </button>
@@ -142,6 +146,8 @@ function AllDeliveries() {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }
 

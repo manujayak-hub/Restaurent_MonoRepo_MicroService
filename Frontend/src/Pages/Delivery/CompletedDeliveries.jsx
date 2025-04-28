@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // import useNavigate
 import axios from 'axios'; // Import axios for API calls
+import Header from "../../Components/Header";
+import Footer from "../../Components/Footer";
 
 function CompletedDeliveries() {
   const [deliveries, setDeliveries] = useState([]);
@@ -50,6 +52,8 @@ function CompletedDeliveries() {
   }
 
   return (
+    <>
+    <Header/>
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-xl font-semibold mb-4">Completed Deliveries</h2>
@@ -79,6 +83,8 @@ function CompletedDeliveries() {
         )}
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }
 
