@@ -8,12 +8,18 @@ function UserDashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:5272/api/delivery')
+    const userId = localStorage.getItem("userId"); // Get logged-in user's ID from localStorage
+
+    if (!userId) {
+      console.error("User not logged in or no user ID found.");
+      return;
+    }
+
+    axios.get(`http://localhost:8084/api/delivery/user/${userId}`) // Endpoint to fetch deliveries for specific user
       .then(response => {
         // Filter out completed deliveries
         const activeDeliveries = response.data.filter(d => d.status !== 'Completed');
         setDeliveries(activeDeliveries);
-        // TODO: Filter deliveries by logged-in user when authentication is added
       })
       .catch(error => console.error('Error fetching deliveries:', error));
   }, []);
@@ -30,7 +36,7 @@ function UserDashboard() {
               {deliveries.map(delivery => (
                 <li key={delivery.id} className="bg-white p-4 rounded-lg shadow flex justify-between items-center">
                   <div>
-                    <p><strong>Restuarant:</strong> {delivery.pickupLocation}</p>
+                    <p><strong>Restaurant:</strong> {delivery.pickupLocation}</p>
                     <p><strong>Delivered Items:</strong></p>
                     <ul className="list-disc pl-5">
                       {delivery.items && delivery.items.length > 0 ? (

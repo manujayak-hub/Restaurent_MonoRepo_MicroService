@@ -9,14 +9,15 @@ import OrderPage from "./Pages/Restaurent/OrderPage";
 
 import AllDeliveries from './Pages/Delivery/AllDeliveries';
 import CompletedDeliveries from './Pages/Delivery/CompletedDeliveries';
-import CreateDelivery from './Pages/Delivery/CreateDelivery';
-import Dashboard from './Pages/Delivery/Dashboard';
 import DeliveryDetails from './Pages/Delivery/DeliveryDetails';
 import UserDashboard from './Pages/Delivery/UserDashboard';
 import TrackDelivery from './Pages/Delivery/TrackDelivery';
 import AdminDeliveries from './Pages/Delivery/AdminDeliveries';
+
+
+
+import DriverProfile from './Pages/Users/DriverProfile';
 import DriverDeliveries from './Pages/Delivery/DriverDeliveries';
-import CreateOrderAndDelivery from './Pages/Delivery/CreateOrderAndDelivery';
 
 import ResOwner from "./Pages/Restaurent/ResOwner";
 
@@ -44,17 +45,25 @@ function App() {
         <Route path="/resuserdash" element={<ResUserDash/>} />
         <Route path="/restaurant/:id" element={<OrderPage />} />
 
-        
-        <Route path="/dashboard" element={<Dashboard />} />
+
+        //driver side delivery     
         <Route path="/all" element={<AllDeliveries />} />
-        <Route path="/completed" element={<CompletedDeliveries />} />
-        <Route path="/create" element={<CreateDelivery />} />
         <Route path="/delivery-details/:deliveryId" element={<DeliveryDetails />} />
+        <Route path="/DriverDeliveries" element={<DriverDeliveries />} />
+        
+        //User side delivery
+        <Route path="/completed" element={<CompletedDeliveries />} />
         <Route path="/userdashboard" element={<UserDashboard />} />
         <Route path="/track-delivery/:deliveryId" element={<TrackDelivery />} />
+
+        //Admin side delivery
         <Route path="/admin-deliveries" element={<AdminDeliveries />} />
+        
+     
+        
+
+        <Route path="/DriverProfile" element={<DriverProfile />} />
         <Route path="/DriverDeliveries" element={<DriverDeliveries />} />
-        <Route path="/CreateOrderAndDelivery" element={<CreateOrderAndDelivery />} />
 
         <Route path="/resowner" element={<ResOwner />} />
 

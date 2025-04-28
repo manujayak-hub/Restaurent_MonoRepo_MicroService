@@ -3,6 +3,7 @@ import RestaurantService from "../../Services/RestaurentService";
 import MenuService from "../../Services/MenuService";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../Components/Footer";
+import Header from "../../Components/Header";
 
 const ResOwner = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -21,8 +22,9 @@ const navigate = useNavigate()
     cuisine: "",
     contactNumber: "",
     rating: "",
-    ImgUrl: "",
+    imgUrl: "",
     address: "",
+    isOpen: true,
   });
 
   const [isAddMenuModalOpen, setIsAddMenuModalOpen] = useState(false);
@@ -32,7 +34,8 @@ const navigate = useNavigate()
     Ingredient: "",
     VegNonveg: 1,
     ImgUrl: "",
-    Rating: "0",
+    Rating: "",
+    isOpen: true,
   });
 
   const [isMenuEditModalOpen, setIsMenuEditModalOpen] = useState(false);
@@ -98,22 +101,26 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
   };
 
   const handleEditRestaurant = (restaurant) => {
+    setIsEditModalOpen(true); 
     setCurrentRestaurant(restaurant);
     setUpdatedRestaurant({
-      ownername:restaurant.ownername,
-      ownerid:restaurant.ownerid,
+      ownername: restaurant.ownername,
+      ownerid: restaurant.ownerid,
       name: restaurant.name,
       cuisine: restaurant.cuisine,
       contactNumber: restaurant.contactNumber,
       rating: restaurant.rating,
-      ImgUrl:restaurent.imgUrl,
+      ImgUrl: restaurant.imgUrl,
       address: restaurant.address,
+      isOpen: restaurant.isOpen, // 🆕 important
     });
+    
     setIsEditModalOpen(true);
   };
 
   const handleUpdateRestaurant = async () => {
     if (currentRestaurant) {
+      
       try {
         const updatedRes = await RestaurantService.update(currentRestaurant.id, {
           ...updatedRestaurant,
@@ -178,7 +185,7 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
         Price: newMenuItem.Price.toString(), // 👈 make it string
         Ingredient: newMenuItem.Ingredient,
         VegNonveg: Number(newMenuItem.VegNonveg), // keep it number/double
-        ImgUrl: newMenuItem.ImgUrl ,
+        ImgUrl: newMenuItem.imgUrl ,
         Rating: newMenuItem.Rating.toString(), // 👈 make it string
         RestaurentId: currentRestaurant.id, // make sure this is not null
         CreatedAt: new Date().toISOString(), // ✅ correct DateTime
@@ -288,129 +295,134 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
   return (
 
     <>
-    <header/>
+    <Header/>
     <div className="min-h-screen bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30 py-10 px-6">
-      <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg p-8">
-        <h2 className="text-3xl font-bold text-[#e87c21] mb-6">🍴 Your Restaurants</h2>
-        
-        {loading ? (
-          <div className="text-center text-lg text-gray-500">Loading...</div>
-        ) : restaurants.length === 0 ? (
-          <div className="text-center text-lg text-gray-500">
-            No restaurants found.
-            <div className="mt-4">
-              <button
-                onClick={() => setIsAddRestaurantModalOpen(true)}
-                className="bg-[#e87c21] text-white px-4 py-2 rounded hover:bg-[#cf6b1b]"
-              >
-                Create Your First Restaurant
-              </button>
-            </div>
-          </div>
-        ) : (
-          restaurants.map((rest) => (
-            <div key={rest.id} className="mb-10 p-6 rounded-xl shadow-lg bg-white border-t-4 border-[#e87c21]">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-2xl font-bold text-[#1f2e4a]">{rest.name}</h3>
-                <button
-                onClick={() => setIsAddRestaurantModalOpen(true)}
-                className="bg-[#e87c21] text-white px-4 py-2 mb-2 rounded hover:bg-[#cf6b1b]"
-              >
-                Create Another Restaurant
-              </button>
-              <button
-                onClick={() =>  navigate("/user-dashboard")}
-                className="bg-[#e87c21] text-white px-4 py-2 mb-2 ml-2 rounded hover:bg-[#cf6b1b]"
-              >
-                See Orders
-              </button>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => {
-                      setCurrentRestaurant(rest);
-                      setIsAddMenuModalOpen(true);
-                    }}
-                    className="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600"
-                  >
-                    Add Menu Item
-                  </button>
+    <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg p-8">
+    <h2 className="text-3xl font-bold text-[#e87c21] mb-6">🍴 Your Restaurants</h2>
 
-                  <button
-                    onClick={() => handleEditRestaurant(rest)}
-                    className="bg-[#7fc7e0] text-white px-4 py-1 rounded hover:bg-[#5ea7c3]"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteRestaurant(rest.id)}
-                    className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-              {rest.imgUrl && (
-                <img
-                  src={rest.imgUrl}
-                  alt={rest.name}
-                  className="w-full h-48 object-contain rounded-lg mb-4"
-                />
-              )}
-              <p className="text-sm text-gray-700">Cuisine: {rest.cuisine}</p>
-              <p className="text-sm text-gray-700">Contact: {rest.contactNumber}</p>
-              <p className="text-sm text-gray-700">Rating: {rest.rating}</p>
-              <p className="text-sm text-gray-700 mb-4">Address: {rest.address}</p>
-
-              <h4 className="text-xl font-semibold text-[#e87c21] mb-3">🍽️ Menu Items</h4>
-              {menus[rest.id]?.length > 0 ? (
-                menus[rest.id].map((item) => (
-                  <div key={item.id} className="border rounded-xl p-4 shadow hover:shadow-md">
-                    
-                    {/* 🖼️ Dish Image */}
-                    {item.imgUrl && (
-                      <img
-                        src={item.imgUrl}
-                        alt={item.dishName}
-                        className="w-full h-48 object-contain rounded-xl mb-4"
-                      />
-                    )}
-
-                    <h5 className="font-bold text-[#1f2e4a]">{item.dishName}</h5>
-                    <p className="text-sm text-gray-600">Rs. {item.price}</p>
-                    <p className="text-sm text-gray-500">{item.ingredient}</p>
-                    <p className="text-xs mt-1">
-                      {item.vegNonveg === 1 ? (
-                        <span className="text-green-500">Vegetarian</span>
-                      ) : (
-                        <span className="text-red-500">Non-Vegetarian</span>
-                      )}
-                    </p>
-
-                    <div className="flex gap-2 mt-2">
-                      <button
-                        onClick={() => handleEditMenuItem(item, rest.id)}
-                        className="bg-[#7fc7e0] text-white px-2 py-1 rounded hover:bg-[#5ea7c3] text-sm"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteMenuItem(item.id, rest.id)}
-                        className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 text-sm"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-gray-400">No menu items available.</p>
-              )}
-
-
-            </div>
-          ))
-        )}
+    {loading ? (
+      <div className="text-center text-lg text-gray-500">Loading...</div>
+    ) : restaurants.length === 0 ? (
+      <div className="text-center text-lg text-gray-500">
+        No restaurants found.
+        <div className="mt-4">
+          <button
+            onClick={() => setIsAddRestaurantModalOpen(true)}
+            className="bg-[#e87c21] text-white px-4 py-2 rounded hover:bg-[#cf6b1b]"
+          >
+            Create Your First Restaurant
+          </button>
+        </div>
       </div>
+    ) : (
+      <>
+        {/* 🆕 Show Buttons Only if Restaurants are Available */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setIsAddRestaurantModalOpen(true)}
+            className="bg-[#e87c21] text-white px-4 py-2 rounded hover:bg-[#cf6b1b]"
+          >
+            Create Another Restaurant
+          </button>
+          <button
+            onClick={() => navigate("/resorder")}
+            className="bg-[#e87c21] text-white px-4 py-2 rounded hover:bg-[#cf6b1b]"
+          >
+            See Orders
+          </button>
+        </div>
+
+        {/* 🔥 List Restaurants */}
+        {restaurants.map((rest) => (
+          <div key={rest.id} className="mb-10 p-6 rounded-xl shadow-lg bg-white border-t-4 border-[#e87c21]">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-2xl font-bold text-[#1f2e4a]">{rest.name}</h3>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setCurrentRestaurant(rest);
+                    setIsAddMenuModalOpen(true);
+                  }}
+                  className="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600"
+                >
+                  Add Menu Item
+                </button>
+
+                <button
+                  onClick={() => handleEditRestaurant(rest)}
+                  className="bg-[#7fc7e0] text-white px-4 py-1 rounded hover:bg-[#5ea7c3]"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDeleteRestaurant(rest.id)}
+                  className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+
+            {rest.imgUrl && (
+              <img
+                src={rest.imgUrl}
+                alt={rest.name}
+                className="w-full h-48 object-contain rounded-lg mb-4"
+              />
+            )}
+            <p className="text-sm text-gray-700">Cuisine: {rest.cuisine}</p>
+            <p className="text-sm text-gray-700">Contact: {rest.contactNumber}</p>
+            <p className="text-sm text-gray-700">Rating: {rest.rating}</p>
+            <p className="text-sm text-gray-700 mb-4">Address: {rest.address}</p>
+
+            <h4 className="text-xl font-semibold text-[#e87c21] mb-3">🍽️ Menu Items</h4>
+            {menus[rest.id]?.length > 0 ? (
+              menus[rest.id].map((item) => (
+                <div key={item.id} className="border rounded-xl p-4 shadow hover:shadow-md">
+                  {item.imgUrl && (
+                    <img
+                      src={item.imgUrl}
+                      alt={item.dishName}
+                      className="w-full h-48 object-contain rounded-xl mb-4"
+                    />
+                  )}
+
+                  <h5 className="font-bold text-[#1f2e4a]">{item.dishName}</h5>
+                  <p className="text-sm text-gray-600">Rs. {item.price}</p>
+                  <p className="text-sm text-gray-500">{item.ingredient}</p>
+                  <p className="text-xs mt-1">
+                    {item.vegNonveg === 1 ? (
+                      <span className="text-green-500">Vegetarian</span>
+                    ) : (
+                      <span className="text-red-500">Non-Vegetarian</span>
+                    )}
+                  </p>
+
+                  <div className="flex gap-2 mt-2">
+                    <button
+                      onClick={() => handleEditMenuItem(item, rest.id)}
+                      className="bg-[#7fc7e0] text-white px-2 py-1 rounded hover:bg-[#5ea7c3] text-sm"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteMenuItem(item.id, rest.id)}
+                      className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 text-sm"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-400">No menu items available.</p>
+            )}
+          </div>
+        ))}
+      </>
+    )}
+  </div>
 
       {/* Add New Menu Item Modal */}
       {isAddMenuModalOpen && (
@@ -628,7 +640,7 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
               />
                <input
                 type="text"
-                value={updatedRestaurant.ImgUrl}
+                value={updatedRestaurant.imgUrl}
                 onChange={(e) =>
                   setUpdatedRestaurant((prev) => ({ ...prev, imgUrl: e.target.value }))
                 }
@@ -636,6 +648,23 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
                 placeholder="Image URL"
               />
             </div>
+            <div className="flex items-center gap-2">
+              <label className="font-medium">Is Open:</label>
+              <select
+                value={updatedRestaurant.isOpen ? "true" : "false"}
+                onChange={(e) =>
+                  setUpdatedRestaurant((prev) => ({
+                    ...prev,
+                    isOpen: e.target.value === "true",
+                  }))
+                }
+                className="p-2 border rounded-md"
+              >
+                <option value="true">Open</option>
+                <option value="false">Closed</option>
+              </select>
+            </div>
+
             <div className="flex justify-end gap-4 mt-4">
               <button
                 onClick={() => setIsEditModalOpen(false)}
@@ -715,6 +744,23 @@ const [updatedMenuItem, setUpdatedMenuItem] = useState({
                 placeholder="Image URL"
               />
             </div>
+            <div className="flex items-center gap-2">
+              <label className="font-medium">Is Open:</label>
+              <select
+                value={newRestaurant.isOpen ? "true" : "false"}
+                onChange={(e) =>
+                  setNewRestaurant((prev) => ({
+                    ...prev,
+                    isOpen: e.target.value === "true",
+                  }))
+                }
+                className="p-2 border rounded-md"
+              >
+                <option value="true">Open</option>
+                <option value="false">Closed</option>
+              </select>
+            </div>
+
             <div className="flex justify-end gap-4 mt-4">
               <button
                 onClick={() => setIsAddRestaurantModalOpen(false)}

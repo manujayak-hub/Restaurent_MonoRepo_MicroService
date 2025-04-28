@@ -12,7 +12,7 @@ function DriverDashboard() {
 
     if (storedDriverId) {
       // Fetch deliveries assigned to the driver
-      axios.get(`http://localhost:5272/api/delivery/driver/${storedDriverId}`)
+      axios.get(`http://localhost:8084/api/delivery/driver/${storedDriverId}`)
         .then(response => {
           setDeliveries(response.data);
         })

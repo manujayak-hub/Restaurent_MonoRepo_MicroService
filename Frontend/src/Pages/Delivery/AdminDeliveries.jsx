@@ -6,7 +6,7 @@ function AdminDeliveries() {
   const [deliveries, setDeliveries] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5272/api/delivery')
+    axios.get('http://localhost:8084/api/delivery')
       .then(res => setDeliveries(res.data))
       .catch(err => console.error("Error fetching deliveries:", err));
   }, []);

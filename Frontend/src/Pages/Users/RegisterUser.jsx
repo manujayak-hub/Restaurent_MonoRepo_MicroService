@@ -2,6 +2,7 @@
 import { useState } from "react";
 import authService from "../../Services/AuthService";
 import Header from "../../Components/Header";
+import Footer from "../../Components/Footer";
 
 const RegisterUser = () => {
   const [form, setForm] = useState({

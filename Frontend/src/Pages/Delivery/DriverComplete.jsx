@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // import useNavigate
 import { getCompletedDeliveries } from '../../Services/Delivery'; // import the service function
 
-function DriverDeliveries() {
+function Driveromplete() {
   const [deliveries, setDeliveries] = useState([]);
   const [driver, setDriver] = useState(null); // state for driver data
   const navigate = useNavigate(); // initialize navigate
@@ -64,4 +64,4 @@ function DriverDeliveries() {
   );
 }
 
-export default DriverDeliveries;
+export default Driveromplete;
