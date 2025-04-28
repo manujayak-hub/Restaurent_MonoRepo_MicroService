@@ -32,6 +32,10 @@ const ResOrder = () => {
     };
 
     fetchData();
+
+    const intervalId = setInterval(fetchData, 5000); 
+
+    return () => clearInterval(intervalId);
   }, [userId]);
 
 //   const handleCompleteOrder = (restaurantId, orderId) => {
@@ -102,22 +106,52 @@ const ResOrder = () => {
                 ) : (
                   orders[restaurant.id]?.map((order) => (
                     <div
-                      key={order.id}
-                      className="flex justify-between items-center border-b py-3"
-                    >
-                      <div>
-                        <p className="font-semibold text-[#1f2e4a]">{order.customerName}</p>
-                        <p className="text-sm text-gray-600">Status: {order.status}</p>
-                      </div>
-                      {order.status === "Paid" && (
-                        
-                        <button onClick={() => handleComplete(order.id, order.restaurantId)} 
-                        className="bg-green-500 text-white px-4 py-1 rounded-xl hover:bg-green-600 transition-all duration-300">
-                        Complete
-                      </button>
-                      
-                      )}
-                    </div>
+                        key={order.id}
+                        className="bg-white p-6 rounded-2xl shadow-md mb-6 hover:shadow-xl transition-all duration-300"
+                        >
+                        <div className="flex justify-between items-start">
+                            <div className="space-y-2">
+                            <h4 className="text-xl font-bold text-[#1f2e4a]">Order #{order.id.slice(-4)}</h4>
+                            <p className="text-gray-600 text-sm">
+                                <span className="font-semibold">Status:</span> {order.status}
+                            </p>
+                            <p className="text-gray-600 text-sm">
+                                <span className="font-semibold">Delivery Address:</span> {order.deliveryAddress}
+                            </p>
+                            <p className="text-gray-600 text-sm">
+                                <span className="font-semibold">Total Amount:</span> ${order.totalAmount}
+                            </p>
+                            <p className="text-gray-600 text-sm">
+                                <span className="font-semibold">Payment Method:</span> {order.paymentMethod}
+                            </p>
+                            <p className="text-gray-600 text-sm">
+                                <span className="font-semibold">Ordered On:</span> {new Date(order.createdAt).toLocaleString()}
+                            </p>
+
+                            <div className="mt-4">
+                                <h5 className="font-semibold text-[#1f2e4a] mb-2">Items:</h5>
+                                <ul className="list-disc list-inside text-gray-700 text-sm">
+                                {order.items.map((item, index) => (
+                                    <li key={index}>
+                                    {item.name} x {item.quantity} — ${item.price}
+                                    </li>
+                                ))}
+                                </ul>
+                            </div>
+                            </div>
+
+                            {order.status === "Paid" && (
+                            <button
+                                onClick={() => handleComplete(order.id, order.restaurantId)}
+                                className="bg-green-500 text-white px-5 py-2 rounded-xl hover:bg-green-600 transition-all duration-300"
+                            >
+                                Complete
+                            </button>
+                            )}
+                        </div>
+                        </div>
+
+
                   ))
                 )}
               </div>
