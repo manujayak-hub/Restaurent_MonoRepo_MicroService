@@ -69,8 +69,11 @@ function AllDeliveries() {
       });
   };
 
-  const handleClickDelivery = (deliveryId) => {
-    navigate(`/delivery-details/${deliveryId}`);
+  const handleClickDelivery = (deliveryId, status) => {
+    // Prevent clicking on "Pending" deliveries
+    if (status !== "Pending") {
+      navigate(`/delivery-details/${deliveryId}`);
+    }
   };
 
   if (loading) {
@@ -98,8 +101,8 @@ function AllDeliveries() {
             {filteredDeliveries.map((delivery) => (
               <li
                 key={delivery.id}
-                className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100 transition flex justify-between items-center" // added flex and justify-between
-                onClick={() => handleClickDelivery(delivery.id)} // Make the delivery clickable
+                className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100 transition flex justify-between items-center"
+                onClick={() => handleClickDelivery(delivery.id, delivery.status)} // Make the delivery clickable based on status
               >
                 <div>
                   <p><strong>Delivery ID:</strong> {delivery.id}</p>
@@ -120,12 +123,12 @@ function AllDeliveries() {
                     )}
                   </ul>
                 </div>
-  
+
                 {/* Conditionally render the "Accept Delivery" button aligned to the right */}
                 {delivery.status === "Pending" && delivery.driverId !== driver._id && (
                   <button
                     onClick={(e) => {
-                      e.stopPropagation();
+                      e.stopPropagation(); // Prevent triggering the onClickDelivery
                       handleAcceptDelivery(delivery.id);
                     }}
                     className="mt-3 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
@@ -140,7 +143,6 @@ function AllDeliveries() {
       </div>
     </div>
   );
-  
 }
 
 export default AllDeliveries;

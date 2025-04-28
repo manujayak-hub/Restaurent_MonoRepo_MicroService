@@ -10,5 +10,9 @@ public interface IDeliveryRepository
     Task<Delivery> GetDeliveryByIdAsync(string deliveryId);
     Task UpdateDeliveryAsync(Delivery delivery);
     Task<List<Delivery>> GetDeliveriesByDriverId(string driverId);
+
+    Task<List<Delivery>> GetCompletedDeliveriesByUserIdAsync(string userId);
+
+    Task<List<Delivery>> GetDeliveriesByUserIdAsync(string userId);
     
 }

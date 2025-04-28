@@ -35,6 +35,10 @@ function DriverProfile() {
     navigate("/all"); // Navigate to the dashboard page
   };
 
+  const handleNavigateToCompletedDelivery = () => {
+    navigate("/DriverDeliveries"); // Navigate to the dashboard page
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -71,6 +75,14 @@ function DriverProfile() {
             className="px-6 py-3 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 transition duration-300"
           >
             Go to Deliveries
+          </button>
+        </div>
+        <div className="mt-6 text-center">
+          <button
+            onClick={handleNavigateToCompletedDelivery}
+            className="px-6 py-3 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 transition duration-300"
+          >
+            Go to Completed Deliveries
           </button>
         </div>
       </div>

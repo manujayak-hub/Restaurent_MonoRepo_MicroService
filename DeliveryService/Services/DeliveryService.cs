@@ -144,6 +144,19 @@ public async Task<List<Delivery>> GetDeliveriesByDriverId(string driverId)
             // Fetch deliveries assigned to the driver from the repository
             return await _repository.GetDeliveriesByDriverId(driverId);
         }
+        public async Task<List<Delivery>> GetCompletedDeliveriesByUserIdAsync(string userId)
+        {
+            return await _repository.GetCompletedDeliveriesByUserIdAsync(userId);
+        }
+
+        public async Task<List<Delivery>> GetDeliveriesByUserIdAsync(string userId)
+        {
+            var deliveries = await _repository.GetDeliveriesByUserIdAsync(userId);
+            return deliveries;
+        }
+
+        
 
 }
+ 
 }

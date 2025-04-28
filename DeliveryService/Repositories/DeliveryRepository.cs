@@ -49,4 +49,23 @@ public async Task<List<Delivery>> GetDeliveriesByDriverId(string driverId)
             return await _collection.Find(filter).ToListAsync();
         }
 
+  public async Task<List<Delivery>> GetCompletedDeliveriesByUserIdAsync(string userId)
+    {
+        var filter = Builders<Delivery>.Filter.And(
+            Builders<Delivery>.Filter.Eq(d => d.CustomerId, userId),
+            Builders<Delivery>.Filter.Eq(d => d.Status, "Completed")
+        );
+
+        return await _collection.Find(filter).ToListAsync();
+    }
+
+    public async Task<List<Delivery>> GetDeliveriesByUserIdAsync(string userId)
+    {
+        // Fetch active deliveries (excluding completed ones) for a specific user
+        var filter = Builders<Delivery>.Filter.And(
+            Builders<Delivery>.Filter.Eq(d => d.CustomerId, userId)
+        );
+
+        return await _collection.Find(filter).ToListAsync();
+    }
 }

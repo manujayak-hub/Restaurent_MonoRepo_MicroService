@@ -16,4 +16,8 @@ public interface IDeliveryService
 
     Task<string> PostDeliveryCreatebyoidresloc(string orderId, string resloc);
 
+    Task<List<Delivery>> GetCompletedDeliveriesByUserIdAsync(string userId);
+
+    Task<List<Delivery>> GetDeliveriesByUserIdAsync(string userId);
+
 }

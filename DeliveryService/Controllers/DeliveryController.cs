@@ -88,4 +88,36 @@ public async Task<ActionResult<List<Delivery>>> GetCompletedDeliveries()
 
             return Ok(deliveries);
         }
+
+        [HttpGet("completed/{userId}")]
+        public async Task<IActionResult> GetCompletedDeliveries(string userId)
+        {
+            try
+            {
+                var deliveries = await _service.GetCompletedDeliveriesByUserIdAsync(userId);
+                
+                if (deliveries == null || deliveries.Count == 0)
+                {
+                    return Ok(new List<Delivery>());
+                }
+
+                return Ok(deliveries);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+         [HttpGet("user/{userId}")]
+        public async Task<ActionResult<List<Delivery>>> GetDeliveriesByUserId(string userId)
+        {
+            var deliveries = await _service.GetDeliveriesByUserIdAsync(userId);
+
+            if (deliveries == null || deliveries.Count == 0)
+            {
+                return NotFound("No active deliveries found for this user.");
+            }
+
+            return Ok(deliveries);
+        }
 }
