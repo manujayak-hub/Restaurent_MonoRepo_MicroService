@@ -44,7 +44,6 @@ const OrderDetails = () => {
               <div className="bg-white rounded-2xl shadow-md p-8 space-y-8">
                 <div className="text-center">
                   <h3 className="text-2xl font-semibold text-[#e87c21]">{orderDetails.restaurantName}</h3>
-                  <p className="text-lg text-gray-700">Order ID: {orderDetails.id}</p>
                 </div>
 
                 <div className="space-y-6">
