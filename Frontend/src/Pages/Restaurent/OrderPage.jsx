@@ -64,6 +64,16 @@ const OrderPage = () => {
     <Header/>
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30">
       <div className="max-w-7xl mx-auto">
+
+        {/* Restaurant Main Image */}
+          <div className="mb-8">
+            <img
+              src={restaurant.imgUrl}
+              alt={restaurant.name}
+              className="w-full h-80 object-cover rounded-3xl shadow-lg"
+            />
+          </div>
+
         {/* Restaurant Info */}
         <div className="bg-white rounded-3xl shadow-lg border-t-8 border-[#e87c21] p-8 mb-12">
           <h1 className="text-4xl font-extrabold text-[#e87c21] mb-4">{restaurant.name}</h1>
