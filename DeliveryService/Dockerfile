@@ -2,6 +2,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
+# Set the environment variable to bind to port 8082
+ENV ASPNETCORE_URLS=http://+:8084
+
 # Copy and restore
 COPY *.csproj ./
 RUN dotnet restore

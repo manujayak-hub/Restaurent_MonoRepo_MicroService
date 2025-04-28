@@ -75,9 +75,9 @@ const RestaurantOrderPage = () => {
   };
   
   return (
-    <div className="order-page bg-gradient-to-r from-[#fbc2eb] via-[#a6c1ee] to-[#fbc2eb] min-h-screen py-12 px-6 sm:px-8">
+    <div className="order-page bg-gradient-to-r from-[#a6c1ee] via-[#e6d4c6] to-[#e87c21] min-h-screen py-12 px-6 sm:px-8">
       <h2 className="text-4xl font-extrabold text-center text-[#e87c21] mb-8 drop-shadow">
-        Restaurant Order
+        My Cart
       </h2>
 
       {/* Order Details Section */}

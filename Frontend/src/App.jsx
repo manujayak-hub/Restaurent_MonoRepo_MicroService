@@ -26,6 +26,7 @@ import AddToCart from "./Pages/Restaurent/AddToCart";
 import RestaurantOrderPage from "./Pages/Restaurent/RestaurantOrderPage"; 
 
 import ResOrder from "./Pages/Restaurent/ResOrder";
+import MyCart from "./Pages/Order/MyCart";
 
 
 
@@ -71,6 +72,7 @@ function App() {
         <Route path="/cart" element={<RestaurantOrderPage/>} />
 
         <Route path="/resorder" element={<ResOrder />} />
+        <Route path="/mycart" element={<MyCart />} />
 
 
         </Routes>
