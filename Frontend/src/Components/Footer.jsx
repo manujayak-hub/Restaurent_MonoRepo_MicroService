@@ -5,7 +5,7 @@ const Footer = () => {
           <p className="mb-2">
             🚀 Powered by <span className="text-[#e87c21] font-semibold">Foodies</span> • Bringing your cravings closer!
           </p>
-          <p>© {new Date().getFullYear()} Nibbly. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Foodies. All rights reserved.</p>
         </div>
       </footer>
     );

@@ -49,7 +49,7 @@ const LoginUser = () => {
       if (urole === "admin") {
         navigate("/admin-dashboard"); 
       } else if (urole === "owner") {
-        navigate("/user-dashboard"); 
+        navigate("/resowner"); 
       } else if(urole === "user") {
         navigate("/resuserdash"); 
       };
