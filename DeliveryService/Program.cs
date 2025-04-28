@@ -51,6 +51,9 @@ builder.Services.AddScoped<IDeliveryService, DeliveryService.Services.DeliverySe
 
 var app = builder.Build();
 
+// Configure the app to listen on port 8082
+app.Urls.Add("http://*:8084");
+
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
@@ -66,3 +69,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Helper function to detect Docker
+bool IsRunningInDocker()
+{
+    return Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+}
+
+app.UseCors("AllowAll");
