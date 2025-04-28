@@ -27,6 +27,8 @@ import RestaurantOrderPage from "./Pages/Restaurent/RestaurantOrderPage";
 
 import ResOrder from "./Pages/Restaurent/ResOrder";
 import MyCart from "./Pages/Order/MyCart";
+import OrderDetails from "./Pages/Order/OrderDetails";
+
 
 
 
@@ -70,9 +72,11 @@ function App() {
         <Route path="/testcartform" element={<TestCartForm />} />
         <Route path="/add-to-cart" element={<AddToCart/>} /> 
         <Route path="/cart" element={<RestaurantOrderPage/>} />
+        <Route path="/mycart" element={<MyCart />} />
+        <Route path="/order/:id" element={<OrderDetails />} />
 
         <Route path="/resorder" element={<ResOrder />} />
-        <Route path="/mycart" element={<MyCart />} />
+
 
 
         </Routes>
