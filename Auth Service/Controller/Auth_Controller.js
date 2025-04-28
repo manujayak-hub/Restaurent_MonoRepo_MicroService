@@ -19,7 +19,7 @@ let refreshTokens = [];
 
 // Register (Only Admins Can Register New Users)
 const register = async (req, res) => {
-    const { lastName,firstName,email, password, role,vehiclemodel,vehicleno,driverbasedlocation } = req.body; 
+    const { lastName,firstName,email, password, role,contactno,driverbasedlocation } = req.body; 
 
     try {
         const existingUser = await User.findOne({ email });
@@ -29,7 +29,7 @@ const register = async (req, res) => {
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({lastName,firstName, email, password: hashedPassword, role ,vehiclemodel, vehicleno, driverbasedlocation });
+        const newUser = new User({lastName,firstName, email, password: hashedPassword, role ,contactno, driverbasedlocation });
 
         await newUser.save();
         res.status(201).json({ message: "User registered successfully" });
@@ -135,5 +135,20 @@ const deleteUser = async (req, res) => {
         return res.status(500).json({ message: "Server error" });
     }
 };
+const getUserDetailsById = async (req, res) => {
+    try {
+        const { uid } = req.params; // Get uid from the route parameter
+        const userdetails = await User.findById(uid); // Fetch user details by UID
 
-export { register, login, refreshToken, logout, adminOnlyRoute,getUserDetails ,deleteUser};
+        if (!userdetails) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.status(200).json({ userdetails });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Server error" });
+    }
+};
+
+export { register, login, refreshToken, logout, adminOnlyRoute,getUserDetails ,deleteUser,getUserDetailsById};

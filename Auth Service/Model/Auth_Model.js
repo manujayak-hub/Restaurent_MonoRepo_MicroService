@@ -8,9 +8,7 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     role:{ type: String, required: true },
     driverbasedlocation:{type: String},
-    vehicleno:{type: String},
-    vehiclemodel:{type:String}
-   
+    contactno:{type:String}
   },
   { timestamps: true }
 );

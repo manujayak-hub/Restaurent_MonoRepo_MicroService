@@ -46,8 +46,8 @@ const LoginUser = () => {
       localStorage.setItem("userRole", urole);
       alert("✅ Logged in and values saved!");
       
-      if (urole === "admin") {
-        navigate("/admin-dashboard"); 
+      if (urole === "driver") {
+        navigate("/DriverProfile"); 
       } else if (urole === "owner") {
         navigate("/user-dashboard"); 
       } else if(urole === "user") {

@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine';
+import OrderService from '../../Services/OrderService'; // Make sure the path to your OrderService is correct
 
 const containerStyle = {
   width: '100%',
@@ -23,13 +24,16 @@ function DeliveryDetails() {
   const [delivery, setDelivery] = useState(null);
   const [pickupCoords, setPickupCoords] = useState(null);
   const [deliveryCoords, setDeliveryCoords] = useState(null);
+  const [orderId, setOrderId] = useState(null);
   const [eta, setEta] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:5272/api/delivery/${deliveryId}`)
+    axios.get(`http://localhost:8084/api/delivery/${deliveryId}`)
       .then(response => {
+        console.log("Delivery API Response:", response.data);
         setDelivery(response.data);
+        setOrderId(response.data.orderId);  
         getCoordinates(response.data.pickupLocation, setPickupCoords);
         getCoordinates(response.data.deliveryLocation, setDeliveryCoords);
       })
@@ -50,11 +54,11 @@ function DeliveryDetails() {
   };
 
   const handleCompleteDelivery = () => {
-    axios
-      .put(`http://localhost:5272/api/delivery/${deliveryId}/complete`)
+    // Update the order status to "Completed" using OrderService
+    OrderService.updaterecord(orderId, 'Completed')
       .then(() => {
-        alert("Delivery marked as complete!");
-        navigate("/");
+        alert("Delivery marked as complete and order status updated!");
+        navigate("/");  // Navigate to another page (e.g., home or order list)
       })
       .catch(error => {
         console.error('Error completing delivery:', error);
@@ -167,5 +171,3 @@ function Routing({ pickup, delivery, setEta }) {
 
   return null;
 }
-
-

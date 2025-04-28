@@ -17,7 +17,7 @@ function CreateDelivery() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5272/api/delivery', formData);
+      await axios.post('http://localhost:8084/api/delivery', formData);
       alert('Delivery created!');
     } catch (err) {
       console.error(err);

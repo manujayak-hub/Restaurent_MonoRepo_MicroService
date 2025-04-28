@@ -18,6 +18,9 @@ import AdminDeliveries from './Pages/Delivery/AdminDeliveries';
 import DriverDeliveries from './Pages/Delivery/DriverDeliveries';
 import CreateOrderAndDelivery from './Pages/Delivery/CreateOrderAndDelivery';
 
+import DriverProfile from './Pages/Users/DriverProfile';
+import Driveromplete from './Pages/Delivery/DriverDeliveries';
+
 import ResOwner from "./Pages/Restaurent/ResOwner";
 
 import TestCartForm from "./Pages/Restaurent/TestCartForm";
@@ -54,6 +57,10 @@ function App() {
         <Route path="/admin-deliveries" element={<AdminDeliveries />} />
         <Route path="/DriverDeliveries" element={<DriverDeliveries />} />
         <Route path="/CreateOrderAndDelivery" element={<CreateOrderAndDelivery />} />
+        
+
+        <Route path="/DriverProfile" element={<DriverProfile />} />
+        <Route path="/DriverDeliveries" element={<DriverDeliveries />} />
 
         <Route path="/resowner" element={<ResOwner />} />
 
