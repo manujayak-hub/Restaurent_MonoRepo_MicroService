@@ -1,16 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
-import { FaUser, FaSignOutAlt, FaSignInAlt, FaUserPlus, FaShoppingCart } from "react-icons/fa"; // Icons
+import { FaUser, FaSignOutAlt, FaSignInAlt, FaUserPlus } from "react-icons/fa"; // Icons
 import { useState } from "react";
 
-const Header = () => {
+const Header = () =>
+{
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
+
 
   const userName = localStorage.getItem("userName");
   const userEmail = localStorage.getItem("userEmail");
   const accessToken = localStorage.getItem("accessToken");
 
-  const handleLogout = () => {
+  const handleLogout = () =>
+  {
     localStorage.clear();
     navigate("/");
   };
@@ -27,27 +30,20 @@ const Header = () => {
         {isLoggedIn ? (
           <div className="flex items-center space-x-6">
             <div className="text-right">
-              <div className="text-[#1f2e4a] font-semibold flex items-center gap-2">
+              <Link
+                to="/profile"
+                className="text-[#1f2e4a] font-semibold flex items-center gap-2 hover:text-[#e87c21] transition-all duration-300"
+              >
                 <FaUser /> {userName}
-              </div>
+              </Link>
               <div className="text-gray-600 text-sm">{userEmail}</div>
             </div>
-            <div className="flex items-center gap-4">
-              {/* Cart Icon */}
-              <button
-                onClick={() => navigate("/mycart")}
-                className="text-[#1f2e4a] hover:text-[#e87c21] transition-all duration-300"
-              >
-                <FaShoppingCart className="text-xl" />
-              </button>
-              {/* Logout Button */}
-              <button
-                onClick={handleLogout}
-                className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300"
-              >
-                <FaSignOutAlt /> Logout
-              </button>
-            </div>
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300"
+            >
+              <FaSignOutAlt /> Logout
+            </button>
           </div>
         ) : (
           <nav className="flex items-center gap-6 relative">

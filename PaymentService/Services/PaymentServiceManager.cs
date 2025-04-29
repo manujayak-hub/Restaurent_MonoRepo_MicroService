@@ -45,5 +45,22 @@ namespace PaymentService.Services
 
             return payment;
         }
+        public async Task<List<Payment>> GetAllPaymentsAsync()
+        {
+            return await _payments.Find(_ => true).ToListAsync();
+        }
+
+        public async Task<Payment?> GetPaymentByIdAsync(string id)
+        {
+            return await _payments.Find(p => p.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> DeletePaymentByIdAsync(string id)
+        {
+            var result = await _payments.DeleteOneAsync(p => p.Id == id);
+            return result.DeletedCount > 0;
+        }
+
     }
+
 }

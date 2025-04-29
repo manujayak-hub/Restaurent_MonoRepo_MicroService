@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import { useNavigate ,useLocation } from "react-router-dom";  // Import useNavigate for React Router v6
+import { useNavigate, useLocation } from "react-router-dom";  // Import useNavigate for React Router v6
 import { FaMapMarkerAlt, FaPhoneAlt, FaUtensils, FaStar, FaLeaf, FaHamburger, FaShoppingCart } from "react-icons/fa";
-import OrderService from '../../Services/OrderService'; 
+import OrderService from '../../Services/OrderService';
 
-const RestaurantOrderPage = () => {
+const RestaurantOrderPage = () =>
+{
   const navigate = useNavigate(); // Initialize useNavigate hook  
-   const location = useLocation();
+  const location = useLocation();
   const orderdetails = location.state || {}; // Get order details from location state
-  const cusid = localStorage.getItem("userId"); 
+  const cusid = localStorage.getItem("userId");
 
   console.log(orderdetails);
 
   // State to hold order data
   const [orderData, setOrderData] = useState({
-    itemId: orderdetails.id , // Ensure this is the correct ItemId
+    itemId: orderdetails.id, // Ensure this is the correct ItemId
     dishName: orderdetails.dishName,
     price: orderdetails.price || 0,
     ingredient: orderdetails.ingredient || '',
@@ -28,7 +29,8 @@ const RestaurantOrderPage = () => {
   });
 
   // Handle form input changes
-  const handleChange = (e) => {
+  const handleChange = (e) =>
+  {
     const { name, value } = e.target;
     setOrderData((prevData) => ({
       ...prevData,
@@ -36,7 +38,8 @@ const RestaurantOrderPage = () => {
     }));
   };
 
-  const handlePlaceOrder = async () => {
+  const handlePlaceOrder = async () =>
+  {
     // Constructing the items array as required
     const items = [
       {
@@ -46,7 +49,7 @@ const RestaurantOrderPage = () => {
         price: orderData.price,
       },
     ];
-  
+
     const requestBody = {
       customerId: cusid,
       restaurantId: orderData.restaurantId,
@@ -55,29 +58,50 @@ const RestaurantOrderPage = () => {
       totalAmount: orderData.price * orderData.quantity, // Calculate total amount
       paymentMethod: orderData.paymentMethod,
     };
-  
-    try {
+
+    try
+    {
       // Call the create method from OrderService with the new request body
       const response = await OrderService.create(requestBody);
       console.log('Order placed successfully:', response.data);
-      
-      // Show success alert
+
+      const updatedOrderData = {
+        ...orderData,
+        orderId: response.data.orderId, // assuming your backend returns { orderId: ... }
+      };
+
+      localStorage.setItem("orderDetails", JSON.stringify(updatedOrderData));
+
+
       alert('Order placed successfully!');
 
       // Wait for a couple of seconds before navigating back
-      setTimeout(() => {
-        navigate(-1);  // Go back to the previous page
-      }, 1000);
-  
-    } catch (error) {
+      if (orderData.paymentMethod === 'creditCard' || orderData.paymentMethod === 'debitCard')
+      {
+
+        setTimeout(() =>
+        {
+          navigate('/payment');
+        }, 1000);
+      } else
+      {
+
+        setTimeout(() =>
+        {
+          navigate(-1);
+        }, 1000);
+      }
+
+    } catch (error)
+    {
       console.error('Error placing order:', error);
     }
   };
-  
+
   return (
-    <div className="order-page bg-gradient-to-r from-[#a6c1ee] via-[#e6d4c6] to-[#e87c21] min-h-screen py-12 px-6 sm:px-8">
+    <div className="order-page bg-gradient-to-r from-[#fbc2eb] via-[#a6c1ee] to-[#fbc2eb] min-h-screen py-12 px-6 sm:px-8">
       <h2 className="text-4xl font-extrabold text-center text-[#e87c21] mb-8 drop-shadow">
-        My Cart
+        Restaurant Order
       </h2>
 
       {/* Order Details Section */}
@@ -96,7 +120,7 @@ const RestaurantOrderPage = () => {
               <FaStar className="mr-1" /> {orderdetails.rating} ⭐
             </p>
             <p className="text-sm text-gray-700">
-              <strong>Type:</strong> 
+              <strong>Type:</strong>
               {orderdetails.vegNonveg === 'veg' ? (
                 <><FaLeaf className="mr-1 text-green-500" /> Vegetarian</>
               ) : (

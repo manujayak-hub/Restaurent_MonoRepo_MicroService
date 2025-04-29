@@ -33,48 +33,51 @@ import OrderDetails from "./Pages/Order/OrderDetails";
 
 import Drivercomplete from "./Pages/Delivery/DriverComplete";
 import PaymentPage from "./Pages/PaymentPage";
+import HomePage from "./Pages/HomePage";
+import Profile from "./Pages/Users/Profile"
 
 
 
 
-function App() {
+function App()
+{
   return (
     <>
       <BrowserRouter>
         <Routes>
 
-        <Route path="/" element={<LoginUser/>} /> 
-        <Route path="/register/driver" element={<RegisterDriver/>} />
-        <Route path="/register/user" element={<RegisterUser/>} />
-        <Route path="/register/owner" element={<RegisterRestaurantOwner/>} />
-        <Route path="/resuserdash" element={<ResUserDash/>} />
-        <Route path="/restaurant/:id" element={<OrderPage />} />
+          <Route path="/" element={<LoginUser />} />
+          <Route path="/register/driver" element={<RegisterDriver />} />
+          <Route path="/register/user" element={<RegisterUser />} />
+          <Route path="/register/owner" element={<RegisterRestaurantOwner />} />
+          <Route path="/resuserdash" element={<ResUserDash />} />
+          <Route path="/restaurant/:id" element={<OrderPage />} />
 
 
-        //driver side delivery     
-        <Route path="/all" element={<AllDeliveries />} />
-        <Route path="/delivery-details/:deliveryId" element={<DeliveryDetails />} />
-        <Route path="/DriverProfile" element={<DriverProfile />} />
-        <Route path="/Drivercomplete" element={<Drivercomplete />} />
-        
+        //driver side delivery
+          <Route path="/all" element={<AllDeliveries />} />
+          <Route path="/delivery-details/:deliveryId" element={<DeliveryDetails />} />
+          <Route path="/DriverProfile" element={<DriverProfile />} />
+          <Route path="/Drivercomplete" element={<Drivercomplete />} />
+
         //User side delivery
-        <Route path="/completed" element={<CompletedDeliveries />} />
-        <Route path="/userdashboard" element={<UserDashboard />} />
-        <Route path="/track-delivery/:deliveryId" element={<TrackDelivery />} />
+          <Route path="/completed" element={<CompletedDeliveries />} />
+          <Route path="/userdashboard" element={<UserDashboard />} />
+          <Route path="/track-delivery/:deliveryId" element={<TrackDelivery />} />
 
         //Admin side delivery
-        <Route path="/admin-deliveries" element={<AdminDeliveries />} />
-        
+          <Route path="/admin-deliveries" element={<AdminDeliveries />} />
 
-        <Route path="/resowner" element={<ResOwner />} />
 
-        <Route path="/testcartform" element={<TestCartForm />} />
-        <Route path="/add-to-cart" element={<AddToCart/>} /> 
-        <Route path="/cart" element={<RestaurantOrderPage/>} />
-        <Route path="/mycart" element={<MyCart />} />
-        <Route path="/order/:id" element={<OrderDetails />} />
+          <Route path="/resowner" element={<ResOwner />} />
 
-        <Route path="/resorder" element={<ResOrder />} />
+          <Route path="/testcartform" element={<TestCartForm />} />
+          <Route path="/add-to-cart" element={<AddToCart />} />
+          <Route path="/cart" element={<RestaurantOrderPage />} />
+          <Route path="/mycart" element={<MyCart />} />
+          <Route path="/order/:id" element={<OrderDetails />} />
+
+          <Route path="/resorder" element={<ResOrder />} />
 
           <Route path="/" element={<LoginUser />} />
           <Route path="/register/driver" element={<RegisterDriver />} />
@@ -95,6 +98,8 @@ function App() {
           <Route path="/resorder" element={<ResOrder />} />
 
           <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/profile" element={<Profile />} />
 
 
 

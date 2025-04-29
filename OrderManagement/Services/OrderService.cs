@@ -26,7 +26,7 @@ namespace OrderManagement.Services
             return await _orders.Find(order => order.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task CreateOrderAsync(CreateOrderDTO orderDto) 
+        public async Task<Order> CreateOrderAsync(CreateOrderDTO orderDto)
         {
             // Set the status based on payment method
             string status = orderDto.PaymentMethod == "cashOnDelivery" ? "Paid" : "Pending";
@@ -44,6 +44,7 @@ namespace OrderManagement.Services
             };
 
             await _orders.InsertOneAsync(order);
+            return order;
         }
 
 
@@ -59,7 +60,7 @@ namespace OrderManagement.Services
             await _orders.DeleteOneAsync(filter);
         }
 
-         public async Task<List<Order>> GetOrdersByRestaurantIdAsync(string restaurantId)
+        public async Task<List<Order>> GetOrdersByRestaurantIdAsync(string restaurantId)
         {
             var filter = Builders<Order>.Filter.Eq(order => order.RestaurantId, restaurantId);
             return await _orders.Find(filter).ToListAsync();
@@ -81,22 +82,22 @@ namespace OrderManagement.Services
         }
 
         // Get Orders by Status and RestaurantId
-public async Task<List<Order>> GetOrdersByStatusAndRestaurantIdAsync(string status, string restaurantId)
-{
-    var filter = Builders<Order>.Filter.Eq(order => order.Status, status) &
-                Builders<Order>.Filter.Eq(order => order.RestaurantId, restaurantId);
-                
-    return await _orders.Find(filter).ToListAsync();
-}
+        public async Task<List<Order>> GetOrdersByStatusAndRestaurantIdAsync(string status, string restaurantId)
+        {
+            var filter = Builders<Order>.Filter.Eq(order => order.Status, status) &
+                        Builders<Order>.Filter.Eq(order => order.RestaurantId, restaurantId);
 
-    // Get Orders by Status only
-    public async Task<List<Order>> GetOrdersByStatusAsync(string status)
-    {
-        var filter = Builders<Order>.Filter.Eq(order => order.Status, status);
+            return await _orders.Find(filter).ToListAsync();
+        }
 
-        return await _orders.Find(filter).ToListAsync();
+        // Get Orders by Status only
+        public async Task<List<Order>> GetOrdersByStatusAsync(string status)
+        {
+            var filter = Builders<Order>.Filter.Eq(order => order.Status, status);
+
+            return await _orders.Find(filter).ToListAsync();
 
 
-        }    
+        }
     }
 }

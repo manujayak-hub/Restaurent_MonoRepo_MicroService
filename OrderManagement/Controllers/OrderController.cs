@@ -36,20 +36,24 @@ namespace OrderManagement.Controllers
         }
 
         [HttpPost]
+        [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] CreateOrderDTO orderDto)
         {
             try
             {
-                await _orderService.CreateOrderAsync(orderDto);
-                return Ok(new { message = "Order created successfully" });
+                var createdOrder = await _orderService.CreateOrderAsync(orderDto);
+                return Ok(new
+                {
+                    message = "Order created successfully",
+                    orderId = createdOrder.Id
+                });
             }
             catch (Exception ex)
             {
                 return BadRequest(new { error = ex.Message });
             }
         }
-
-       [HttpPatch("{id}")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult> UpdateOrderStatus(string id, string recordstatus)
         {
             var existingOrder = await _orderService.GetOrderAsync(id);
@@ -110,9 +114,9 @@ namespace OrderManagement.Controllers
                 return NotFound(new { message = "No orders found for this restaurant" });
 
             return Ok(orders);
-        }
+        }
 
-       
+
         [HttpGet("status/{status}/{id}")]
         public async Task<ActionResult<List<Order>>> GetOrdersByStatusAndRestaurantId(string status, string id)
         {
@@ -132,6 +136,6 @@ namespace OrderManagement.Controllers
 
             return Ok(orders);
         }
-    }    
+    }
 
 }

@@ -43,5 +43,34 @@ namespace PaymentService.Controllers
                 paymentId = payment.Id // return the payment ID from MongoDB
             });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllPayments()
+        {
+            var payments = await _paymentServiceManager.GetAllPaymentsAsync();
+            return Ok(payments);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPaymentById(string id)
+        {
+            var payment = await _paymentServiceManager.GetPaymentByIdAsync(id);
+            if (payment == null)
+            {
+                return NotFound();
+            }
+            return Ok(payment);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePaymentById(string id)
+        {
+            var deleted = await _paymentServiceManager.DeletePaymentByIdAsync(id);
+            if (!deleted)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
     }
 }
