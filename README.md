@@ -83,6 +83,17 @@ docker-compose up --build
 ---
 
 ## 📌 Notes
+Configure appsettings.json for PaymentService
+
+"Stripe": {
+  "SecretKey": "sk_test_51RI5VbRogb3j20qj7lYKpNWHAdeZZ3tsSADbskzAF0dtoLgMYhGa9qoZIrmyLMwICyz51B3VMATXGpbQDZztC9UE00LaghgT8b",
+  "PublishableKey": "pk_test_51RI5VbRogb3j20qj9LWcqb4RnHTvi91WnJdMkAFzheXy9Xc5ulinFHLhKzhLs7mYBqlcbWDGPRvc8A8uG9Ajs1iv00W5tVn7iN"
+},
+"Twilio": {
+  "AccountSid": "ACecb7cd78a897a481a241c94cc4a9e06b",
+  "AuthToken": "cd6ed1d908dd8a2cb5a2f3100e8c6ee3",
+  "PhoneNumber": "+13365596635"
+}
 
 - Each service has its own Dockerfile and can be deployed independently.
 - Environment variables and secrets should be configured via .env files.
