@@ -59,13 +59,6 @@ const MyCart = () => {
               🛒 My Cart
             </h2>
 
-            {/* Delivery Page Button */}
-            <button
-              onClick={() => navigate('/userdashboard')}
-              className="flex items-center bg-gradient-to-r from-[#df9f6b] to-[#e87c21] hover:from-[#df9f6b] hover:to-[#e87c21] text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              My deliveries
-            </button>
           </div>
 
           {/* Tab Navigation */}

@@ -107,6 +107,14 @@ const Profile = () =>
       <Header />
       <div className="min-h-screen bg-gradient-to-r from-[#7fc7e0] via-white to-[#e87c21]/30 py-12 px-4">
         <div className="max-w-4xl mx-auto">
+        <div className="flex justify-end mb-4">
+        <button
+          onClick={() => navigate('/userdashboard')}
+          className="flex items-center bg-gradient-to-r from-[#df9f6b] to-[#e87c21] hover:from-[#df9f6b] hover:to-[#e87c21] text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+        >
+          🛵 My Deliveries
+        </button>
+      </div>
           {/* Profile Card with Animation */}
           <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 transform transition-all duration-500 hover:shadow-xl">
             <div className="flex items-center justify-center mb-6">
@@ -114,7 +122,7 @@ const Profile = () =>
                 <User size={40} className="text-[#e87c21]" />
               </div>
             </div>
-
+           
             <h1 className="text-3xl font-bold text-[#e87c21] mb-6 text-center">
               Your Profile
             </h1>
@@ -134,6 +142,8 @@ const Profile = () =>
                 <label className="text-gray-600 text-sm mb-1">Email</label>
                 <div className="font-semibold text-[#1f2e4a] text-xl">{user.email}</div>
               </div>
+
+              
             </div>
           </div>
 
