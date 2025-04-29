@@ -56,15 +56,24 @@ function DeliveryDetails() {
 
   const handleCompleteDelivery = async () => {
     try {
-      await OrderService.updaterecord(orderId, 'Completed');
+      // Try to update the order status, but ignore any failure
+      try {
+        await OrderService.updaterecord(orderId, 'Completed');
+      } catch (orderError) {
+        console.warn("Order status update failed, continuing with delivery completion.", orderError);
+      }
+  
+      // Always attempt to complete the delivery
       await axios.put(`http://localhost:8084/api/delivery/${deliveryId}/complete`);
-      alert("Delivery and Order marked as complete!");
+  
+      alert("Delivery marked as complete!");
       navigate("/DriverProfile");
-    } catch (error) {
-      console.error('Error completing delivery:', error.response?.data || error.message);
-      alert(error.response?.data || "Failed to complete delivery.");
+    } catch (deliveryError) {
+      console.error('Error completing delivery:', deliveryError.response?.data || deliveryError.message);
+      alert(deliveryError.response?.data?.message || "Failed to complete delivery.");
     }
   };
+  
 
   if (!delivery || !pickupCoords || !deliveryCoords) {
     return <div>Loading...</div>;

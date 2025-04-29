@@ -54,9 +54,9 @@ const LoginUser = () =>
       {
         alert("✅ Logged in and values saved!");
 
-        if (urole === "admin")
+        if (urole === "driver")
         {
-          navigate("/admin-dashboard");
+          navigate("/DriverProfile");
         } else if (urole === "owner")
         {
           navigate("/user-dashboard");
