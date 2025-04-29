@@ -56,7 +56,7 @@ function CompletedDeliveries() {
     <Header/>
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-xl font-semibold mb-4">Completed Deliveries</h2>
+        <h2 className="text-5xl font-extrabold text-center text-[#e87c21] mb-12 drop-shadow">Completed Deliveries</h2>
 
         {deliveries.length === 0 ? (
           <div className="min-h-screen flex items-center justify-center">
@@ -65,18 +65,29 @@ function CompletedDeliveries() {
             </div>
           </div>
         ) : (
-          <ul className="space-y-2">
+          <ul className="space-y-5">
             {deliveries.map((d) => (
               <li
-                key={d.id}
-                onClick={() => handleDeliveryClick(d.id)} // Navigate to the delivery details page
-                className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100 transition"
+              
+                className="bg-white p-4 rounded-lg shadow  border-t-8 border-[#7fc7e0]  "
               >
-                <p><strong>Payment Type:</strong> {d.paymentType}</p>
-                <p><strong>Status:</strong> {d.status}</p>
+                
                 <p><strong>Pickup Location:</strong> {d.pickupLocation}</p>
                 <p><strong>Dropoff Location:</strong> {d.deliveryLocation}</p>
-                <p><strong>Completed On:</strong> {new Date(d.completedDate).toLocaleDateString()}</p> {/* Example of showing completion date */}
+                <p><strong>Delivery Items:</strong></p>
+                      <ul className="list-disc pl-10">
+                        {d.items && d.items.length > 0 ? (
+                          d.items.map((item, index) => (
+                            <li key={index}>
+                              {item.name} - Quantity: {item.quantity}
+                            </li>
+                          ))
+                        ) : (
+                          <li>Unassigned</li>
+                        )}
+                      </ul>
+                <p><strong>Total Amount:</strong> Rs.{d.totalAmount}</p>
+                <p><strong>Payment Type:</strong> {d.paymentType}</p>
               </li>
             ))}
           </ul>

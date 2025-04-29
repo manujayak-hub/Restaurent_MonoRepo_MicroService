@@ -14,5 +14,7 @@ public interface IDeliveryRepository
     Task<List<Delivery>> GetCompletedDeliveriesByUserIdAsync(string userId);
 
     Task<List<Delivery>> GetDeliveriesByUserIdAsync(string userId);
+
+    
     
 }

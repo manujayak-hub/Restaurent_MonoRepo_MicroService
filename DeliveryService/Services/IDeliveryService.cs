@@ -20,4 +20,6 @@ public interface IDeliveryService
 
     Task<List<Delivery>> GetDeliveriesByUserIdAsync(string userId);
 
+    Task<bool> SetDeliveryPendingAsync(string deliveryId);
+
 }

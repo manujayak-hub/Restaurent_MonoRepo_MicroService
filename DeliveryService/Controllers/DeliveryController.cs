@@ -120,4 +120,29 @@ public async Task<ActionResult<List<Delivery>>> GetCompletedDeliveries()
 
             return Ok(deliveries);
         }
+
+
+      [HttpPut("{deliveryId}/setPending")]
+public async Task<IActionResult> SetDeliveryPending(string deliveryId)
+{
+    try
+    {
+        var result = await _service.SetDeliveryPendingAsync(deliveryId);
+
+        if (!result)
+        {
+            return NotFound($"Delivery with ID {deliveryId} not found.");
+        }
+
+        return Ok("Delivery status set to Pending successfully.");
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, $"Internal server error: {ex.Message}");
+    }
+}
+
+
+
+
 }

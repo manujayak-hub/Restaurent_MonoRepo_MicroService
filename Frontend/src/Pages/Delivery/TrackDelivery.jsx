@@ -89,7 +89,7 @@ function TrackDelivery() {
               ) : (
                 <li className="flex items-center">
                   <img src={tickImage} alt="Tick" className="mr-2 w-6 h-6" />
-                  Order Processing
+                  Driver Searching
                 </li>
               )}
             </ul>

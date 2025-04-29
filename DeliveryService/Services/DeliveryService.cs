@@ -154,8 +154,25 @@ public async Task<List<Delivery>> GetDeliveriesByDriverId(string driverId)
             var deliveries = await _repository.GetDeliveriesByUserIdAsync(userId);
             return deliveries;
         }
+public async Task<bool> SetDeliveryPendingAsync(string deliveryId)
+{
+    var delivery = await _repository.GetDeliveryByIdAsync(deliveryId); // Reuse your existing method
 
-        
+    if (delivery == null)
+    {
+        return false;
+    }
+
+    delivery.Status = "Pending";
+    delivery.DriverId = null;
+    delivery.DriverName = null;
+    delivery.DriverContact = null;
+
+    await _repository.UpdateDeliveryAsync(delivery);
+
+    return true;
+}
+
 
 }
  
