@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OrderService from '../../Services/OrderService';
+import RestaurantService from '../../Services/RestaurentService';
 import { FaUtensils, FaMoneyBillAlt, FaClock, FaCheckCircle } from 'react-icons/fa';
 import Header from '../../Components/Header';
 import Footer from '../../Components/Footer';
@@ -10,6 +11,7 @@ const MyCart = () => {
   const [loading, setLoading] = useState(true);
   const [completedOrders, setCompletedOrders] = useState([]);
   const [otherOrders, setOtherOrders] = useState([]);
+  const [restaurantDetails, setRestaurantDetails] = useState({});
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('other');
   
@@ -21,9 +23,18 @@ const MyCart = () => {
         const response = await OrderService.getByCustomerId(customerId);
         const allOrders = response.data;
 
+        // Fetch restaurant details for each order
+        const enrichedOrders = await Promise.all(allOrders.map(async (order) => {
+          if (order.restaurantId) {
+            const restaurantRes = await RestaurantService.getById(order.restaurantId);
+            return { ...order, restaurantDetails: restaurantRes.data };
+          }
+          return { ...order, restaurantDetails: null };
+        }));
+
         // Divide orders into completed and other orders
-        const completed = allOrders.filter(order => order.status === 'Completed');
-        const others = allOrders.filter(order => order.status !== 'Completed');
+        const completed = enrichedOrders.filter(order => order.status === 'Completed');
+        const others = enrichedOrders.filter(order => order.status !== 'Completed');
         
         setCompletedOrders(completed);
         setOtherOrders(others);
@@ -48,18 +59,11 @@ const MyCart = () => {
               🛒 My Cart
             </h2>
 
-            {/* Delivery Page Button */}
-            <button
-              onClick={() => navigate('/userdashboard')}
-              className="flex items-center bg-gradient-to-r from-[#df9f6b] to-[#e87c21] hover:from-[#df9f6b] hover:to-[#e87c21] text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              My deliveries
-            </button>
           </div>
 
           {/* Tab Navigation */}
           <div className="flex justify-center mb-8">
-          <button
+            <button
               className={`py-2 px-4 text-lg font-semibold rounded-l-xl ${activeTab === 'other' ? 'bg-[#e87c21] text-white' : 'bg-white text-[#e87c21]'}`}
               onClick={() => setActiveTab('other')}
             >
@@ -71,7 +75,6 @@ const MyCart = () => {
             >
               Completed Orders
             </button>
-            
           </div>
 
           {loading ? (
@@ -91,11 +94,13 @@ const MyCart = () => {
                         className="flex flex-col md:flex-row md:items-center justify-between bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition-all"
                       >
                         <div className="flex-1 space-y-2">
+                          {/* Restaurant Details */}
                           <p className="flex items-center text-gray-700 text-sm md:text-base">
                             <FaUtensils className="text-[#7fc7e0] mr-2" />
-                            <span className="font-semibold">{order.restaurantName}</span>
+                            <span className="font-semibold">{order.restaurantDetails?.name || 'Restaurant'}</span>
                           </p>
 
+                          {/* Order Details */}
                           <p className="flex items-center text-gray-700 text-sm md:text-base">
                             <FaMoneyBillAlt className="text-[#7fc7e0] mr-2" />
                             ₹{order.totalAmount.toFixed(2)}
@@ -109,6 +114,26 @@ const MyCart = () => {
                             <FaCheckCircle className="text-[#7fc7e0] mr-2" />
                             Status: {order.status}
                           </p>
+
+                          {/* Ordered Items */}
+                          {order.items && (
+                            <div className="mt-4">
+                              <h4 className="text-xl font-semibold text-[#e87c21]">Ordered Items</h4>
+                              <ul className="space-y-4">
+                                {order.items.map((item) => (
+                                  <li key={item.itemId} className="bg-gray-100 rounded-xl p-4 shadow">
+                                    <div className="text-lg font-semibold text-gray-800">{item.name}</div>
+                                    <div className="text-sm text-gray-600">
+                                      Quantity: {item.quantity} × ₹{item.price.toFixed(2)}
+                                    </div>
+                                    <div className="text-sm text-gray-700 font-medium">
+                                      Subtotal: ₹{(item.quantity * item.price).toFixed(2)}
+                                    </div>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
                         </div>
 
                         <div className="mt-4 md:mt-0 md:ml-6">
@@ -128,7 +153,6 @@ const MyCart = () => {
               {/* Other Orders Tab */}
               {activeTab === 'other' && otherOrders.length > 0 && (
                 <div>
-                
                   <div className="space-y-6">
                     {otherOrders.map((order) => (
                       <div
@@ -136,11 +160,13 @@ const MyCart = () => {
                         className="flex flex-col md:flex-row md:items-center justify-between bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition-all"
                       >
                         <div className="flex-1 space-y-2">
+                          {/* Restaurant Details */}
                           <p className="flex items-center text-gray-700 text-sm md:text-base">
                             <FaUtensils className="text-[#7fc7e0] mr-2" />
-                            <span className="font-semibold">{order.restaurantName}</span>
+                            <span className="font-semibold">{order.restaurantDetails?.name || 'Restaurant'}</span>
                           </p>
 
+                          {/* Order Details */}
                           <p className="flex items-center text-gray-700 text-sm md:text-base">
                             <FaMoneyBillAlt className="text-[#7fc7e0] mr-2" />
                             ₹{order.totalAmount.toFixed(2)}
@@ -154,6 +180,23 @@ const MyCart = () => {
                             <FaCheckCircle className="text-[#7fc7e0] mr-2" />
                             Status: {order.status}
                           </p>
+
+                          {/* Ordered Items */}
+                          {order.items && (
+                            <div className="mt-4">
+                              <h4 className="text-xl font-semibold text-[#e87c21]">Ordered Items</h4>
+                              <ul className="space-y-4">
+                                {order.items.map((item) => (
+                                  <li key={item.itemId} className="bg-gray-100 rounded-xl p-4 shadow">
+                                    <div className="text-lg font-semibold text-gray-800">{item.name}</div>
+                                    <div className="text-sm text-gray-600">
+                                      Quantity: {item.quantity} × ₹{item.price.toFixed(2)}
+                                    </div>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
                         </div>
 
                         <div className="mt-4 md:mt-0 md:ml-6">

@@ -29,6 +29,7 @@ import ResOrder from "./Pages/Restaurent/ResOrder";
 
 import MyCart from "./Pages/Order/MyCart";
 import OrderDetails from "./Pages/Order/OrderDetails";
+import CancelOrder from "./Pages/Order/CancelOrder";
 
 
 import Drivercomplete from "./Pages/Delivery/DriverComplete";
@@ -77,6 +78,7 @@ function App()
           <Route path="/cart" element={<RestaurantOrderPage />} />
           <Route path="/mycart" element={<MyCart />} />
           <Route path="/order/:id" element={<OrderDetails />} />
+          <Route path="/cancelorder/:id" element={<CancelOrder />} />
 
           <Route path="/resorder" element={<ResOrder />} />
 
