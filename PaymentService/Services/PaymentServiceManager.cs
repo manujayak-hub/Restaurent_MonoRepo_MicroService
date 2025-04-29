@@ -13,7 +13,7 @@ namespace PaymentService.Services
         {
             var client = new MongoClient(config["MongoDB:ConnectionString"]);
 
-            // Change the key to "MongoDB:ConnectionString"
+
             var database = client.GetDatabase("PaymentDb");
             _payments = database.GetCollection<Payment>("Payments");
         }
@@ -22,7 +22,7 @@ namespace PaymentService.Services
         {
             var options = new PaymentIntentCreateOptions
             {
-                Amount = (long)(amount * 100), // amount in cents
+                Amount = (long)(amount * 100),
                 Currency = "usd",
                 PaymentMethodTypes = new List<string> { "card" }
             };
@@ -41,7 +41,7 @@ namespace PaymentService.Services
                 CreatedAt = DateTime.UtcNow
             };
 
-            await _payments.InsertOneAsync(payment); // Insert the payment into MongoDB
+            await _payments.InsertOneAsync(payment);
 
             return payment;
         }
