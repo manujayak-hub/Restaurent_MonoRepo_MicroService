@@ -42,9 +42,20 @@ const MyCart = () => {
       <Header />
       <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-[#e87c21] mb-12 drop-shadow">
-            🛒 My Cart
-          </h2>
+          {/* Title and Delivery Button Row */}
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-[#e87c21] drop-shadow">
+              🛒 My Cart
+            </h2>
+
+            {/* Delivery Page Button */}
+            <button
+              onClick={() => navigate('/userdashboard')}
+              className="flex items-center bg-gradient-to-r from-[#df9f6b] to-[#e87c21] hover:from-[#df9f6b] hover:to-[#e87c21] text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+            >
+              My deliveries
+            </button>
+          </div>
 
           {/* Tab Navigation */}
           <div className="flex justify-center mb-8">

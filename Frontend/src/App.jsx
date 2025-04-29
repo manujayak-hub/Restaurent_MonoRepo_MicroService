@@ -16,8 +16,8 @@ import AdminDeliveries from './Pages/Delivery/AdminDeliveries';
 
 
 
-import DriverProfile from './Pages/Users/DriverProfile';
-import DriverDeliveries from './Pages/Delivery/DriverDeliveries';
+import DriverProfile from './Pages/Delivery/DriverProfile';
+
 
 import ResOwner from "./Pages/Restaurent/ResOwner";
 
@@ -31,20 +31,13 @@ import MyCart from "./Pages/Order/MyCart";
 import OrderDetails from "./Pages/Order/OrderDetails";
 
 
+import Drivercomplete from "./Pages/Delivery/DriverComplete";
 import PaymentPage from "./Pages/PaymentPage";
 
 
 
 
-
-
-
-
-
-
-function App()
-{
-
+function App() {
   return (
     <>
       <BrowserRouter>
@@ -61,7 +54,8 @@ function App()
         //driver side delivery     
         <Route path="/all" element={<AllDeliveries />} />
         <Route path="/delivery-details/:deliveryId" element={<DeliveryDetails />} />
-        <Route path="/DriverDeliveries" element={<DriverDeliveries />} />
+        <Route path="/DriverProfile" element={<DriverProfile />} />
+        <Route path="/Drivercomplete" element={<Drivercomplete />} />
         
         //User side delivery
         <Route path="/completed" element={<CompletedDeliveries />} />
@@ -70,8 +64,7 @@ function App()
 
         //Admin side delivery
         <Route path="/admin-deliveries" element={<AdminDeliveries />} />
-        <Route path="/DriverProfile" element={<DriverProfile />} />
-        <Route path="/DriverDeliveries" element={<DriverDeliveries />} />
+        
 
         <Route path="/resowner" element={<ResOwner />} />
 
@@ -97,19 +90,6 @@ function App()
           <Route path="/testcartform" element={<TestCartForm />} />
           <Route path="/add-to-cart" element={<AddToCart />} />
           <Route path="/cart" element={<RestaurantOrderPage />} />
-
-
-
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/all" element={<AllDeliveries />} />
-          <Route path="/completed" element={<CompletedDeliveries />} />
-          <Route path="/create" element={<CreateDelivery />} />
-          <Route path="/delivery-details/:deliveryId" element={<DeliveryDetails />} />
-          <Route path="/userdashboard" element={<UserDashboard />} />
-          <Route path="/track-delivery/:deliveryId" element={<TrackDelivery />} />
-          <Route path="/admin-deliveries" element={<AdminDeliveries />} />
-          <Route path="/DriverDeliveries" element={<DriverDeliveries />} />
-          <Route path="/CreateOrderAndDelivery" element={<CreateOrderAndDelivery />} />
 
           <Route path="/resowner" element={<ResOwner />} />
           <Route path="/resorder" element={<ResOrder />} />

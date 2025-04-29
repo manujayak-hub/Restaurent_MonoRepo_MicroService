@@ -5,13 +5,13 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine';
-import OrderService from '../../Services/OrderService'; // Make sure the path to your OrderService is correct
+import OrderService from '../../Services/OrderService';
 import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
 
 const containerStyle = {
   width: '100%',
-  height: '500px',
+  height: '100%', // Full height inside the flex box
 };
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -33,9 +33,8 @@ function DeliveryDetails() {
   useEffect(() => {
     axios.get(`http://localhost:8084/api/delivery/${deliveryId}`)
       .then(response => {
-        console.log("Delivery API Response:", response.data);
         setDelivery(response.data);
-        setOrderId(response.data.orderId);  
+        setOrderId(response.data.orderId);
         getCoordinates(response.data.pickupLocation, setPickupCoords);
         getCoordinates(response.data.deliveryLocation, setDeliveryCoords);
       })
@@ -57,25 +56,15 @@ function DeliveryDetails() {
 
   const handleCompleteDelivery = async () => {
     try {
-      // First, update the Order status
       await OrderService.updaterecord(orderId, 'Completed');
-      console.log('Order status updated.');
-  
-      // Then, update the Delivery status using the PUT method
-      const response = await axios.put(
-        `http://localhost:8084/api/delivery/${deliveryId}/complete`
-      );
-      console.log('Delivery status updated:', response.data);
-  
+      await axios.put(`http://localhost:8084/api/delivery/${deliveryId}/complete`);
       alert("Delivery and Order marked as complete!");
-      navigate("/all"); // Navigate after both updates
+      navigate("/DriverProfile");
     } catch (error) {
       console.error('Error completing delivery:', error.response?.data || error.message);
       alert(error.response?.data || "Failed to complete delivery.");
     }
   };
-  
-  
 
   if (!delivery || !pickupCoords || !deliveryCoords) {
     return <div>Loading...</div>;
@@ -83,60 +72,71 @@ function DeliveryDetails() {
 
   return (
     <>
-    <Header/>
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30">
-      <h2 className="text-5xl font-extrabold text-center text-[#e87c21] mb-12 drop-shadow">Delivery Details</h2>
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="space-y-8">
-          <div className="p-6 bg-white rounded-lg shadow">
-            <ul className="space-y-3">
+      <Header />
+      <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-[#7fc7e0] via-white to-[#e87c21]/30">
+        <h2 className="text-5xl font-extrabold text-center text-[#e87c21] mb-12 drop-shadow">Delivery Details</h2>
+
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10">
+          
+          {/* Left Side - Delivery Information */}
+          <div className="bg-white rounded-3xl shadow-xl hover:shadow-2xl border-t-8 border-[#7fc7e0] p-8 transition-all duration-300 hover:scale-105  w-[700px] ">
+            <ul className="space-y-5 text-lg">
               <li><strong>Restaurant:</strong> {delivery.pickupLocation}</li>
-              <li><strong>Delivered Items:</strong></li>
-              <ul className="list-disc pl-5">
-                {delivery.items && delivery.items.length > 0 ? (
-                  delivery.items.map((item, index) => (
-                    <li key={index}>
-                      {item.name} - Quantity: {item.quantity}
-                    </li>
-                  ))
-                ) : (
-                  <li>Unassigned</li>
-                )}
-              </ul>
+              <li>
+                <strong>Delivered Items:</strong>
+                <ul className="list-disc pl-6 mt-2">
+                  {delivery.items && delivery.items.length > 0 ? (
+                    delivery.items.map((item, index) => (
+                      <li key={index}>
+                        {item.name} - Quantity: {item.quantity}
+                      </li>
+                    ))
+                  ) : (
+                    <li>Unassigned</li>
+                  )}
+                </ul>
+              </li>
               <li><strong>Payment Type:</strong> {delivery.paymentType}</li>
               <li><strong>Destination:</strong> {delivery.deliveryLocation}</li>
-              {delivery.status !== "Completed" && (
-                <div className="flex justify-center">
-                  <button
-                    onClick={handleCompleteDelivery}
-                    className="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 mt-7"
-                  >
-                    Complete Delivery
-                  </button>
-                </div>
+              {eta && (
+                <li><strong>Estimated Time:</strong> {eta} minutes</li>
               )}
             </ul>
+
+            {/* Complete Delivery Button */}
+            {delivery.status !== "Completed" && (
+              <div className="mt-30 flex justify-center">
+                <button
+                  onClick={handleCompleteDelivery}
+                  className="bg-gradient-to-r from-[#7fc7e0] to-[#57a9c6] hover:from-[#68b8d8] hover:to-[#499ab0] text-white font-bold py-3 px-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+                >
+                  Complete Delivery
+                </button>
+              </div>
+            )}
           </div>
+
+          {/* Right Side - Map */}
+          <div className="rounded-3xl overflow-hidden shadow-xl w-full  h-[500px]">
+            <MapContainer center={pickupCoords} zoom={13} style={containerStyle}>
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+              />
+              <Marker position={pickupCoords}>
+                <Popup>Pickup Location</Popup>
+              </Marker>
+              <Marker position={deliveryCoords}>
+                <Popup>Delivery Location</Popup>
+              </Marker>
+              <Routing pickup={pickupCoords} delivery={deliveryCoords} setEta={setEta} />
+            </MapContainer>
+          </div>
+
         </div>
 
-        <div className="rounded overflow-hidden shadow">
-          <MapContainer center={pickupCoords} zoom={13} style={containerStyle}>
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            />
-            <Marker position={pickupCoords}>
-              <Popup>Pickup Location</Popup>
-            </Marker>
-            <Marker position={deliveryCoords}>
-              <Popup>Delivery Location</Popup>
-            </Marker>
-            <Routing pickup={pickupCoords} delivery={deliveryCoords} setEta={setEta} />
-          </MapContainer>
-        </div>
       </div>
-    </div>
-    <Footer/>
+      <Footer />
     </>
   );
 }
@@ -157,11 +157,11 @@ function Routing({ pickup, delivery, setEta }) {
       lineOptions: {
         styles: [{ color: '#1E90FF', weight: 5 }]
       },
-      createMarker: () => null, // No extra markers
+      createMarker: () => null,
       routeWhileDragging: false,
       draggableWaypoints: false,
       addWaypoints: false,
-      show: false,  // Prevent showing instructions
+      show: false,
       routerOptions: {
         showAlternatives: false,
       },
@@ -175,11 +175,9 @@ function Routing({ pickup, delivery, setEta }) {
     })
     .addTo(map);
 
-    // Manually hide the instructions if they appear (extra step)
+    // Hide routing panel if any
     const container = document.querySelector('.leaflet-routing-container');
-    if (container) {
-      container.style.display = 'none';
-    }
+    if (container) container.style.display = 'none';
 
     return () => map.removeControl(routingControl);
   }, [pickup, delivery, map, setEta]);
