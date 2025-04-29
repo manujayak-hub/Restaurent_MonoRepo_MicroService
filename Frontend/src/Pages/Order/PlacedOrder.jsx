@@ -12,7 +12,7 @@ const PlacedOrder = () => {
     if (storedOrder) {
       setOrder(JSON.parse(storedOrder));
     } else {
-      navigate('/home'); // redirect if no order data found
+      navigate('/'); // redirect if no order data found
     }
   }, [navigate]);
 
@@ -66,7 +66,7 @@ const PlacedOrder = () => {
         </div>
 
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/home')}
           className="mt-4 bg-[#57a9c6] hover:bg-[#499ab0] text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-300"
         >
           Back to Home
