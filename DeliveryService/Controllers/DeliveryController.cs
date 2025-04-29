@@ -28,41 +28,41 @@ public class DeliveryController : ControllerBase
     }
 
 
-[HttpPut("{deliveryId}/accept")]
-public async Task<IActionResult> AcceptDelivery(string deliveryId, [FromBody] Driver request)
-{
-    var success = await _service.AcceptDeliveryAsync(deliveryId, request.DriverId,request.DriverName,request.DriverContact);
-
-    if (!success)
+    [HttpPut("{deliveryId}/accept")]
+    public async Task<IActionResult> AcceptDelivery(string deliveryId, [FromBody] Driver request)
     {
-        return NotFound("Delivery not found or cannot be accepted.");
+        var success = await _service.AcceptDeliveryAsync(deliveryId, request.DriverId,request.DriverName,request.DriverContact);
+
+        if (!success)
+        {
+            return NotFound("Delivery not found or cannot be accepted.");
+        }
+
+        return Ok("Delivery accepted successfully.");
     }
 
-    return Ok("Delivery accepted successfully.");
-}
 
-
-[HttpPut("{deliveryId}/complete")]
-public async Task<IActionResult> CompleteDelivery(string deliveryId)
-{
-    var success = await _service.CompleteDeliveryAsync(deliveryId);
-    
-    if (!success)
+    [HttpPut("{deliveryId}/complete")]
+    public async Task<IActionResult> CompleteDelivery(string deliveryId)
     {
-        return NotFound("Delivery not found or cannot be completed.");
+        var success = await _service.CompleteDeliveryAsync(deliveryId);
+        
+        if (!success)
+        {
+            return NotFound("Delivery not found or cannot be completed.");
+        }
+
+        return Ok("Delivery completed successfully.");
     }
 
-    return Ok("Delivery completed successfully.");
-}
+    [HttpGet("completed")]
+    public async Task<ActionResult<List<Delivery>>> GetCompletedDeliveries()
+    {
+        var deliveries = await _service.GetCompletedDeliveriesAsync();
+        return Ok(deliveries);
+    }
 
-[HttpGet("completed")]
-public async Task<ActionResult<List<Delivery>>> GetCompletedDeliveries()
-{
-    var deliveries = await _service.GetCompletedDeliveriesAsync();
-    return Ok(deliveries);
-}
-
-[HttpGet("{deliveryId}")]
+    [HttpGet("{deliveryId}")]
     public async Task<ActionResult<Delivery>> GetDeliveryById(string deliveryId)
     {
         var delivery = await _service.GetDeliveryByIdAsync(deliveryId);
@@ -75,7 +75,7 @@ public async Task<ActionResult<List<Delivery>>> GetCompletedDeliveries()
         return Ok(delivery);
     }
 
-// GET: api/delivery/driver/{driverId}
+
         [HttpGet("driver/{driverId}")]
         public async Task<ActionResult<IEnumerable<Delivery>>> GetDeliveriesByDriverId(string driverId)
         {
@@ -122,25 +122,25 @@ public async Task<ActionResult<List<Delivery>>> GetCompletedDeliveries()
         }
 
 
-      [HttpPut("{deliveryId}/setPending")]
-public async Task<IActionResult> SetDeliveryPending(string deliveryId)
-{
-    try
+    [HttpPut("{deliveryId}/setPending")]
+    public async Task<IActionResult> SetDeliveryPending(string deliveryId)
     {
-        var result = await _service.SetDeliveryPendingAsync(deliveryId);
-
-        if (!result)
+        try
         {
-            return NotFound($"Delivery with ID {deliveryId} not found.");
-        }
+            var result = await _service.SetDeliveryPendingAsync(deliveryId);
 
-        return Ok("Delivery status set to Pending successfully.");
+            if (!result)
+            {
+                return NotFound($"Delivery with ID {deliveryId} not found.");
+            }
+
+            return Ok("Delivery status set to Pending successfully.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
-    catch (Exception ex)
-    {
-        return StatusCode(500, $"Internal server error: {ex.Message}");
-    }
-}
 
 
 

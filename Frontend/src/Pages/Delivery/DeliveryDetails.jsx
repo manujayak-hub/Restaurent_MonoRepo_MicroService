@@ -11,7 +11,7 @@ import Footer from "../../Components/Footer";
 
 const containerStyle = {
   width: '100%',
-  height: '100%', // Full height inside the flex box
+  height: '100%', 
 };
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -56,7 +56,7 @@ function DeliveryDetails() {
 
   const handleCompleteDelivery = async () => {
     try {
-      // Try to update the order status, but ignore any failure
+      
       try {
         await OrderService.updaterecord(orderId, 'Completed');
       } catch (orderError) {
@@ -112,7 +112,7 @@ function DeliveryDetails() {
               )}
             </ul>
 
-            {/* Complete Delivery Button */}
+           
             {delivery.status !== "Completed" && (
               <div className="mt-30 flex justify-center">
                 <button

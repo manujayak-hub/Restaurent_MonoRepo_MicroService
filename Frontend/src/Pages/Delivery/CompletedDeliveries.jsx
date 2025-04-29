@@ -1,19 +1,18 @@
-// src/pages/CompletedDeliveries.jsx
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // import useNavigate
-import axios from 'axios'; // Import axios for API calls
+import { useNavigate } from 'react-router-dom'; 
+import axios from 'axios'; 
 import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
 
 function CompletedDeliveries() {
   const [deliveries, setDeliveries] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate(); // initialize navigate
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchCompletedDeliveries = async () => {
       try {
-        const userId = localStorage.getItem("userId"); // Get user ID from localStorage
+        const userId = localStorage.getItem("userId"); 
 
         if (!userId) {
           console.error("No user ID found in local storage!");
@@ -22,7 +21,7 @@ function CompletedDeliveries() {
         }
 
         // Fetch completed deliveries for the logged-in user
-        const deliveriesResponse = await axios.get(`http://localhost:8084/api/delivery/completed/${userId}`); // Assuming there's an endpoint to fetch completed deliveries for a user
+        const deliveriesResponse = await axios.get(`http://localhost:8084/api/delivery/completed/${userId}`); 
         const deliveriesData = deliveriesResponse.data;
 
         if (deliveriesData && deliveriesData.length > 0) {
@@ -40,7 +39,7 @@ function CompletedDeliveries() {
   }, []); // Empty dependency array to fetch data only once
 
   const handleDeliveryClick = (deliveryId) => {
-    navigate(`/track-delivery/${deliveryId}`); // Navigate to delivery tracking page
+    navigate(`/track-delivery/${deliveryId}`); 
   };
 
   if (loading) {
