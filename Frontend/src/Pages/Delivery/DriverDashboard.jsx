@@ -8,7 +8,7 @@ function DriverDashboard() {
   const [driverId, setDriverId] = useState(null);
 
   useEffect(() => {
-    // Get logged-in driver ID from local storage
+    
     const storedDriverId = localStorage.getItem('userId');
     setDriverId(storedDriverId);
 
@@ -45,7 +45,7 @@ function DriverDashboard() {
 
                   {/* Button to Track Delivery */}
                   <button
-                    onClick={() => alert(`Tracking delivery ID: ${delivery.id}`)} // You can navigate to the tracking page
+                    onClick={() => alert(`Tracking delivery ID: ${delivery.id}`)} 
                     className="mt-3 px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 text-white"
                   >
                     Track Delivery

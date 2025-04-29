@@ -161,7 +161,7 @@ function AllDeliveries() {
                     </ul>
                   </div>
 
-                  {/* Accept Button */}
+                 
                   {delivery.status === "Pending" && delivery.driverId !== driver._id && !hasActiveDelivery && (
                     <button
                       onClick={(e) => {

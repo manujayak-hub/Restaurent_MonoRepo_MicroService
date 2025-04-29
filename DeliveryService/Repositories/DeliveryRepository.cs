@@ -26,30 +26,30 @@ public class DeliveryRepository : IDeliveryRepository
     }
 
     public async Task<Delivery> GetDeliveryByIdAsync(string deliveryId)
-{
-    var filter = Builders<Delivery>.Filter.Eq(d => d.Id, deliveryId);
-    return await _collection.Find(filter).FirstOrDefaultAsync();
-}
+    {
+        var filter = Builders<Delivery>.Filter.Eq(d => d.Id, deliveryId);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
+    }
 
-public async Task UpdateDeliveryAsync(Delivery delivery)
-{
-    var filter = Builders<Delivery>.Filter.Eq(d => d.Id, delivery.Id);
-    var update = Builders<Delivery>.Update
-                .Set(d => d.Status, delivery.Status)
-                .Set(d => d.DriverId, delivery.DriverId)
-                .Set(d => d.DriverName, delivery.DriverName)
-                .Set(d => d.DriverContact, delivery.DriverContact);
+    public async Task UpdateDeliveryAsync(Delivery delivery)
+    {
+        var filter = Builders<Delivery>.Filter.Eq(d => d.Id, delivery.Id);
+        var update = Builders<Delivery>.Update
+                    .Set(d => d.Status, delivery.Status)
+                    .Set(d => d.DriverId, delivery.DriverId)
+                    .Set(d => d.DriverName, delivery.DriverName)
+                    .Set(d => d.DriverContact, delivery.DriverContact);
 
-    await _collection.UpdateOneAsync(filter, update);
-}
-public async Task<List<Delivery>> GetDeliveriesByDriverId(string driverId)
+        await _collection.UpdateOneAsync(filter, update);
+    }
+    public async Task<List<Delivery>> GetDeliveriesByDriverId(string driverId)
         {
-            // Fetch deliveries where the driver's ID matches
+           
             var filter = Builders<Delivery>.Filter.Eq(d => d.DriverId, driverId);
             return await _collection.Find(filter).ToListAsync();
         }
 
-  public async Task<List<Delivery>> GetCompletedDeliveriesByUserIdAsync(string userId)
+    public async Task<List<Delivery>> GetCompletedDeliveriesByUserIdAsync(string userId)
     {
         var filter = Builders<Delivery>.Filter.And(
             Builders<Delivery>.Filter.Eq(d => d.CustomerId, userId),
@@ -61,7 +61,7 @@ public async Task<List<Delivery>> GetDeliveriesByDriverId(string driverId)
 
     public async Task<List<Delivery>> GetDeliveriesByUserIdAsync(string userId)
     {
-        // Fetch active deliveries (excluding completed ones) for a specific user
+        // Fetch active deliveries for a specific user
         var filter = Builders<Delivery>.Filter.And(
             Builders<Delivery>.Filter.Eq(d => d.CustomerId, userId)
         );

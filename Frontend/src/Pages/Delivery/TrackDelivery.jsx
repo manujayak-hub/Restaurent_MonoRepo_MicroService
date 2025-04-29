@@ -1,4 +1,3 @@
-// src/pages/TrackDelivery.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -163,7 +162,7 @@ function Routing({ pickup, delivery, setEta }) {
       routeWhileDragging: false,
       draggableWaypoints: false,
       addWaypoints: false,
-      show: false,  // Prevent showing instructions
+      show: false,  
       routerOptions: {
         showAlternatives: false,
       },
@@ -177,7 +176,7 @@ function Routing({ pickup, delivery, setEta }) {
     })
     .addTo(map);
 
-    // Manually hide the instructions if they appear (extra step)
+    
     const container = document.querySelector('.leaflet-routing-container');
     if (container) {
       container.style.display = 'none';

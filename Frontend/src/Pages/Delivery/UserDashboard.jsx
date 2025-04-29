@@ -1,4 +1,3 @@
-// src/pages/UserDashboard.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +9,7 @@ function UserDashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId"); // Get logged-in user's ID from localStorage
+    const userId = localStorage.getItem("userId"); 
 
     if (!userId) {
       console.error("User not logged in or no user ID found.");
@@ -37,7 +36,7 @@ function UserDashboard() {
                 My Deliveries
               </h2>
 
-              {/* Button to navigate to completed deliveries */}
+              
               <button
                 onClick={() => navigate('/completed')}
                 className="flex items-center bg-gradient-to-r from-[#df9f6b] to-[#e87c21] hover:from-[#df9f6b] hover:to-[#e87c21] text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"

@@ -30,7 +30,7 @@ function DriverProfile() {
         const deliveriesResponse = await axios.get("http://localhost:8084/api/delivery");
         const deliveriesData = deliveriesResponse.data;
 
-        // Only non-completed deliveries
+        
         const activeDeliveries = deliveriesData.filter((delivery) => delivery.status !== "Completed");
         setDeliveries(activeDeliveries);
 
@@ -159,7 +159,7 @@ function DriverProfile() {
         </div>
 
         <div className="flex flex-col gap-2">
-          {/* Accept Delivery Button */}
+          
           {delivery.status === "Pending" && delivery.driverId !== driver._id && !hasActiveDelivery && (
             <button
               onClick={(e) => {
