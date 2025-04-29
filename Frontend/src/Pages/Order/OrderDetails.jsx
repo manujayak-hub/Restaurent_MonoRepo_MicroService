@@ -74,14 +74,24 @@ const OrderDetails = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-center mt-8">
+                <div className="flex justify-center mt-8 space-x-4">
                   <button
                     onClick={() => navigate('/mycart')}
                     className="bg-gradient-to-r from-[#7fc7e0] to-[#57a9c6] hover:from-[#68b8d8] hover:to-[#499ab0] text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
                   >
                     Back to My Cart
                   </button>
+
+                  {orderDetails.status !== 'Completed' && (
+                    <button
+                      onClick={() => navigate(`/cancelorder/${id}`)}
+                      className="bg-gradient-to-r from-red-400 to-red-600 hover:from-red-500 hover:to-red-700 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+                    >
+                      Cancel Order
+                    </button>
+                  )}
                 </div>
+
               </div>
             )
           )}

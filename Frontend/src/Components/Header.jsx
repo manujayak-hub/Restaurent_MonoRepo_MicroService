@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { FaUser, FaSignOutAlt, FaSignInAlt, FaUserPlus } from "react-icons/fa"; // Icons
+import { FaUser, FaSignOutAlt, FaSignInAlt, FaUserPlus, FaShoppingCart  } from "react-icons/fa"; // Icons
 import { useState } from "react";
 
 const Header = () =>
@@ -38,6 +38,13 @@ const Header = () =>
               </Link>
               <div className="text-gray-600 text-sm">{userEmail}</div>
             </div>
+                          {/* Cart Icon */}
+                          <button
+                onClick={() => navigate("/mycart")}
+                className="text-[#1f2e4a] hover:text-[#e87c21] transition-all duration-300"
+              >
+                <FaShoppingCart className="text-xl" />
+              </button>
             <button
               onClick={handleLogout}
               className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300"
