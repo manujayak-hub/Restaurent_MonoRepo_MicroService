@@ -88,7 +88,7 @@ const RestaurantOrderPage = () =>
 
         setTimeout(() =>
         {
-          navigate(-1);
+          navigate('/placedOrder'); 
         }, 1000);
       }
 

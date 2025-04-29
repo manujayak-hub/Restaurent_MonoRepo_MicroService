@@ -5,7 +5,6 @@ import RestaurantService from '../../Services/RestaurentService';
 import { FaUtensils, FaMoneyBillAlt, FaClock, FaCheckCircle } from 'react-icons/fa';
 import Header from '../../Components/Header';
 import Footer from '../../Components/Footer';
-import { motion } from 'framer-motion';
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -15,16 +14,19 @@ const OrderDetails = () => {
   const [orderedItems, setOrderedItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const orderStages = ['Placed', 'Preparing', 'On the Way', 'Completed'];
-
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
+        // Fetch the order details
         const orderRes = await OrderService.getById(id);
         const order = orderRes.data;
+        console.log('Order Details:', order);
         setOrderDetails(order);
+
+        // Fetch items from the order
         setOrderedItems(order.items || []);
 
+        // Fetch the restaurant details if available
         if (order.restaurantId) {
           const restaurantRes = await RestaurantService.getById(order.restaurantId);
           setRestaurantDetails(restaurantRes.data);
@@ -38,10 +40,6 @@ const OrderDetails = () => {
 
     fetchOrderDetails();
   }, [id]);
-
-  const getStageIndex = (status) => {
-    return orderStages.findIndex(stage => stage.toLowerCase() === status.toLowerCase());
-  };
 
   return (
     <>
@@ -68,52 +66,7 @@ const OrderDetails = () => {
                   )}
                 </div>
 
-                {/* Progress Tracker */}
-                <div className="mt-8">
-                  <h4 className="text-xl font-bold text-[#e87c21] mb-4">Tracker</h4>
-                  <div className="relative flex justify-between items-center">
-                    {orderStages.map((stage, index) => {
-                      const isCompleted = index <= getStageIndex(orderDetails.status);
-                      return (
-                        <div key={stage} className="flex-1 flex flex-col items-center text-center">
-                          <motion.div
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ duration: 0.4, delay: index * 0.2 }}
-                            className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                              isCompleted
-                                ? 'bg-[#e87c21] text-white'
-                                : 'bg-gray-300 text-gray-500'
-                            }`}
-                          >
-                            {index + 1}
-                          </motion.div>
-                          <span className={`mt-2 text-sm ${isCompleted ? 'text-[#e87c21]' : 'text-gray-400'}`}>
-                            {stage}
-                          </span>
-                          {index < orderStages.length - 1 && (
-                            <div className="w-full h-1 bg-gray-300 absolute top-4 z-0 left-1/2 transform -translate-x-1/2">
-                              <motion.div
-                                initial={{ width: 0 }}
-                                animate={{
-                                  width:
-                                    getStageIndex(orderDetails.status) > index
-                                      ? '100%'
-                                      : '0%',
-                                }}
-                                transition={{ duration: 0.5, delay: index * 0.2 }}
-                                className="h-full bg-[#e87c21]"
-                              />
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Order Details */}
-                <div className="space-y-6 mt-10">
+                <div className="space-y-6">
                   <div className="flex items-center">
                     <FaUtensils className="text-[#7fc7e0] mr-2" />
                     <span className="text-lg text-gray-700 font-semibold">Restaurant:</span>
@@ -141,13 +94,14 @@ const OrderDetails = () => {
                   </div>
                 </div>
 
-                {/* Ordered Items */}
+                {/* Ordered Items List */}
                 <div className="mt-10">
                   <h4 className="text-xl font-bold text-[#e87c21] mb-4">Ordered Items</h4>
                   <ul className="space-y-4">
                     {orderedItems.map((item, index) => (
                       <li key={item.itemId || index} className="bg-gray-100 rounded-xl p-4 shadow">
                         <div className="flex gap-4 items-center">
+                          {/* Display Image of the Item */}
                           {item.imgUrl ? (
                             <img
                               src={item.imgUrl}
