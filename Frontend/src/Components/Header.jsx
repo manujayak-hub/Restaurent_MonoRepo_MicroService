@@ -38,11 +38,11 @@ const Header = () =>
               </Link>
               <div className="text-gray-600 text-sm">{userEmail}</div>
             </div>
-                          {/* Cart Icon */}
-                          <button
+                {/* Cart Icon */}
+                <button
                 onClick={() => navigate("/mycart")}
                 className="text-[#1f2e4a] hover:text-[#e87c21] transition-all duration-300"
-              >
+>
                 <FaShoppingCart className="text-xl" />
               </button>
             <button
