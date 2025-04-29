@@ -1,45 +1,56 @@
-# docker run -d --rm --name mongo -p 27017: 27017 -v mongodbdata:/data/db mongo
-#                           container name           volumes              imagename
-
-# Part	                              Explanation
-#--------------------------------------------------------------------------------
-# docker run	                        Tells Docker to run a container.
-# -d	                                Runs the container in detached mode (in the background).
-# --rm	                              Automatically removes the container when it stops (good for temporary use).
-# --name mongo	                      Sets the container's name to mongo (so you can reference it easily).
-# -p 27017:27017	                    Maps host port 27017 to container port 27017 (default MongoDB port).
-# -v mongodbdata:/data/db	            Creates or uses a named volume called mongodbdata and mounts it to /data/db in the container (where MongoDB stores its data).
-# mongo	                              The image name from Docker Hub. This pulls and runs the official MongoDB image.
-
-
-# This is a Docker Compose file that defines how to run the MongoDB service in a container.
-
-# Version of Docker Compose file format (NOT the Docker version!)
-# You can omit this line, or set it to a compatible version if needed.
-# '27.5.1' looks like a Docker version, not a Compose file version — typically you'd use something like "3.8"
-# Let's correct it:
-version: "3.8"
-
 services:
-  # Defining a service named "mongo"
-  mongo:
-    image: mongo 
-    # Specifies the Docker image to use. 'mongo' is the official MongoDB image from Docker Hub.
-
-    container_name: mongo 
-    # Gives the container a specific name instead of a random one.
-
+  restaurant:
+    build:
+      context: ./Restaurent_MonoRepo_MicroService/restaurant/restaurantservice/restaurantservice
+      dockerfile: Dockerfile
     ports:
-      - 8081:8081
-      # Maps port 27017 on your **host machine** to port 27017 inside the container.
-      # MongoDB runs on port 27017 by default.
+      - "8081:8081"
+    environment:
+      - ASPNETCORE_URLS=http://+:8081
 
-    volumes:
-      - mongodbdata:/data/db
-      # Mounts a **named volume** called "mongodbdata" to the path /data/db inside the container.
-      # MongoDB stores its database files in /data/db — this ensures your data persists even if the container stops.
+  order:
+    build:
+      context: ./Restaurent_MonoRepo_MicroService/ordermanagement
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - ASPNETCORE_URLS=http://+:8082
 
-volumes:
-  mongodbdata:
-  # This section defines a named volume called "mongodbdata".
-  # Docker will manage this volume, and it will persist on your host disk across container restarts/removals.
+  payment:
+    build:
+      context: ./Restaurent_MonoRepo_MicroService/paymentservice
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      - ASPNETCORE_URLS=http://+:8083
+
+  delivery:
+    build:
+      context: ./Restaurent_MonoRepo_MicroService/deliveryservice
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    environment:
+      - ASPNETCORE_URLS=http://+:8084
+
+  auth:
+    build:
+      context: ./Restaurent_MonoRepo_MicroService/authservice
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./Restaurent_MonoRepo_MicroService/frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - restaurant
+      - order
+      - payment
+      - delivery
+      - auth
