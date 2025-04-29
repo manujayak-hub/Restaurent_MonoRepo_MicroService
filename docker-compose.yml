@@ -1,7 +1,7 @@
 services:
   restaurant:
     build:
-      context: ./Restaurent_MonoRepo_MicroService/restaurant/restaurantservice/restaurantservice
+      context: ./restaurant/restaurantservice/restaurantservice
       dockerfile: Dockerfile
     ports:
       - "8081:8081"
@@ -10,7 +10,7 @@ services:
 
   order:
     build:
-      context: ./Restaurent_MonoRepo_MicroService/ordermanagement
+      context: ./ordermanagement
       dockerfile: Dockerfile
     ports:
       - "8082:8082"
@@ -19,7 +19,7 @@ services:
 
   payment:
     build:
-      context: ./Restaurent_MonoRepo_MicroService/paymentservice
+      context: ./paymentservice
       dockerfile: Dockerfile
     ports:
       - "8083:8083"
@@ -28,7 +28,7 @@ services:
 
   delivery:
     build:
-      context: ./Restaurent_MonoRepo_MicroService/deliveryservice
+      context: ./deliveryservice
       dockerfile: Dockerfile
     ports:
       - "8084:8084"
@@ -37,14 +37,14 @@ services:
 
   auth:
     build:
-      context: ./Restaurent_MonoRepo_MicroService/authservice
+      context: ./authservice
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
 
   frontend:
     build:
-      context: ./Restaurent_MonoRepo_MicroService/frontend
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
       - "5173:5173"
