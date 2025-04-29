@@ -14,7 +14,7 @@ const HomePage = () =>
         {
             id: 1,
             name: "Burger Haven",
-            image: "/api/placeholder/400/320",
+            image: "../src/assets/burger.jpg",
             cuisine: "Fast Food",
             rating: 4.8,
             deliveryTime: "15-25 min",
@@ -23,7 +23,7 @@ const HomePage = () =>
         {
             id: 2,
             name: "Green Garden",
-            image: "/api/placeholder/400/320",
+            image: "../src/assets/vegi.jpg",
             cuisine: "Vegetarian",
             rating: 4.5,
             deliveryTime: "20-30 min",
@@ -32,39 +32,13 @@ const HomePage = () =>
         {
             id: 3,
             name: "Pizza Palace",
-            image: "/api/placeholder/400/320",
+            image: "../src/assets/pizza.jpg",
             cuisine: "Italian",
             rating: 4.7,
             deliveryTime: "20-35 min",
             category: "pizza"
         },
-        {
-            id: 4,
-            name: "Sushi Express",
-            image: "/api/placeholder/400/320",
-            cuisine: "Japanese",
-            rating: 4.9,
-            deliveryTime: "25-40 min",
-            category: "healthy"
-        },
-        {
-            id: 5,
-            name: "Taco Town",
-            image: "/api/placeholder/400/320",
-            cuisine: "Mexican",
-            rating: 4.6,
-            deliveryTime: "15-30 min",
-            category: "tacos"
-        },
-        {
-            id: 6,
-            name: "Sweet Delights",
-            image: "/api/placeholder/400/320",
-            cuisine: "Desserts",
-            rating: 4.7,
-            deliveryTime: "15-25 min",
-            category: "desserts"
-        }
+
     ];
 
     // Popular food items
@@ -72,28 +46,28 @@ const HomePage = () =>
         {
             id: 1,
             name: "Double Cheeseburger",
-            image: "/api/placeholder/400/320",
+            image: "../src/assets/dburger.jpg",
             price: 12.99,
             restaurant: "Burger Haven"
         },
         {
             id: 2,
             name: "Avocado Salad",
-            image: "/api/placeholder/400/320",
+            image: "../src/assets/avacado.jpg",
             price: 9.99,
             restaurant: "Green Garden"
         },
         {
             id: 3,
             name: "Supreme Pizza",
-            image: "/api/placeholder/400/320",
+            image: "../src/assets/spizza.jpg",
             price: 15.99,
             restaurant: "Pizza Palace"
         },
         {
             id: 4,
             name: "Rainbow Roll",
-            image: "/api/placeholder/400/320",
+            image: "../src/assets/rainbowbowl.jpg",
             price: 18.99,
             restaurant: "Sushi Express"
         }
@@ -160,15 +134,11 @@ const HomePage = () =>
                         <div className={`md:w-1/2 mt-12 md:mt-0 transition-all duration-1000 delay-300 transform ${isLoaded ? "translate-x-0 opacity-100" : "translate-x-10 opacity-0"}`}>
                             <div className="relative">
                                 <img
-                                    src="/api/placeholder/600/400"
+                                    src="../src/assets/sushi.jpg"
                                     alt="Delicious food"
                                     className="rounded-lg shadow-xl mx-auto transform rotate-2 hover:rotate-0 transition-all duration-500"
                                 />
-                                <img
-                                    src="/api/placeholder/200/200"
-                                    alt="Food delivery"
-                                    className="absolute -bottom-10 -left-10 w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white shadow-lg transform hover:scale-110 transition-all duration-500"
-                                />
+
                                 <div className="absolute -top-6 -right-6 bg-white rounded-full p-4 shadow-lg transform hover:scale-110 transition-all duration-500">
                                     <FaMotorcycle className="text-[#e87c21] text-2xl" />
                                 </div>
@@ -247,7 +217,7 @@ const HomePage = () =>
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex justify-between items-center mb-8">
                         <h2 className="text-3xl font-bold text-[#1f2e4a]">Featured Restaurants</h2>
-                        <Link to="/restaurants" className="text-[#e87c21] font-semibold flex items-center hover:underline">
+                        <Link to="/resuserdash" className="text-[#e87c21] font-semibold flex items-center hover:underline">
                             View All <FaArrowRight className="ml-2" />
                         </Link>
                     </div>
@@ -277,7 +247,7 @@ const HomePage = () =>
 
                                     <div className="flex justify-between items-center">
                                         <span className="text-sm text-gray-500">{restaurant.deliveryTime}</span>
-                                        <Link to={`/restaurant/${restaurant.id}`} className="bg-[#e87c21]/10 text-[#e87c21] px-4 py-2 rounded-full text-sm font-semibold hover:bg-[#e87c21]/20 transition-all duration-300">
+                                        <Link to={`/resuserdash`} className="bg-[#e87c21]/10 text-[#e87c21] px-4 py-2 rounded-full text-sm font-semibold hover:bg-[#e87c21]/20 transition-all duration-300">
                                             View Menu
                                         </Link>
                                     </div>
@@ -322,9 +292,7 @@ const HomePage = () =>
                                     </div>
                                     <p className="text-sm text-gray-500 mt-1">{item.restaurant}</p>
 
-                                    <button className="w-full mt-4 bg-[#7fc7e0] hover:bg-[#7fc7e0]/80 text-white py-2 rounded-lg font-medium transition-all duration-300">
-                                        Add to Cart
-                                    </button>
+
                                 </div>
                             </div>
                         ))}
@@ -397,7 +365,7 @@ const HomePage = () =>
 
                         <div className={`md:w-1/2 relative transition-all duration-1000 ${isLoaded ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}>
                             <img
-                                src="/api/placeholder/300/600"
+                                src="../src/assets/ss.png"
                                 alt="Mobile app screenshot"
                                 className="mx-auto h-72 md:h-96 rounded-xl shadow-2xl border-4 border-white/10 transform -rotate-6 hover:rotate-0 transition-all duration-500"
                             />

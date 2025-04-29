@@ -47,6 +47,7 @@ function App()
         <Routes>
 
           <Route path="/" element={<LoginUser />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/register/driver" element={<RegisterDriver />} />
           <Route path="/register/user" element={<RegisterUser />} />
           <Route path="/register/owner" element={<RegisterRestaurantOwner />} />

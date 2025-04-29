@@ -62,7 +62,7 @@ const LoginUser = () =>
           navigate("/user-dashboard");
         } else if (urole === "user")
         {
-          navigate("/resuserdash");
+          navigate("/home");
         }
       }, 100); // Delay slightly to let localStorage complete
     }
