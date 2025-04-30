@@ -59,7 +59,7 @@ const LoginUser = () =>
           navigate("/DriverProfile");
         } else if (urole === "owner")
         {
-          navigate("/user-dashboard");
+          navigate("/resowner");
         } else if (urole === "user")
         {
           navigate("/home");

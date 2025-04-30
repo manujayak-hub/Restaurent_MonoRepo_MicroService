@@ -26,13 +26,13 @@ services:
       - mongo
     # environment:
     #   - MONGO_URL=mongodb+srv://s1sewe35:s1sewe35@group35.z5ucr.mongodb.net/Microservice_AuthService?retryWrites=true&w=majority&appName=Group35
-    #   - PORT=8000
+    #   - PORT=8080
     #   - ACCESS_TOKEN_SECRET=helloworldjwt_secret_key
     #   - REFRESH_TOKEN_SECRET=thisisnotmyrefresh_secret_key
     networks:
       - mynetwork
     ports:
-      - "8000:8000"
+      - "8080:8080"
 
 networks:
   mynetwork:

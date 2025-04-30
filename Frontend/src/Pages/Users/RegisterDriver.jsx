@@ -3,6 +3,8 @@ import { useState } from "react";
 import authService from "../../Services/AuthService";
 import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
+import axios from "axios";
+
 
 const RegisterDriver = () => {
   const [form, setForm] = useState({
@@ -21,6 +23,13 @@ const RegisterDriver = () => {
     try {
       await authService.register(form);
       alert("🎉 User registered successfully!");
+
+      await axios.post("http://localhost:8085/api/Email/send", {
+        toEmail: form.email,
+        subject: "🎉 Welcome to Our Delivery Team!",
+        body: `Hi ${form.firstName},\n\nWelcome aboard! Your account has been successfully registered.\n\nHappy delivering! 🚗\n\n-- Team`,
+      });
+
       setForm({
         firstName: "",
         lastName: "",

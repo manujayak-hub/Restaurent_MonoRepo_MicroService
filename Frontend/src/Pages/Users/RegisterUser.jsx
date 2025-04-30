@@ -3,6 +3,8 @@ import { useState } from "react";
 import authService from "../../Services/AuthService";
 import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const RegisterUser = () =>
 {
@@ -14,6 +16,8 @@ const RegisterUser = () =>
     role: "user",
   });
 
+
+  const navigate = useNavigate()
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -24,6 +28,15 @@ const RegisterUser = () =>
     {
       await authService.register(form);
       alert("🎉 User registered successfully!");
+
+      await axios.post("http://localhost:8085/api/Email/send", {
+        toEmail: form.email,
+        subject: "🎉 Welcome to Foodies!",
+        body: `Hi ${form.firstName},\n\nYour account has been successfully registered. 🥳\n\nYou can now explore restaurants, place orders, and enjoy delicious meals delivered to your door. 🍕🍔🥗\n\nBon appétit!\n\n-- The Team`,
+      });
+      
+      navigate("/");
+
       setForm({
         firstName: "",
         lastName: "",

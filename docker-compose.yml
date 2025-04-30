@@ -35,6 +35,15 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:8084
 
+  email:
+    build:
+      context: ./EmailService/EmailService
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    environment:
+      - ASPNETCORE_URLS=http://+:8085
+
   auth:
     build:
       context: "./Auth service"
@@ -53,4 +62,6 @@ services:
       - order
       - payment
       - delivery
+      - email
       - auth
+
