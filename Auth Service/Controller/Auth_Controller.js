@@ -6,12 +6,21 @@ const generateAccessToken = (user) => {
     return jwt.sign(
         { _id: user._id, email: user.email,firstName: user.firstName , role: user.role },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "55m" }
+        {
+    expiresIn: "55m",
+    algorithm: "HS256" 
+  }
+        
     );
+
+    
 };
 
 const generateRefreshToken = (user) => {
-    return jwt.sign({ _id: user._id, email: user.email, firstName: user.firstName, role: user.role }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
+    return jwt.sign({ _id: user._id, email: user.email, firstName: user.firstName, role: user.role }, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: "7d",
+    algorithm: "HS256" 
+  });
 };
 
 // Store refresh tokens in memory or database

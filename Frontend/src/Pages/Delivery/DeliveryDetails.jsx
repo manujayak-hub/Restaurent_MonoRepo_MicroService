@@ -75,7 +75,7 @@ function DeliveryDetails() {
           body: `Dear Driver,\n\nYou have successfully completed the delivery for Order ID: ${orderId}.\n\nThank you for your service!\n\n- Foodie Delivery Team`
         };
   
-        await axios.post("http://localhost:5293/api/Email/send", emailPayload); 
+        await axios.post("http://localhost:8085/api/Email/send", emailPayload); 
       } else {
         console.warn("Driver email not found in localStorage.");
       }

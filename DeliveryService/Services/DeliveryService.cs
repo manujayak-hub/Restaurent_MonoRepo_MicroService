@@ -86,7 +86,7 @@ namespace DeliveryService.Services
             var client = _httpClientFactory.CreateClient();
 
            
-            var apiUrl = $"http://localhost:8082/api/Order/{orderId}";
+            var apiUrl = $"http://order:8082/api/Order/{orderId}";
 
             var response = await client.GetAsync(apiUrl);
 

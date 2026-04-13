@@ -1,28 +1,82 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/Menu/{everything}",
+      "DownstreamPathTemplate": "/menu",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "restaurant",
           "Port": 8081
+        },
+        {
+          "Host": "restaurant",
+          "Port": 8086
+        }
+      ],
+      "UpstreamPathTemplate": "/restaurant/menu",
+      "UpstreamHttpMethod": [ "GET" ],
+      "RouteIsCaseSensitive": false,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "{Authorization}"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/menu/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "restaurant",
+          "Port": 8081
+        },
+        {
+          "Host": "restaurant",
+          "Port": 8086
         }
       ],
       "UpstreamPathTemplate": "/restaurant/menu/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RouteIsCaseSensitive": false,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "{Authorization}"
+      }
     },
     {
-      "DownstreamPathTemplate": "/Restaurent/{everything}",
+      "DownstreamPathTemplate": "/restaurant/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "restaurant",
           "Port": 8081
+        },
+        {
+          "Host": "restaurant",
+          "Port": 8086
         }
       ],
-      "UpstreamPathTemplate": "/restaurant/restaurent/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+      "UpstreamPathTemplate": "/restaurant/restaurant/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RouteIsCaseSensitive": false,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "{Authorization}"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/order/{everything}",
@@ -31,10 +85,25 @@
         {
           "Host": "order",
           "Port": 8082
+        },
+        {
+          "Host": "order",
+          "Port": 8087
         }
       ],
       "UpstreamPathTemplate": "/order/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RouteIsCaseSensitive": false,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "{Authorization}"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/payment/{everything}",
@@ -43,10 +112,25 @@
         {
           "Host": "payment",
           "Port": 8083
+        },
+        {
+          "Host": "payment",
+          "Port": 8088
         }
       ],
       "UpstreamPathTemplate": "/payment/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RouteIsCaseSensitive": false,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "{Authorization}"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/delivery/{everything}",
@@ -55,10 +139,25 @@
         {
           "Host": "delivery",
           "Port": 8084
+        },
+        {
+          "Host": "delivery",
+          "Port": 8089
         }
       ],
       "UpstreamPathTemplate": "/delivery/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "RouteIsCaseSensitive": false,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "{Authorization}"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/email/{everything}",
@@ -70,10 +169,18 @@
         }
       ],
       "UpstreamPathTemplate": "/email/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST" ]
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "RouteIsCaseSensitive": false,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "Authorization": "{Authorization}"
+      }
     },
     {
-      "DownstreamPathTemplate": "/api/auth/{everything}",
+      "DownstreamPathTemplate": "/auth/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -82,11 +189,19 @@
         }
       ],
       "UpstreamPathTemplate": "/auth/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "RouteIsCaseSensitive": false
     }
   ],
+
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:5000",
-   
+    "RateLimitOptions": {
+      "EnableRateLimiting": true,
+      "ClientIdHeader": "ClientId",
+      "Period": "1m",
+      "PeriodTimespan": 60,
+      "Limit": 100
+    }
   }
 }

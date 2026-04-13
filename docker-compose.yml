@@ -45,6 +45,8 @@ services:
       - ASPNETCORE_URLS=http://+:8085
 
   auth:
+    environment:
+      - ACCESS_TOKEN_SECRET=supersecret1234567890supersecret1234
     build:
       context: "./Auth service"
       dockerfile: Dockerfile
@@ -52,6 +54,8 @@ services:
       - "8080:8080"
 
   api-gateway:
+    environment:
+      - Jwt__Secret=supersecret1234567890supersecret1234
     build:
       context: ./ApiGateway
       dockerfile: Dockerfile
