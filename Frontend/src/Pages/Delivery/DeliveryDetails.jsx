@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { BASE_URL } from "../../Hooks/BaseUrl";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -11,7 +12,7 @@ import Footer from "../../Components/Footer";
 
 const containerStyle = {
   width: '100%',
-  height: '100%', 
+  height: '100%',
 };
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -31,7 +32,7 @@ function DeliveryDetails() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:8084/api/delivery/${deliveryId}`)
+    axios.get(`${BASE_URL}/delivery/${deliveryId}`)
       .then(response => {
         setDelivery(response.data);
         setOrderId(response.data.orderId);
@@ -55,39 +56,41 @@ function DeliveryDetails() {
   };
 
   const handleCompleteDelivery = async () => {
-  try {
-    // 🔥 1. Show success immediately
-    alert("Delivery marked as complete!");
+    try {
+      // Update the order status
+      try {
+        await OrderService.updaterecord(orderId, 'Completed');
+      } catch (orderError) {
+        console.warn("Order status update failed, continuing with delivery completion.", orderError);
+      }
 
-    // 🔥 2. Navigate immediately
-    navigate("/DriverProfile");
+      // Mark the delivery as complete
+      await axios.put(`${BASE_URL}/delivery/${deliveryId}/complete`);
 
-    // 🔥 3. Run backend updates in background (DON'T await)
-    OrderService.updaterecord(orderId, 'Completed')
-      .catch(err => console.warn("Order update failed:", err));
+      // Send confirmation email
+      const driverEmail = localStorage.getItem("userEmail");
+      if (driverEmail) {
+        const emailPayload = {
+          toEmail: driverEmail,
+          subject: "Delivery Completed Successfully",
+          body: `Dear Driver,\n\nYou have successfully completed the delivery for Order ID: ${orderId}.\n\nThank you for your service!\n\n- Foodie Delivery Team`
+        };
 
-    axios.put(`http://localhost:8084/api/delivery/${deliveryId}/complete`)
-      .catch(err => console.error("Delivery update failed:", err));
+        await axios.post(`${BASE_URL}/Email/send`, emailPayload);
+      } else {
+        console.warn("Driver email not found in localStorage.");
+      }
 
-    const driverEmail = localStorage.getItem("userEmail");
-    if (driverEmail) {
-      const emailPayload = {
-        toEmail: driverEmail,
-        subject: "Delivery Completed Successfully",
-        body: `Delivery completed for Order ID: ${orderId}`
-      };
+      alert("Delivery marked as complete!");
+      navigate("/DriverProfile");
 
-      axios.post("http://email:8085/api/Email/send", emailPayload)
-        .catch(err => console.warn("Email failed:", err));
+    } catch (deliveryError) {
+      console.error('Error completing delivery:', deliveryError.response?.data || deliveryError.message);
+      alert(deliveryError.response?.data?.message || "Failed to complete delivery.");
     }
+  };
 
-  } catch (err) {
-    console.error(err);
-    alert("Something went wrong");
-  }
-};
-  
-  
+
 
   if (!delivery || !pickupCoords || !deliveryCoords) {
     return <div>Loading...</div>;
@@ -100,7 +103,7 @@ function DeliveryDetails() {
         <h2 className="text-5xl font-extrabold text-center text-[#e87c21] mb-12 drop-shadow">Delivery Details</h2>
 
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10">
-          
+
           {/* Left Side - Delivery Information */}
           <div className="bg-white rounded-3xl shadow-xl hover:shadow-2xl border-t-8 border-[#7fc7e0] p-8 transition-all duration-300 hover:scale-105  w-[700px] ">
             <ul className="space-y-5 text-lg">
@@ -126,7 +129,7 @@ function DeliveryDetails() {
               )}
             </ul>
 
-           
+
             {delivery.status !== "Completed" && (
               <div className="mt-30 flex justify-center">
                 <button
@@ -190,13 +193,13 @@ function Routing({ pickup, delivery, setEta }) {
       },
       fitSelectedRoutes: true,
     })
-    .on('routesfound', function (e) {
-      const route = e.routes[0];
-      const travelTimeInSeconds = route.summary.totalTime;
-      const travelTimeInMinutes = Math.round(travelTimeInSeconds / 60);
-      setEta(travelTimeInMinutes);
-    })
-    .addTo(map);
+      .on('routesfound', function (e) {
+        const route = e.routes[0];
+        const travelTimeInSeconds = route.summary.totalTime;
+        const travelTimeInMinutes = Math.round(travelTimeInSeconds / 60);
+        setEta(travelTimeInMinutes);
+      })
+      .addTo(map);
 
     // Hide routing panel if any
     const container = document.querySelector('.leaflet-routing-container');

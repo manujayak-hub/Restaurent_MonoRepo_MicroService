@@ -1,6 +1,9 @@
-import axios from "axios";
+// CartService.js
 
-const BASE_URL = 'http://localhost:8082/api/cart';  // Adjust if needed
+import axios from 'axios';
+import { BASE_URL as GLOBAL_BASE_URL } from '../Hooks/BaseUrl';
+
+const BASE_URL = `${GLOBAL_BASE_URL}/cart`;  // Adjust if needed
 
 const CartService = {
   create: async ({ userId }) => {

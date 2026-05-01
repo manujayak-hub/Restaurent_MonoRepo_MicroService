@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BASE_URL } from "../../Hooks/BaseUrl";
 import { useNavigate } from 'react-router-dom';
 import { getCompletedDeliveries } from '../../Services/Delivery';
 import Header from "../../Components/Header";
@@ -18,7 +19,7 @@ function Drivercomplete() {
           return;
         }
 
-        const driverResponse = await fetch(`http://localhost:8080/auth/userdetails/${userId}`);
+        const driverResponse = await fetch(`${BASE_URL}/auth/userdetails/${userId}`);
         const driverData = await driverResponse.json();
         setDriver(driverData.userdetails);
 

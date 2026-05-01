@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { BASE_URL } from "../../Hooks/BaseUrl";
 import { useNavigate } from 'react-router-dom';
 import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
@@ -9,14 +10,14 @@ function UserDashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId"); 
+    const userId = localStorage.getItem("userId");
 
     if (!userId) {
       console.error("User not logged in or no user ID found.");
       return;
     }
 
-    axios.get(`http://localhost:8084/api/delivery/user/${userId}`) // Fetch deliveries for specific user
+    axios.get(`${BASE_URL}/delivery/user/${userId}`) // Fetch deliveries for specific user
       .then(response => {
         // Filter out completed deliveries
         const activeDeliveries = response.data.filter(d => d.status !== 'Completed');
@@ -36,7 +37,7 @@ function UserDashboard() {
                 My Deliveries
               </h2>
 
-              
+
               <button
                 onClick={() => navigate('/completed')}
                 className="flex items-center bg-gradient-to-r from-[#df9f6b] to-[#e87c21] hover:from-[#df9f6b] hover:to-[#e87c21] text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"

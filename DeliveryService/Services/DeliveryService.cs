@@ -85,8 +85,8 @@ namespace DeliveryService.Services
             // Use the HttpClient to call the external API
             var client = _httpClientFactory.CreateClient();
 
-           
-            var apiUrl = $"http://order:8082/api/Order/{orderId}";
+            // Now calling through the internal docker API Gateway
+            var apiUrl = $"http://api-gateway:5000/order/{orderId}";
 
             var response = await client.GetAsync(apiUrl);
 

@@ -1,7 +1,8 @@
 import axios from "axios";
+import { BASE_URL } from "../Hooks/BaseUrl";
 
 const api = axios.create({
-  baseURL: "http://localhost:8081",
+  baseURL: BASE_URL,
 });
 
 const RestaurantService = {
@@ -13,7 +14,7 @@ const RestaurantService = {
     return await api.get(`/Restaurent/${id}`);
   },
 
-  getbyowner : async (id) => {
+  getbyowner: async (id) => {
     return await api.get(`/Restaurent/resowner/${id}`);
   },
 

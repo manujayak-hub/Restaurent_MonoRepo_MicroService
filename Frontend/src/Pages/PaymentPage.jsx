@@ -10,7 +10,7 @@ import Footer from "../Components/Footer"
 
 
 // Stripe Publishable Key
-const stripePromise = loadStripe("pk_test_51RI5VbRogb3j20qj9LWcqb4RnHTvi91WnJdMkAFzheXy9Xc5ulinFHLhKzhLs7mYBqlcbWDGPRvc8A8uG9Ajs1iv00W5tVn7iN");
+const stripePromise = loadStripe("pk_test_51QAmKWLhuN3IPrzMg7jeZeVcCf18AVluO9vAtXPrslmXC1K13qouJO9hKjrMaqXXrAImsUlnGqXNQodj0QotViCy00hloXm9gj");
 
 const PaymentPage = () =>
 {

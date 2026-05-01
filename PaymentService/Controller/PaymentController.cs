@@ -20,18 +20,6 @@ namespace PaymentService.Controllers
         [HttpPost("create-payment-intent")]
         public async Task<IActionResult> CreatePaymentIntent([FromBody] PaymentIntentRequest request)
         {
-            // Create the payment intent via Stripe
-            var options = new PaymentIntentCreateOptions
-            {
-                Amount = request.Amount,
-                Currency = request.Currency,
-                PaymentMethodTypes = new List<string> { request.PaymentMethodType }
-            };
-
-            var service = new PaymentIntentService();
-            var paymentIntent = service.Create(options);
-
-
             var payment = await _paymentServiceManager.CreatePaymentAsync(
                 orderId: Guid.NewGuid().ToString(),
                 amount: request.Amount / 100m
@@ -39,11 +27,10 @@ namespace PaymentService.Controllers
 
             return Ok(new
             {
-                clientSecret = paymentIntent.ClientSecret,
+                clientSecret = payment.StripePaymentIntentId,
                 paymentId = payment.Id
             });
         }
-
         [HttpGet]
         public async Task<IActionResult> GetAllPayments()
         {

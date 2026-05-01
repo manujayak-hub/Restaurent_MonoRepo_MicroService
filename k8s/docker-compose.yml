@@ -1,0 +1,67 @@
+services:
+  restaurant:
+    build:
+      context: ./restaurant/restaurantservice/restaurantservice
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - ASPNETCORE_URLS=http://+:8081
+
+  order:
+    build:
+      context: ./ordermanagement
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - ASPNETCORE_URLS=http://+:8082
+
+  payment:
+    build:
+      context: ./paymentservice
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      - ASPNETCORE_URLS=http://+:8083
+
+  delivery:
+    build:
+      context: ./deliveryservice
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    environment:
+      - ASPNETCORE_URLS=http://+:8084
+
+  email:
+    build:
+      context: ./EmailService/EmailService
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    environment:
+      - ASPNETCORE_URLS=http://+:8085
+
+  auth:
+    build:
+      context: "./Auth service"
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - restaurant
+      - order
+      - payment
+      - delivery
+      - email
+      - auth
+

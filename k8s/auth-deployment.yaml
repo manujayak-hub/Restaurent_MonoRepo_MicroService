@@ -1,19 +1,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.30.0 (9d8dcb518)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: auth
   name: auth
+  namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      io.kompose.service: auth
+  strategy: {}
   template:
     metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.30.0 (9d8dcb518)
+      creationTimestamp: null
       labels:
-        app: auth
+        io.kompose.network/restaurent-monorepo-microservice-default: "true"
+        io.kompose.service: auth
     spec:
       containers:
-        - name: auth
-          image: manujayak/authservice:v1.0.0
+        - image: auth
+          name: auth
           ports:
-            - containerPort: 5000
+            - containerPort: 8080
+              hostPort: 8080
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}

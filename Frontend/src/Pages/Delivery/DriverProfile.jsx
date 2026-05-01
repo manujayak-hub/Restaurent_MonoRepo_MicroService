@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { BASE_URL } from "../../Hooks/BaseUrl";
 import { useNavigate } from "react-router-dom";
 import Header from "../../Components/Header";
 import Footer from "../../Components/Footer";
@@ -22,15 +23,15 @@ function DriverProfile() {
         }
 
         // Fetch driver details
-        const driverResponse = await axios.get(`http://localhost:8080/auth/userdetails/${userId}`);
+        const driverResponse = await axios.get(`${BASE_URL}/auth/userdetails/${userId}`);
         const driverData = driverResponse.data.userdetails;
         setDriver(driverData);
 
         // Fetch deliveries
-        const deliveriesResponse = await axios.get("http://localhost:8084/api/delivery");
+        const deliveriesResponse = await axios.get(`${BASE_URL}/delivery`);
         const deliveriesData = deliveriesResponse.data;
 
-        
+
         const activeDeliveries = deliveriesData.filter((delivery) => delivery.status !== "Completed");
         setDeliveries(activeDeliveries);
 
@@ -55,7 +56,7 @@ function DriverProfile() {
     }
 
     axios
-      .put(`http://localhost:8084/api/delivery/${deliveryId}/accept`, {
+      .put(`${BASE_URL}/delivery/${deliveryId}/accept`, {
         driverId: driver._id,
         driverName: driver.firstName,
         driverContact: driver.contactno,
@@ -72,7 +73,7 @@ function DriverProfile() {
 
   const handleSetPending = (deliveryId) => {
     axios
-      .put(`http://localhost:8084/api/delivery/${deliveryId}/setPending`, {
+      .put(`${BASE_URL}/delivery/${deliveryId}/setPending`, {
         driverId: null,
         driverName: null,
         driverContact: null,
@@ -109,7 +110,7 @@ function DriverProfile() {
       <Header />
       <div className="min-h-screen py-12 px-6 bg-gradient-to-tr from-blue-100 via-white to-orange-100">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-          
+
           {/* Left Side - Driver Profile */}
           <div className="bg-white p-6 rounded-xl shadow-lg">
             <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Driver Profile</h2>
@@ -131,77 +132,76 @@ function DriverProfile() {
               onClick={() => navigate("/Drivercomplete")}
               className="absolute top-30 right-50 bg-gradient-to-r from-[#57a9c6] to-[#7fc7e0] text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
             >
-             Completed Deliveries
+              Completed Deliveries
             </button>
             <ul className="space-y-4 list-none">
-            {deliveries.map((delivery) => {
-  const isAssignedToDriver = delivery.driverId === driver._id;
+              {deliveries.map((delivery) => {
+                const isAssignedToDriver = delivery.driverId === driver._id;
 
-  return (
-    <li
-      key={delivery.id}
-      onClick={() => {
-        if (isAssignedToDriver) {
-          navigate(`/delivery-details/${delivery.id}`);
-        }
-      }}
-      className={`bg-white rounded-3xl shadow-xl hover:shadow-2xl border-t-8 border-[#7fc7e0] p-4 transition-all duration-300 hover:scale-105  ${
-        isAssignedToDriver ? 'hover:shadow-xl hover:cursor-pointer hover:bg-blue-50' : ''
-      }`}
-    >
-      <div className="flex justify-between items-center">
-        <div>
-          <p><strong>Delivery ID:</strong> {delivery.id}</p>
-          <p><strong>Status:</strong> {delivery.status}</p>
-          <p><strong>Pickup:</strong> {delivery.pickupLocation}</p>
-          <p><strong>Dropoff:</strong> {delivery.deliveryLocation}</p>
-          <p><strong>Payment Type:</strong> {delivery.paymentType}</p>
-        </div>
+                return (
+                  <li
+                    key={delivery.id}
+                    onClick={() => {
+                      if (isAssignedToDriver) {
+                        navigate(`/delivery-details/${delivery.id}`);
+                      }
+                    }}
+                    className={`bg-white rounded-3xl shadow-xl hover:shadow-2xl border-t-8 border-[#7fc7e0] p-4 transition-all duration-300 hover:scale-105  ${isAssignedToDriver ? 'hover:shadow-xl hover:cursor-pointer hover:bg-blue-50' : ''
+                      }`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p><strong>Delivery ID:</strong> {delivery.id}</p>
+                        <p><strong>Status:</strong> {delivery.status}</p>
+                        <p><strong>Pickup:</strong> {delivery.pickupLocation}</p>
+                        <p><strong>Dropoff:</strong> {delivery.deliveryLocation}</p>
+                        <p><strong>Payment Type:</strong> {delivery.paymentType}</p>
+                      </div>
 
-        <div className="flex flex-col gap-2">
-          
-          {delivery.status === "Pending" && delivery.driverId !== driver._id && !hasActiveDelivery && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleAcceptDelivery(delivery.id);
-              }}
-              className="bg-gradient-to-r from-[#7fc7e0] to-[#57a9c6] hover:from-[#68b8d8] hover:to-[#499ab0] text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              Accept
-            </button>
-          )}
+                      <div className="flex flex-col gap-2">
+
+                        {delivery.status === "Pending" && delivery.driverId !== driver._id && !hasActiveDelivery && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAcceptDelivery(delivery.id);
+                            }}
+                            className="bg-gradient-to-r from-[#7fc7e0] to-[#57a9c6] hover:from-[#68b8d8] hover:to-[#499ab0] text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+                          >
+                            Accept
+                          </button>
+                        )}
 
 
-         
-          {/* Disabled if already has active */}
-          {delivery.status === "Pending" && delivery.driverId !== driver._id && hasActiveDelivery && (
-            <button
-              disabled
-              className="bg-gray-400 text-white font-semibold py-2 px-4 rounded-xl shadow-md cursor-not-allowed"
-            >
-              Complete Current Delivery
-            </button>
-          )}
 
-          {/* Set Pending */}
-          {delivery.driverId === driver._id && delivery.status !== "Completed" && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleSetPending(delivery.id);
-              }}
-              className="bg-gradient-to-r from-red-300 to-red-400 hover:from-red-300 hover:to-red-400 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              Unset
-            </button>
-          )}
-        </div>
-      </div>
-    </li>
-  );
-})}
-</ul>
+                        {/* Disabled if already has active */}
+                        {delivery.status === "Pending" && delivery.driverId !== driver._id && hasActiveDelivery && (
+                          <button
+                            disabled
+                            className="bg-gray-400 text-white font-semibold py-2 px-4 rounded-xl shadow-md cursor-not-allowed"
+                          >
+                            Complete Current Delivery
+                          </button>
+                        )}
+
+                        {/* Set Pending */}
+                        {delivery.driverId === driver._id && delivery.status !== "Completed" && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSetPending(delivery.id);
+                            }}
+                            className="bg-gradient-to-r from-red-300 to-red-400 hover:from-red-300 hover:to-red-400 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+                          >
+                            Unset
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
 
           </div>
 

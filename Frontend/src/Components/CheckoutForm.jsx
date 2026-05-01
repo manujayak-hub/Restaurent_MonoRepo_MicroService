@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import OrderService from '../Services/OrderService';
+import { BASE_URL } from "../Hooks/BaseUrl";
 
 const CARD_ELEMENT_OPTIONS = {
     style: {
@@ -23,8 +24,7 @@ const CARD_ELEMENT_OPTIONS = {
     },
 };
 
-const CheckoutForm = ({ orderId, amount, orderDetails, onPaymentSuccess }) =>
-{
+const CheckoutForm = ({ orderId, amount, orderDetails, onPaymentSuccess }) => {
     const stripe = useStripe();
     const elements = useElements();
     const navigate = useNavigate();
@@ -33,17 +33,15 @@ const CheckoutForm = ({ orderId, amount, orderDetails, onPaymentSuccess }) =>
     const [error, setError] = useState('');
     const [paymentId, setPaymentId] = useState(null);
 
-    const handleSubmit = async (e) =>
-    {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!stripe || !elements) return;
 
         setLoading(true);
         setError('');
 
-        try
-        {
-            const { data } = await axios.post("http://localhost:8083/api/payment/create-payment-intent", {
+        try {
+            const { data } = await axios.post(`${BASE_URL}/api/payment/create-payment-intent`, {
                 amount: amount * 100,
                 currency: "usd",
                 paymentMethodType: "card",
@@ -59,18 +57,14 @@ const CheckoutForm = ({ orderId, amount, orderDetails, onPaymentSuccess }) =>
                 },
             });
 
-            if (result.error)
-            {
+            if (result.error) {
                 setError(result.error.message);
-            } else
-            {
-                if (result.paymentIntent.status === 'succeeded')
-                {
+            } else {
+                if (result.paymentIntent.status === 'succeeded') {
                     setPaymentSuccess(true);
                     setPaymentId(data.paymentId);
 
-                    try
-                    {
+                    try {
                         await OrderService.updaterecord(orderId, 'Paid');
                         console.log('Order status updated to Paid.');
 
@@ -79,27 +73,23 @@ const CheckoutForm = ({ orderId, amount, orderDetails, onPaymentSuccess }) =>
                             amount: amount,
                         };
 
-                        await axios.post("http://localhost:8083/api/sms/send-receipt", paymentData);
+                        await axios.post(`${BASE_URL}/api/sms/send-receipt`, paymentData);
                         console.log('Receipt sent to mobile number.');
-                    } catch (updateError)
-                    {
+                    } catch (updateError) {
                         console.error('Failed to update order status:', updateError);
                     }
 
                     onPaymentSuccess();
 
-                    setTimeout(() =>
-                    {
+                    setTimeout(() => {
                         navigate('/resuserdash');
                     }, 3000);
                 }
             }
-        } catch (err)
-        {
+        } catch (err) {
             console.error('Payment failed: ', err);
             setError('Payment failed. ' + (err.message || 'Please try again later.'));
-        } finally
-        {
+        } finally {
             setLoading(false);
         }
     };

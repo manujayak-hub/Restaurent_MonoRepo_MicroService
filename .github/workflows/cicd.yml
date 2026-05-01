@@ -1,0 +1,129 @@
+name: CI/CD with GHCR + Sonar
+
+permissions:
+  packages: write
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+      - Feat/APIGateway
+  pull_request:
+    branches:
+      - main
+      - Feat/APIGateway
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+
+  # 🔍 1. SonarCloud Quality Check
+  sonarcloud:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+
+      - name: Run SonarCloud scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          args: >
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+            -Dsonar.organization=${{ secrets.SONAR_ORG }}
+            -Dsonar.host.url=https://sonarcloud.io
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+
+  # 🚀 2. Build & Push Docker Images
+  build-and-push:
+    needs: sonarcloud
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # 🔥 Build & Push services
+      - name: Restaurant
+        run: |
+          docker build -t ghcr.io/se-project-group-440/restaurant:latest ./Restaurant/RestaurantService/RestaurantService
+          docker push ghcr.io/se-project-group-440/restaurant:latest
+
+      - name: Order
+        run: |
+          docker build -t ghcr.io/se-project-group-440/order:latest ./OrderManagement
+          docker push ghcr.io/se-project-group-440/order:latest
+
+      - name: Payment
+        run: |
+          docker build -t ghcr.io/se-project-group-440/payment:latest ./PaymentService
+          docker push ghcr.io/se-project-group-440/payment:latest
+
+      - name: Delivery
+        run: |
+          docker build -t ghcr.io/se-project-group-440/delivery:latest ./DeliveryService
+          docker push ghcr.io/se-project-group-440/delivery:latest
+
+      - name: Email
+        run: |
+          docker build -t ghcr.io/se-project-group-440/email:latest ./EmailService/EmailService
+          docker push ghcr.io/se-project-group-440/email:latest
+
+      - name: Auth
+        run: |
+          docker build -t ghcr.io/se-project-group-440/auth:latest "./Auth Service"
+          docker push ghcr.io/se-project-group-440/auth:latest
+
+      - name: API Gateway
+        run: |
+          docker build -t ghcr.io/se-project-group-440/api-gateway:latest ./ApiGateway
+          docker push ghcr.io/se-project-group-440/api-gateway:latest
+
+      - name: Frontend
+        run: |
+          docker build -t ghcr.io/se-project-group-440/frontend:latest ./Frontend
+          docker push ghcr.io/se-project-group-440/frontend:latest
+
+  # 🚀 3. Deploy to EC2
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+
+          script: |
+            cd ~/app/ctse
+            git fetch origin
+
+            git reset --hard origin/${{ github.ref_name }}
+
+            docker-compose down
+
+            # Pull latest images from GHCR
+            docker-compose pull
+
+            # Restart containers
+            docker-compose up -d
+
+            #test2

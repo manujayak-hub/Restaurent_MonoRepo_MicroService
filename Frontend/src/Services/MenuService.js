@@ -1,7 +1,8 @@
 import axios from "axios";
+import { BASE_URL } from "../Hooks/BaseUrl";
 
 const api = axios.create({
-  baseURL: "http://localhost:8081",
+  baseURL: BASE_URL,
 });
 
 const MenuService = {
