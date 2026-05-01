@@ -1,25 +1,17 @@
 services:
   restaurant:
-<<<<<<< HEAD
-    image: ghcr.io/se-project-group-440/restaurant:latest
-=======
     build:
       context: ./restaurant/restaurantservice/restaurantservice
       dockerfile: Dockerfile
->>>>>>> parent of 44c3f2b (Update docker-compose.yml)
     ports:
       - "8081:8081"
     environment:
       - ASPNETCORE_URLS=http://+:8081
 
   order:
-<<<<<<< HEAD
-    image: ghcr.io/se-project-group-440/order:latest
-=======
     build:
       context: ./ordermanagement
       dockerfile: Dockerfile
->>>>>>> parent of 44c3f2b (Update docker-compose.yml)
     ports:
       - "8082:8082"
     environment:
@@ -27,67 +19,47 @@ services:
       - MONGO_URI=${MONGO_URL}
 
   payment:
-<<<<<<< HEAD
-    image: ghcr.io/se-project-group-440/payment:latest
-=======
     build:
       context: ./paymentservice
       dockerfile: Dockerfile
->>>>>>> parent of 44c3f2b (Update docker-compose.yml)
     ports:
       - "8083:8083"
     environment:
       - ASPNETCORE_URLS=http://+:8083
 
   delivery:
-<<<<<<< HEAD
-    image: ghcr.io/se-project-group-440/delivery:latest
-=======
     build:
       context: ./deliveryservice
       dockerfile: Dockerfile
->>>>>>> parent of 44c3f2b (Update docker-compose.yml)
     ports:
       - "8084:8084"
     environment:
       - ASPNETCORE_URLS=http://+:8084
 
   email:
-<<<<<<< HEAD
-    image: ghcr.io/se-project-group-440/email:latest
-=======
     build:
       context: ./EmailService/EmailService
       dockerfile: Dockerfile
->>>>>>> parent of 44c3f2b (Update docker-compose.yml)
     ports:
       - "8085:8085"
     environment:
       - ASPNETCORE_URLS=http://+:8085
 
   auth:
-<<<<<<< HEAD
-    image: ghcr.io/se-project-group-440/auth:latest
-=======
     environment:
       - ACCESS_TOKEN_SECRET=supersecret1234567890supersecret1234
     build:
       context: "./Auth service"
       dockerfile: Dockerfile
->>>>>>> parent of 44c3f2b (Update docker-compose.yml)
     ports:
       - "8080:8080"
 
   api-gateway:
-<<<<<<< HEAD
-    image: ghcr.io/se-project-group-440/api-gateway:latest
-=======
     environment:
       - Jwt__Secret=supersecret1234567890supersecret1234
     build:
       context: ./ApiGateway
       dockerfile: Dockerfile
->>>>>>> parent of 44c3f2b (Update docker-compose.yml)
     ports:
       - "5000:5000"
     depends_on:
@@ -99,13 +71,9 @@ services:
       - auth
 
   frontend:
-<<<<<<< HEAD
-    image: ghcr.io/se-project-group-440/frontend:latest
-=======
     build:
       context: ./frontend
       dockerfile: Dockerfile
->>>>>>> parent of 44c3f2b (Update docker-compose.yml)
     ports:
       - "5173:5173"
     depends_on:
